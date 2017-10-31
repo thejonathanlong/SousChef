@@ -12,7 +12,7 @@ protocol Measurement {
     
     var type : MeasurementType { get }
     
-    var amount : Float { get set }
+    var amount : Double { get set }
     
 //    init(amount: Float)
 }
@@ -28,7 +28,7 @@ extension Measurement {
 //    var amount: Float
 //
 //
-//    internal var amount : Float {
+//    internal var amount : Double {
 //        return 0
 //    }
 //
@@ -37,9 +37,17 @@ extension Measurement {
 //    }
 //}
 
+struct UnknownMeasurement : Measurement {
+    internal var amount : Double
+    
+    var type : MeasurementType {
+        return .none
+    }
+}
+
 struct CupMeasurement : Measurement {
     
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .cup
@@ -54,7 +62,7 @@ struct CupMeasurement : Measurement {
 
 struct GallonMeasurement : Measurement {
     
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .gallon
@@ -69,7 +77,7 @@ struct GallonMeasurement : Measurement {
 
 struct QuartMeasurement : Measurement {
     
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .quart
@@ -83,7 +91,7 @@ struct QuartMeasurement : Measurement {
 }
 
 struct TablespoonMeasurement : Measurement {
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .tablespoon
@@ -97,7 +105,7 @@ struct TablespoonMeasurement : Measurement {
 }
 
 struct TeaspoonMeasurement : Measurement {
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .teaspoon
@@ -111,7 +119,7 @@ struct TeaspoonMeasurement : Measurement {
 }
 
 struct CanMeasurement : Measurement {
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .can
@@ -125,7 +133,7 @@ struct CanMeasurement : Measurement {
 }
 
 struct OunceMeasurement : Measurement {
-    internal var amount : Float
+    internal var amount : Double
     
     var type : MeasurementType {
         return .ounce

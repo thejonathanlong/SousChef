@@ -48,7 +48,7 @@ struct Ingredient {
 //        self.init(measurementType: <#T##MeasurementType#>, amount: <#T##Float#>, item: <#T##String#>, original: <#T##String#>)
 //    }
     
-    init(measurementType: MeasurementType, amount : Float, item : String, original : String) {
+    init(measurementType: MeasurementType, amount : Double, item : String, original : String) {
         
         switch measurementType {
         case .can:
@@ -74,8 +74,7 @@ struct Ingredient {
             break
         default:
             print("Unrecognized measurement type. \(measurementType)")
-            measurement = CanMeasurement(amount: 0)
-            assert(false)
+            measurement = UnknownMeasurement(amount: amount)
             break
         }
         
