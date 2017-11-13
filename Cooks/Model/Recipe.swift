@@ -37,9 +37,9 @@ struct Ingredient {
     
     let original : String
     
-    static let usMeasurementLemma = Set(["pound", "gallon", "ounce", "quart", "cup", "pint", "tablespoon", "teaspoon", "dash", "pinch", "can"])
+    static let usMeasurementLemma = Set(["pound", "gallon", "ounce", "quart", "cup", "pint", "tablespoon", "teaspoon", "dash", "pinch", "can", "lb", "oz", "c", "tbsp", "tsp"])
     
-    static let metricMeasurementLemma = Set(["liter", "gram", "milliliter", "kilogram"])
+    static let metricMeasurementLemma = Set(["liter", "gram", "milliliter", "kilogram", "g", "l", "ml", "kg"])
     
     var description : String {
         return "\(measurement.amount) \(measurement.type) \(item)"
@@ -74,7 +74,7 @@ struct Ingredient {
             break
         default:
             print("Unrecognized measurement type. \(measurementType)")
-            measurement = UnknownMeasurement(amount: amount)
+            measurement = OtherMeasurement(amount: amount)
             break
         }
         
