@@ -80,7 +80,7 @@ struct GallonMeasurement : Measurement {
 		case .ounce:
 			amountToAdd *= (1/MeasurementValues.ouncesPerCup) * (1/MeasurementValues.cupsPerQuart * 1/MeasurementValues.quartsPerGallon)
 		case .quart:
-			amountToAdd *= MeasurementValues.quartsPerGallon
+			amountToAdd *= 1/MeasurementValues.quartsPerGallon
 		case .tablespoon:
 			amountToAdd *= MeasurementValues.ouncesPerTablespoon * (1/MeasurementValues.ouncesPerCup) * (1/MeasurementValues.cupsPerQuart * 1/MeasurementValues.quartsPerGallon)
 		case .teaspoon:

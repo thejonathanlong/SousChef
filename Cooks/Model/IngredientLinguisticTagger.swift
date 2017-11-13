@@ -24,7 +24,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 		self.enumerateTags(in: NSMakeRange(0, inputString.count), unit: .word, scheme: NSLinguisticTagScheme.lemma, options: .omitWhitespace) { (tag, range, stop) in
 			guard let measurementTag = tag else { return }
 			if !Ingredient.usMeasurementLemma.contains(measurementTag.rawValue) && !Ingredient.metricMeasurementLemma.contains(measurementTag.rawValue) { return }
-//			measurementType = MeasurementType(rawValue: measurementTag.rawValue)!
+			measurementType = MeasurementType(rawValue: measurementTag.rawValue)!
 			measurementRanges.append(range)
 //			stop.pointee = true
 		}

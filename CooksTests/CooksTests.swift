@@ -500,46 +500,125 @@ For the quinoa:
 // MARK: MeasurementAdditionTests
 class MeasurementAdditionTests: CooksTestCase {
 	
+	// MARK: - Gallon Addition
+	func testGallonPlusGallon() {
+		let gallon1 = GallonMeasurement(amount: 1)
+		let gallon2 = GallonMeasurement(amount: 1)
+		let answer = GallonMeasurement(amount: 2)
+		let test = gallon1 + gallon2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
+	}
+	
+	func testGallonPlusQuart() {
+		let gallon1 = GallonMeasurement(amount: 1)
+		let gallon2 = QuartMeasurement(amount: 1)
+		let answer = GallonMeasurement(amount: 1.25)
+		let test = gallon1 + gallon2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
+	}
+	
+	func testGallonPlusCup() {
+		let gallon1 = GallonMeasurement(amount: 1)
+		let gallon2 = CupMeasurement(amount: 1)
+		let answer = GallonMeasurement(amount: 1.0625)
+		let test = gallon1 + gallon2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
+	}
+	
+	func testGallonPlusOunce() {
+		let gallon1 = GallonMeasurement(amount: 1)
+		let gallon2 = OunceMeasurement(amount: 1)
+		let answer = GallonMeasurement(amount: 1.0078125)
+		let test = gallon1 + gallon2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
+	}
+	
+	func testGallonPlusTablespoon() {
+		let gallon1 = GallonMeasurement(amount: 1)
+		let gallon2 = TablespoonMeasurement(amount: 1)
+		let answer = GallonMeasurement(amount: 1.00390625)
+		let test = gallon1 + gallon2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
+	}
+	
+	func testGallonPlusTeaspoon() {
+		let gallon1 = GallonMeasurement(amount: 1)
+		let gallon2 = TeaspoonMeasurement(amount: 1)
+		let answer = GallonMeasurement(amount: 1.0013021093750001)
+		let test = gallon1 + gallon2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
+	}
+	
 	// MARK: - Cup Addition
 	func testCupPlusCup() {
 		let cup1 = CupMeasurement(amount: 1)
 		let cup2 = CupMeasurement(amount: 1)
 		let answer = CupMeasurement(amount: 2)
-		XCTAssertTrue(cup1 + cup2 == answer)
+		let test = cup1 + cup2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
 	}
 	
 	func testCupPlusQuart() {
 		let cup1 = CupMeasurement(amount: 1)
 		let cup2 = QuartMeasurement(amount: 1)
 		let answer = CupMeasurement(amount: 5)
-		XCTAssertTrue(cup1 + cup2 == answer)
+		let test = cup1 + cup2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
 	}
 	
 	func testCupPlusOunce() {
 		let cup1 = CupMeasurement(amount: 1)
 		let cup2 = OunceMeasurement(amount: 1)
 		let answer = CupMeasurement(amount: 1.125)
-		XCTAssertTrue(cup1 + cup2 == answer)
+		let test = cup1 + cup2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
 	}
 	
 	func testCupPlusTablespoon() {
 		let cup1 = CupMeasurement(amount: 1)
 		let cup2 = TablespoonMeasurement(amount: 1)
 		let answer = CupMeasurement(amount: 1.0625)
-		XCTAssertTrue(cup1 + cup2 == answer)
+		let test = cup1 + cup2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
 	}
 	
 	func testCupPlusTeaspoon() {
 		let cup1 = CupMeasurement(amount: 1)
 		let cup2 = TeaspoonMeasurement(amount: 1)
 		let answer = CupMeasurement(amount: 1.02083375)
-		XCTAssertTrue(cup1 + cup2 == answer)
+		let test = cup1 + cup2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
 	}
 	
 	func testCupPlusGallon() {
 		let cup1 = CupMeasurement(amount: 1)
 		let cup2 = GallonMeasurement(amount: 1)
 		let answer = CupMeasurement(amount: 17)
-		XCTAssertTrue(cup1 + cup2 == answer)
+		let test = cup1 + cup2
+		print(test)
+		print(answer)
+		XCTAssertTrue(test == answer)
 	}
 }
