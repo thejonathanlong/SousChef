@@ -13,7 +13,7 @@ class IngredientListTableViewController: UITableViewController {
     
     static let ingredientListTableViewCellReuseIdentifier = "IngredientListCellReuseIdentifier"
     
-    var ingredients : [Ingredient] = []
+    var ingredients: [Ingredient] = []
 }
 
 // MARK: UITableViewControllerDelegate

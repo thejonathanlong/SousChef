@@ -18,19 +18,25 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 	
 	func enumerateTags(using block: (Ingredient) -> Void) {
 		guard let inputString = self.string else { return }
-		var measurementRanges : Array<NSRange> = Array<NSRange>()
-		var measurementType: MeasurementType = .other
+		var measurementRanges: Array<NSRange> = Array<NSRange>()
+		var measurementTypes : [MeasurementType] = []
 		
 		self.enumerateTags(in: NSMakeRange(0, inputString.count), unit: .word, scheme: NSLinguisticTagScheme.lemma, options: .omitWhitespace) { (tag, range, stop) in
 			guard let measurementTag = tag else { return }
 			if !Ingredient.usMeasurementLemma.contains(measurementTag.rawValue) && !Ingredient.metricMeasurementLemma.contains(measurementTag.rawValue) { return }
-			measurementType = MeasurementType(rawValue: measurementTag.rawValue)!
+			let type = MeasurementType(rawValue: measurementTag.rawValue)!
+			measurementTypes.append(type)
 			measurementRanges.append(range)
-//			stop.pointee = true
 		}
 		
-		var nounsAndAdjectives : [String] = []
-		var specifiedAmount : [String] = []
+		var measurementType: MeasurementType = .other
+		if measurementTypes.first != nil {
+			measurementType = measurementTypes.first!
+		}
+		var currentMeasurementTypeIndex = 0
+		
+		var nounsAndAdjectives: [String] = []
+		var specifiedAmount: [String] = []
 		var lastTag = ""
 		var ingredientAmount = 0.0
 		var isParenthetical = false
@@ -41,13 +47,18 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 			let end = inputString.index(inputString.startIndex, offsetBy: (range.location + range.length))
 			let tokenInQuestion = String(inputString[start..<end])
 			
-			if measurementRanges.contains(range) && !isParenthetical{
+			if measurementRanges.contains(range) && !isParenthetical {
 				for amount in specifiedAmount {
 					ingredientAmount += amount.fraction
 				}
 				return
 			}
-			
+			// Need to do something here. I don't know what...
+//			} else if isParenthetical && ingredientAmount == 0.0 && measurementType == .other {
+//				currentMeasurementTypeIndex += 1
+//				measurementType = currentMeasurementTypeIndex < measurementTypes.count ? measurementTypes[currentMeasurementTypeIndex] : .other
+//				return
+//			}
 			
 			let lowerCasedToken = tokenInQuestion.lowercased()
 			let containsWhiteListedToken = Ingredient.usMeasurementLemma.contains(lowerCasedToken) || Ingredient.metricMeasurementLemma.contains(lowerCasedToken)
@@ -97,7 +108,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 			lastTag = tag.rawValue
 		}
 		
-		ingredientAmount = ingredientAmount == 0 && specifiedAmount.count > 0 ? specifiedAmount[0].fraction : ingredientAmount
+		ingredientAmount = ingredientAmount == 0 && specifiedAmount.count > 0 ? specifiedAmount[0].fraction: ingredientAmount
 		let item = nounsAndAdjectives.joined(separator: " ")
 		let ingredient = Ingredient(measurementType: measurementType, amount: ingredientAmount, item: item, original: inputString)
 		print(ingredient)
@@ -106,7 +117,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 }
 
 extension String {
-	var fraction : Double {
+	var fraction: Double {
 		get {
 			if self.contains("/") {
 				let numbers = self.split(separator: "/")

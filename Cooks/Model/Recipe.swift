@@ -9,10 +9,10 @@
 import UIKit
 
 struct Recipe {
-    let name : String
-    let ingredients : [Ingredient]
-    let instructions : [String]
-    let image : UIImage
+    let name: String
+    let ingredients: [Ingredient]
+    let instructions: [String]
+    let image: UIImage
     
     init() {
         name = ""
@@ -21,7 +21,7 @@ struct Recipe {
         image = UIImage()
     }
     
-    init(name : String, ingredients : [Ingredient], instructions : [String], image : UIImage) {
+    init(name: String, ingredients: [Ingredient], instructions: [String], image: UIImage) {
         self.name = name
         self.ingredients = ingredients
         self.instructions = instructions
@@ -31,24 +31,24 @@ struct Recipe {
 
 struct Ingredient {
     
-    let measurement : Measurement
+    let measurement: Measurement
     
-    let item : String
+    let item: String
     
-    let original : String
+    let original: String
     
     static let usMeasurementLemma = Set(["pound", "gallon", "ounce", "quart", "cup", "pint", "tablespoon", "teaspoon", "dash", "pinch", "can", "lb", "oz", "c", "tbsp", "tsp"])
     
     static let metricMeasurementLemma = Set(["liter", "gram", "milliliter", "kilogram", "g", "l", "ml", "kg"])
     
-    var description : String {
+    var description: String {
         return "\(measurement.amount) \(measurement.type) \(item)"
     }
 //    init(taggedIngredient: TaggedIngredient) {
 //        self.init(measurementType: <#T##MeasurementType#>, amount: <#T##Float#>, item: <#T##String#>, original: <#T##String#>)
 //    }
     
-    init(measurementType: MeasurementType, amount : Double, item : String, original : String) {
+    init(measurementType: MeasurementType, amount: Double, item: String, original: String) {
         
         switch measurementType {
         case .can:

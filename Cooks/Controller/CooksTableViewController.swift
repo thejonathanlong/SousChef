@@ -12,7 +12,7 @@ class CooksTableViewController: UITableViewController {
     
     static let recipeDetailSegueIdentifier = "RecipeDetailSegue"
     
-    let recipes : [Recipe] = []
+    let recipes: [Recipe] = []
     
     var selectedIndexPath = IndexPath(row: 0, section: 0)
     

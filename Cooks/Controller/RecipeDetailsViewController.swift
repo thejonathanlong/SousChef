@@ -28,7 +28,7 @@ class RecipeDetailsViewController: UITabBarController {
 }
 
 // MARK: UITabBarControllerDelegate
-extension RecipeDetailsViewController : UITabBarControllerDelegate {
+extension RecipeDetailsViewController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if let ingredientDetailViewController = viewController as? IngredientsDetailViewController {

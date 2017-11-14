@@ -13,7 +13,7 @@ class InstructionsListTableViewController: UITableViewController {
     static let instructionListTableViewCellReuseIdentifier = "InstructionListCellReuseIdentifier"
     
     @IBOutlet weak var tableHeaderView: UIImageView!
-    var instructions : [String] = []
+    var instructions: [String] = []
     
     var previousScrollOffset = CGFloat(0.0)
     let maxHeaderHeight = UIScreen.main.bounds.height
