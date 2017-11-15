@@ -53,30 +53,32 @@ struct Ingredient {
         switch measurementType {
         case .can:
             measurement = CanMeasurement(amount: amount)
-            break
+
         case .cup:
             measurement = CupMeasurement(amount: amount)
-            break
+
         case .teaspoon:
             measurement = TeaspoonMeasurement(amount: amount)
-            break
+
         case .tablespoon:
             measurement = TablespoonMeasurement(amount: amount)
-            break
+
         case .gallon:
             measurement = GallonMeasurement(amount: amount)
-            break
+
         case .ounce:
             measurement = OunceMeasurement(amount: amount)
-            break
+
         case .quart:
             measurement = QuartMeasurement(amount: amount)
-            break
-        default:
-            print("Unrecognized measurement type. \(measurementType)")
+
+		case .other:
             measurement = OtherMeasurement(amount: amount)
-            break
-        }
+			
+		case .pound:
+			measurement = PoundMeasurement(amount: amount)
+			
+		}
         
         self.item = item
         self.original = original

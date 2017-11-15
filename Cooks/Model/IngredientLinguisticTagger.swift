@@ -30,9 +30,6 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 		}
 		
 		var measurementType: MeasurementType = .other
-		if measurementTypes.first != nil {
-			measurementType = measurementTypes.first!
-		}
 		var currentMeasurementTypeIndex = 0
 		
 		var nounsAndAdjectives: [String] = []
@@ -47,18 +44,16 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 			let end = inputString.index(inputString.startIndex, offsetBy: (range.location + range.length))
 			let tokenInQuestion = String(inputString[start..<end])
 			
-			if measurementRanges.contains(range) && !isParenthetical {
-				for amount in specifiedAmount {
-					ingredientAmount += amount.fraction
+			if measurementRanges.contains(range) {
+				if !isParenthetical {
+					for amount in specifiedAmount {
+						ingredientAmount += amount.fraction
+					}
+					measurementType = currentMeasurementTypeIndex < measurementTypes.count ? measurementTypes[currentMeasurementTypeIndex] : .other
 				}
+				currentMeasurementTypeIndex += 1
 				return
 			}
-			// Need to do something here. I don't know what...
-//			} else if isParenthetical && ingredientAmount == 0.0 && measurementType == .other {
-//				currentMeasurementTypeIndex += 1
-//				measurementType = currentMeasurementTypeIndex < measurementTypes.count ? measurementTypes[currentMeasurementTypeIndex] : .other
-//				return
-//			}
 			
 			let lowerCasedToken = tokenInQuestion.lowercased()
 			let containsWhiteListedToken = Ingredient.usMeasurementLemma.contains(lowerCasedToken) || Ingredient.metricMeasurementLemma.contains(lowerCasedToken)
@@ -82,7 +77,6 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 				isParenthetical = false
 				
 			case NSLinguisticTag.punctuation:
-				
 				if lastTag == NSLinguisticTag.number.rawValue {
 					specifiedAmount[specifiedAmount.count - 1].append(tokenInQuestion)
 				}
