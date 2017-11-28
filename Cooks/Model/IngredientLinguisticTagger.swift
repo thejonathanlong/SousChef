@@ -8,13 +8,20 @@
 
 import UIKit
 
+let DEBUG = true
+func printDebug(_ s: String) {
+	if DEBUG {
+		print(s)
+	}
+}
+
 struct TaggedIngredient {
 	
 }
 
 class IngredientLinguisticTagger: NSLinguisticTagger {
 	
-	static let exceptions = ["thyme", "cinnamon", "salt"]
+	static let exceptions = ["thyme", "cinnamon", "salt", "quinoa"]
 	
 	func enumerateTags(using block: (Ingredient) -> Void) {
 		guard let inputString = self.string else { return }
@@ -38,6 +45,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 		var ingredientAmount = 0.0
 		var isParenthetical = false
 		
+		var numNouns = 0
 		self.enumerateTags(in: NSMakeRange(0, inputString.count), unit: .word, scheme: NSLinguisticTagScheme.lexicalClass, options: .omitWhitespace) { (optionalTag, range, stop) in
 			guard let tag = optionalTag else { return }
 			let start = inputString.index(inputString.startIndex, offsetBy: range.location)
@@ -58,6 +66,9 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 			let lowerCasedToken = tokenInQuestion.lowercased()
 			let containsWhiteListedToken = Ingredient.usMeasurementLemma.contains(lowerCasedToken) || Ingredient.metricMeasurementLemma.contains(lowerCasedToken)
 			if containsWhiteListedToken { return }
+			
+			//Debug log...
+			printDebug("token: \(tokenInQuestion) tag:\(tag.rawValue)")
 			
 			switch tag {
 				
@@ -83,6 +94,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 				
 			case NSLinguisticTag.noun:
 				if !isParenthetical {
+					numNouns += 1
 					nounsAndAdjectives.append(tokenInQuestion)
 				}
 				
@@ -106,6 +118,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 		let item = nounsAndAdjectives.joined(separator: " ")
 		let ingredient = Ingredient(measurementType: measurementType, amount: ingredientAmount, item: item, original: inputString)
 		print(ingredient)
+		print(numNouns)
 		block(ingredient)
 	}
 }
