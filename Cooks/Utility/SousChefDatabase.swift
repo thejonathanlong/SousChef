@@ -18,31 +18,34 @@ class SousChefDatabase: NSObject {
 	let privateDB = CKContainer.default().privateCloudDatabase
 }
 
+typealias RecipeFetchCompletion = ([Recipe]) -> Void
 // MARK: - Fetching Recipes
 extension SousChefDatabase {
-	func recipe(named: String, completion: @escaping (Recipe) -> Void) {
+	func recipe(named: String, completion: @escaping RecipeFetchCompletion) {
 		let predicate = NSPredicate(format: "name = %@", named)
 		databaseRecipeQuery(predicate: predicate, completion: completion)
 	}
 	
-	func recipes(completion: @escaping (Recipe) -> Void) {
+	func recipes(completion: @escaping RecipeFetchCompletion) {
 		databaseRecipeQuery(predicate: NSPredicate(value: true), completion: completion)
 	}
 	
-	func recipe(tagged: String, completion: @escaping (Recipe) -> Void) {
+	func recipe(tagged: String, completion: @escaping RecipeFetchCompletion) {
 		let predicate = NSPredicate(format: "tags CONTAINS[cd] %@", tagged)
 		databaseRecipeQuery(predicate: predicate, completion: completion)
 	}
 	
-	func databaseRecipeQuery(predicate: NSPredicate, completion: @escaping (Recipe) -> Void) {
+	func databaseRecipeQuery(predicate: NSPredicate, completion: @escaping RecipeFetchCompletion) {
 		let query = CKQuery(recordType: SousChefDatabase.recipeRecordType, predicate: predicate)
 		
 		privateDB.perform(query, inZoneWith: nil) { (recordsOrNil, errorOrNil) in
 			guard let records = recordsOrNil else { print("rcords were nil for query: \(query)"); return }
+			var recipes: [Recipe] = []
 			for record in records {
 				let recipe = Recipe(record: record)
-				completion(recipe)
+				recipes.append(recipe)
 			}
+			completion(recipes)
 		}
 	}
 	

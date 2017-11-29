@@ -12,28 +12,44 @@ import XCTest
 class SousChefDatabaseTests: CooksTestCase {
     let sousChefDatabase = SousChefDatabase()
 	
+	override func setUp() {
+		super.setUp()
+		XCTAssertNotNil(FileManager.default.ubiquityIdentityToken) // If this fails the user is not logged into iCloud
+	}
+	
 	func testAllRecipes() {
-		var recipes: [Recipe] = []
-		sousChefDatabase.recipes { (recipe) in
-			recipes.append(recipe)
+		let semaphore = DispatchSemaphore(value: 0)
+		sousChefDatabase.recipes { (recipes) in
+			XCTAssertTrue(recipes.count == 1)
+			guard let recipe = recipes.first else {
+				XCTAssertTrue(false)
+				return
+			}
+			XCTAssertTrue(recipe.name == "Vegan Cinnamon Rolls")
+			semaphore.signal()
 		}
-		XCTAssertTrue(recipes.count == 1)
-		
-		XCTAssertTrue(recipes.first!.name == "Vegan Cinnamon Rolls")
+		semaphore.wait()
 	}
 	
 	func testRecipeNamedVeganCinnamonRolls() {
-		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipe) in
+		let semaphore = DispatchSemaphore(value: 0)
+		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipes) in
+			guard let recipe = recipes.first else {
+				XCTAssertTrue(false)
+				return
+			}
 			XCTAssertTrue(recipe.name == "Vegan Cinnamon Rolls")
+			semaphore.signal()
 		}
+		semaphore.wait()
 	}
 }
 
 // MARK: - Ingredient Fetching Tests
 extension SousChefDatabaseTests {
 	func testRecipeIngredientsForVeganCinnamonRolls() {
-		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipe) in
-			self.sousChefDatabase.ingredients(for: recipe) { (ingredients) in
+		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipes) in
+			self.sousChefDatabase.ingredients(for: recipes.first!) { (ingredients) in
 				XCTAssertTrue(ingredients.count == 1)
 				XCTAssertTrue(ingredients.first!.item == "sugar")
 			}
