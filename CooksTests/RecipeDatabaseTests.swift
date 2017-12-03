@@ -47,12 +47,21 @@ class SousChefDatabaseTests: CooksTestCase {
 
 // MARK: - Ingredient Fetching Tests
 extension SousChefDatabaseTests {
+	
 	func testRecipeIngredientsForVeganCinnamonRolls() {
+		let semaphore = DispatchSemaphore(value: 0)
 		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipes) in
 			self.sousChefDatabase.ingredients(for: recipes.first!) { (ingredients) in
 				XCTAssertTrue(ingredients.count == 1)
-				XCTAssertTrue(ingredients.first!.item == "sugar")
+				guard let ingredient = ingredients.first else {
+					XCTAssertTrue(false)
+					return
+				}
+				XCTAssertTrue(ingredient.item == "sugar")
+				semaphore.signal()
 			}
 		}
+		semaphore.wait()
 	}
+	
 }
