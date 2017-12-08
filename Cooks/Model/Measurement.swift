@@ -13,8 +13,6 @@ protocol Measurement {
 	var type: MeasurementType { get }
 	
 	var amount: Double { get set }
-	
-	//    init(amount: Float)
 }
 
 extension Measurement {
@@ -296,25 +294,4 @@ enum MeasurementType: String {
 			self = MeasurementType(rawValue: abbreviation)!
 		}
 	}
-	
-	//    func max(left: MeasurementType, right: MeasurementType) -> MeasurementType {
-	//        switch left {
-	//        case .cup:
-	//            right == .teaspoon || right == .tablespoon ||
-	//        case .teaspoon:
-	//        case .tablespoon:
-	//        case .quart:
-	//        case .gallon:
-	//        case .can:
-	//        case .ounce:
-	//
-	//        default:
-	//            return right
-	//        }
-	//    }
-	//
-	//    func min(left: MeasurementType, right: MeasurementType) -> MeasurementType {
-	//
-	//    }
-	
 }

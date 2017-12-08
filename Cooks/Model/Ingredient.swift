@@ -7,15 +7,16 @@
 //
 
 import Foundation
+import CloudKit
 
-struct Ingredient {
+class Ingredient: NSObject {
 	let measurement: Measurement
 	let item: String
 	let original: String
 	static let usMeasurementLemma = Set(["pound", "gallon", "ounce", "quart", "cup", "pint", "tablespoon", "teaspoon", "dash", "pinch", "can", "lb", "oz", "c", "tbsp", "tsp"])
 	static let metricMeasurementLemma = Set(["liter", "gram", "milliliter", "kilogram", "g", "l", "ml", "kg"])
 	
-	var description: String {
+	override var description: String {
 		return "\(measurement.amount) \(measurement.type) \(item)"
 	}
 	
@@ -53,5 +54,20 @@ struct Ingredient {
 		
 		self.item = item
 		self.original = original
+	}
+}
+
+// MARK: - Ingredient from Record
+extension Ingredient {
+	static let recordItemKey = "item"
+	static let recordOriginalKey = "original"
+	static let recordMeasurementTypeKey = "measurementType"
+	static let recordMeasurementAmountKey = "measurementAmount"
+	
+	convenience init(record: CKRecord) {
+		let measurementType = record[Ingredient.recordMeasurementTypeKey] as! String
+		let measurementAmount = record[Ingredient.recordMeasurementAmountKey] as! Double
+		self.init(measurementType: MeasurementType(rawValue: measurementType.lowercased())!, amount: measurementAmount, item: record[Ingredient.recordItemKey] as! String, original: record[Ingredient.recordOriginalKey] as! String)
+		
 	}
 }

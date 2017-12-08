@@ -23,6 +23,7 @@ class SousChefDatabaseTests: CooksTestCase {
 			XCTAssertTrue(recipes.count == 1)
 			guard let recipe = recipes.first else {
 				XCTAssertTrue(false)
+				semaphore.signal()
 				return
 			}
 			XCTAssertTrue(recipe.name == "Vegan Cinnamon Rolls")
@@ -36,6 +37,7 @@ class SousChefDatabaseTests: CooksTestCase {
 		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipes) in
 			guard let recipe = recipes.first else {
 				XCTAssertTrue(false)
+				semaphore.signal()
 				return
 			}
 			XCTAssertTrue(recipe.name == "Vegan Cinnamon Rolls")
@@ -50,18 +52,31 @@ extension SousChefDatabaseTests {
 	
 	func testRecipeIngredientsForVeganCinnamonRolls() {
 		let semaphore = DispatchSemaphore(value: 0)
-		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls") { (recipes) in
-			self.sousChefDatabase.ingredients(for: recipes.first!) { (ingredients) in
-				XCTAssertTrue(ingredients.count == 1)
-				guard let ingredient = ingredients.first else {
-					XCTAssertTrue(false)
-					return
-				}
-				XCTAssertTrue(ingredient.item == "sugar")
+		sousChefDatabase.recipe(named: "Vegan Cinnamon Rolls", loadingIngredients: true) { (recipes) in
+			guard let recipe = recipes.first else { XCTAssertTrue(false); semaphore.signal(); return }
+			
+			XCTAssertTrue(recipe.ingredients.count == 1)
+			guard let ingredient = recipe.ingredients.first else {
+				XCTAssertTrue(false)
 				semaphore.signal()
+				return
 			}
+			XCTAssertTrue(ingredient.item == "sugar")
+			XCTAssertTrue(ingredient.measurement.amount == 1.0)
+			XCTAssertTrue(ingredient.measurement.type == .cup)
+			XCTAssertTrue(ingredient.original == "1 cup of cane sugar")
+			semaphore.signal()
 		}
 		semaphore.wait()
 	}
+	
+	//TODO: Test the performance of this
+	/*
+	func testPerformanceOfRecipeWithManyIngredients() {
+		self.measure {
+			sousChefDatabase.ingredients(for: <#T##Recipe#>, completion: <#T##IngredientFetchCompletion##IngredientFetchCompletion##([Ingredient]) -> Void#>)
+		}
+	}
+*/
 	
 }
