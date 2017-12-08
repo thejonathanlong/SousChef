@@ -16,6 +16,8 @@
 		5669B1E31F650EDD00AEB5FA /* RecipeDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5669B1E21F650EDD00AEB5FA /* RecipeDetailsViewController.swift */; };
 		5669B1E51F650FBF00AEB5FA /* IngredientsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5669B1E41F650FBF00AEB5FA /* IngredientsDetailViewController.swift */; };
 		5669B1E71F6650D100AEB5FA /* IngredientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5669B1E61F6650D100AEB5FA /* IngredientListTableViewController.swift */; };
+		56766A551FDA69B700C91E0C /* iPadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56766A531FDA69B700C91E0C /* iPadStoryboard.storyboard */; };
+		56766A581FDA6A3300C91E0C /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */; };
 		56797B311FBC04A300052382 /* IngredientLinguisticTesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56797B301FBC04A300052382 /* IngredientLinguisticTesterTests.swift */; };
 		56797B331FBC04D600052382 /* MeasurementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56797B321FBC04D600052382 /* MeasurementTests.swift */; };
 		56797B351FBC0A3500052382 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56797B341FBC0A3500052382 /* Ingredient.swift */; };
@@ -56,6 +58,8 @@
 		5669B1E21F650EDD00AEB5FA /* RecipeDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecipeDetailsViewController.swift; path = Controller/RecipeDetailsViewController.swift; sourceTree = "<group>"; };
 		5669B1E41F650FBF00AEB5FA /* IngredientsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientsDetailViewController.swift; path = Controller/IngredientsDetailViewController.swift; sourceTree = "<group>"; };
 		5669B1E61F6650D100AEB5FA /* IngredientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientListTableViewController.swift; path = Controller/IngredientListTableViewController.swift; sourceTree = "<group>"; };
+		56766A541FDA69B700C91E0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPadStoryboard.storyboard; sourceTree = "<group>"; };
+		56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipeDetailViewController.swift; path = iPadControllers/RecipeDetailViewController.swift; sourceTree = "<group>"; };
 		56797B301FBC04A300052382 /* IngredientLinguisticTesterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientLinguisticTesterTests.swift; sourceTree = "<group>"; };
 		56797B321FBC04D600052382 /* MeasurementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementTests.swift; sourceTree = "<group>"; };
 		56797B341FBC0A3500052382 /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Ingredient.swift; path = Model/Ingredient.swift; sourceTree = "<group>"; };
@@ -119,11 +123,30 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		56766A521FDA697F00C91E0C /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				568258B21F63A31800A020A9 /* LaunchScreen.storyboard */,
+				568258AD1F63A31800A020A9 /* Main.storyboard */,
+				56766A531FDA69B700C91E0C /* iPadStoryboard.storyboard */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		56766A561FDA69EE00C91E0C /* iPadControllers */ = {
+			isa = PBXGroup;
+			children = (
+				56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */,
+			);
+			name = iPadControllers;
+			sourceTree = "<group>";
+		};
 		5682589D1F63A31800A020A9 = {
 			isa = PBXGroup;
 			children = (
 				568258A81F63A31800A020A9 /* Cooks */,
 				563C45681F9085E100B3CAF4 /* CooksTests */,
+				568258BE1F63A35300A020A9 /* Supporting */,
 				568258A71F63A31800A020A9 /* Products */,
 				563C45721F90876E00B3CAF4 /* Frameworks */,
 			);
@@ -141,11 +164,14 @@
 		568258A81F63A31800A020A9 /* Cooks */ = {
 			isa = PBXGroup;
 			children = (
+				568258B01F63A31800A020A9 /* Assets.xcassets */,
+				56797B391FBD43FE00052382 /* Cooks.entitlements */,
+				56766A561FDA69EE00C91E0C /* iPadControllers */,
+				56766A521FDA697F00C91E0C /* Storyboards */,
 				568625C61FBD46A50062175F /* Utility */,
-				568258BE1F63A35300A020A9 /* Supporting */,
+				568258BB1F63A33700A020A9 /* Model */,
 				568258BD1F63A34500A020A9 /* Controller */,
 				568258BC1F63A33E00A020A9 /* View */,
-				568258BB1F63A33700A020A9 /* Model */,
 			);
 			path = Cooks;
 			sourceTree = "<group>";
@@ -184,13 +210,10 @@
 			isa = PBXGroup;
 			children = (
 				568258A91F63A31800A020A9 /* AppDelegate.swift */,
-				568258B01F63A31800A020A9 /* Assets.xcassets */,
-				568258B21F63A31800A020A9 /* LaunchScreen.storyboard */,
-				568258AD1F63A31800A020A9 /* Main.storyboard */,
-				56797B391FBD43FE00052382 /* Cooks.entitlements */,
 				568258B51F63A31800A020A9 /* Info.plist */,
 			);
 			name = Supporting;
+			path = Cooks;
 			sourceTree = "<group>";
 		};
 		568625C61FBD46A50062175F /* Utility */ = {
@@ -322,6 +345,7 @@
 				568258B41F63A31800A020A9 /* LaunchScreen.storyboard in Resources */,
 				568258B11F63A31800A020A9 /* Assets.xcassets in Resources */,
 				568258AF1F63A31800A020A9 /* Main.storyboard in Resources */,
+				56766A551FDA69B700C91E0C /* iPadStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +385,7 @@
 				56797B381FBC115300052382 /* AddRecipeTableViewController.swift in Sources */,
 				568258C01F63A39800A020A9 /* CooksTableViewController.swift in Sources */,
 				5669B1E71F6650D100AEB5FA /* IngredientListTableViewController.swift in Sources */,
+				56766A581FDA6A3300C91E0C /* RecipeDetailViewController.swift in Sources */,
 				568258C41F63A53600A020A9 /* Recipe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -376,6 +401,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		56766A531FDA69B700C91E0C /* iPadStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				56766A541FDA69B700C91E0C /* Base */,
+			);
+			name = iPadStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
 		568258AD1F63A31800A020A9 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -554,6 +587,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.SousChef;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -569,6 +603,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jlo.SousChef;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
