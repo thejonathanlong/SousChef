@@ -16,7 +16,19 @@ class Ingredient: NSObject {
 	static let usMeasurementLemma = Set(["pound", "gallon", "ounce", "quart", "cup", "pint", "tablespoon", "teaspoon", "dash", "pinch", "can", "lb", "oz", "c", "tbsp", "tsp"])
 	static let metricMeasurementLemma = Set(["liter", "gram", "milliliter", "kilogram", "g", "l", "ml", "kg"])
 	
+	var itemDescription: String {
+		return debugDescription
+	}
+	
+	var originalDescription: String {
+		return description
+	}
+	
 	override var description: String {
+		return "\(measurement.amount) \(measurement.type) \(original)"
+	}
+	
+	override var debugDescription: String {
 		return "\(measurement.amount) \(measurement.type) \(item)"
 	}
 	

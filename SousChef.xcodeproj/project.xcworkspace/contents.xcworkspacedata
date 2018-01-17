@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Cooks.xcodeproj">
+      location = "self:/Users/jonathanlong/Projects/Cooks/SousChef.xcodeproj">
    </FileRef>
 </Workspace>

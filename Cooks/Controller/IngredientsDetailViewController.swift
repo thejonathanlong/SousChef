@@ -9,29 +9,30 @@
 import UIKit
 
 // MARK: IngredientsDetailViewController
-class IngredientsDetailViewController: UIViewController {
-    
-    static let ingredientListEmbedSegueIdentifier = "IngredientListEmbedSegue"
-    var ingredientListViewController = IngredientListTableViewController()
-    
-    var recipe = Recipe() {
-        didSet {
-            ingredientListViewController.ingredients = recipe.ingredients
-            ingredientListViewController.tableView.reloadData()
-        }
-    }
+//class IngredientsDetailViewController: UIViewController {
+//    
+//    static let ingredientListEmbedSegueIdentifier = "IngredientListEmbedSegue"
+//    var ingredientListViewController = IngredientListTableViewController()
+//    
+//    var recipe = Recipe() {
+//        didSet {
+//            ingredientListViewController.ingredients = recipe.ingredients
+//            ingredientListViewController.tableView.reloadData()
+//        }
+//    }
+//
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let segueIdentifier = segue.identifier {
+//            switch segueIdentifier {
+//            case IngredientsDetailViewController.ingredientListEmbedSegueIdentifier:
+//                if let viewController = segue.destination as? IngredientListTableViewController {
+//                    ingredientListViewController = viewController
+//                }
+//            default:
+//                break
+//            }
+//        }
+//    }
+//
+//}
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let segueIdentifier = segue.identifier {
-            switch segueIdentifier {
-            case IngredientsDetailViewController.ingredientListEmbedSegueIdentifier:
-                if let viewController = segue.destination as? IngredientListTableViewController {
-                    ingredientListViewController = viewController
-                }
-            default:
-                break
-            }
-        }
-    }
-
-}
