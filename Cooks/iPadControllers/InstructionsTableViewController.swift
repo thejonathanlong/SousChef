@@ -37,7 +37,7 @@ extension InstructionsTableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: InstructionsTableViewController.baseTableViewCellReuseIdentifier, for: indexPath) as! IngredientTableViewCell
+		let cell = tableView.dequeueReusableCell(withIdentifier: InstructionsTableViewController.baseTableViewCellReuseIdentifier, for: indexPath) as! DetailTableViewCell
 		
 		cell.mainTextLabel.text = instructions[indexPath.row]
 		//		cell.mainTextLabel.preferredMaxLayoutWidth = 200

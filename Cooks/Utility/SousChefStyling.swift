@@ -56,3 +56,8 @@ extension SousChefStyling {
 extension SousChefStyling {
 	static let smallestAllowableMargin: CGFloat = 10.0
 }
+
+//MARK: - Assets
+extension SousChefStyling {
+	static let calendarImage = UIImage(named: "calendar-3")
+}

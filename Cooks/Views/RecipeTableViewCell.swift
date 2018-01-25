@@ -9,7 +9,6 @@
 import UIKit
 
 class RecipeTableViewCell: UITableViewCell {
-    
     static let recipeTableViewCellReuseIdentifier = "RecipeListCellReuseIdentifier"
     
     override func awakeFromNib() {

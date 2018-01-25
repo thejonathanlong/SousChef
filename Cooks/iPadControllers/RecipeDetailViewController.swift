@@ -31,9 +31,9 @@ class RecipeDetailViewController: UIViewController {
 	override func loadView() {
 		super.loadView()
 		
-		let addButtonItem = UIBarButtonItem(image: UIImage(named: "calendar-3"), style: .plain, target: self, action: #selector(presentAddRecipe))
-		addButtonItem.tintColor = SousChefStyling.darkColor
-		self.navigationItem.setRightBarButton(addButtonItem, animated: true)
+		let planButtomItem = UIBarButtonItem(image: SousChefStyling.calendarImage, style: .plain, target: self, action: #selector(presentAddRecipe))
+		planButtomItem.tintColor = SousChefStyling.darkColor
+		self.navigationItem.setRightBarButton(planButtomItem, animated: true)
 		
 		if let theView = self.view, let ingredientTableView = ingredientViewController.view, let instructionTableView = instructionViewController.view {
 			backgroundImageView.translatesAutoresizingMaskIntoConstraints = false

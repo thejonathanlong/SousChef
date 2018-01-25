@@ -11,13 +11,13 @@
         <!--Root View Controller-->
         <scene sceneID="l5l-X3-yjQ">
             <objects>
-                <tableViewController id="0ai-Ah-Imm" customClass="CooksTableViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="0ai-Ah-Imm" customClass="CooksTableViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="cXd-Vj-1pb">
                         <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RecipeListCellReuseIdentifier" id="gdb-Dm-5Eg" customClass="RecipeTableViewCell" customModule="Cooks" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RecipeListCellReuseIdentifier" id="gdb-Dm-5Eg" customClass="RecipeTableViewCell" customModule="SousChef" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="834" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gdb-Dm-5Eg" id="zaQ-Ca-JLk">
@@ -43,7 +43,7 @@
         <!--Recipe Details View Controller-->
         <scene sceneID="gPF-EJ-MMb">
             <objects>
-                <tabBarController id="rqR-b0-s04" customClass="RecipeDetailsViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController id="rqR-b0-s04" customClass="RecipeDetailsViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="R6o-9v-Lt5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -77,13 +77,13 @@
         <!--Root View Controller-->
         <scene sceneID="aqX-fB-pBT">
             <objects>
-                <tableViewController id="32a-ax-Xl9" customClass="AddRecipeTableViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="32a-ax-Xl9" customClass="AddRecipeTableViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="lhl-FM-nGr">
                         <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="08E-dj-tlI">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotUsed" id="08E-dj-tlI">
                                 <rect key="frame" x="0.0" y="55.5" width="834" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="08E-dj-tlI" id="N7S-hz-1ku">
@@ -122,7 +122,7 @@
         <!--Instructions-->
         <scene sceneID="a29-af-jom">
             <objects>
-                <viewController id="7Ab-bI-OAa" customClass="InstructionsDetailViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="7Ab-bI-OAa" customClass="InstructionsDetailViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="q6S-4v-zp3"/>
                         <viewControllerLayoutGuide type="bottom" id="zyc-pv-sGs"/>
@@ -155,7 +155,7 @@
         <!--Instructions List Table View Controller-->
         <scene sceneID="NFj-H4-wPn">
             <objects>
-                <tableViewController id="MCz-Kh-Te9" customClass="InstructionsListTableViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="MCz-Kh-Te9" customClass="InstructionsListTableViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Fzf-OW-1BD">
                         <rect key="frame" x="0.0" y="0.0" width="834" height="999"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -190,7 +190,7 @@
         <!--Ingredients-->
         <scene sceneID="Zb3-8k-IsU">
             <objects>
-                <viewController storyboardIdentifier="IngredientsDetailViewControllerStoryBoardID" id="3JP-fB-yRP" customClass="IngredientsDetailViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="IngredientsDetailViewControllerStoryBoardID" id="3JP-fB-yRP" customClass="IngredientsDetailViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ebr-Df-21V"/>
                         <viewControllerLayoutGuide type="bottom" id="aYu-ot-3xd"/>
@@ -223,7 +223,7 @@
         <!--Ingredient List Table View Controller-->
         <scene sceneID="dpo-qF-NfB">
             <objects>
-                <tableViewController id="hST-47-f5w" customClass="IngredientListTableViewController" customModule="Cooks" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="hST-47-f5w" customClass="IngredientListTableViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qRc-Vx-r9a">
                         <rect key="frame" x="0.0" y="0.0" width="834" height="999"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

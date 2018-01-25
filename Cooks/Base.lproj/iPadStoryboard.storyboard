@@ -21,6 +21,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="Lfh-n2-Ryk" kind="relationship" relationship="viewControllers" id="3LV-UW-pvR"/>
+                        <segue destination="Msg-2F-M5a" kind="relationship" relationship="viewControllers" id="qNh-Vd-8jS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Frx-rC-8Pn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -41,7 +42,42 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="peG-ja-Oai" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="561" y="-1632"/>
+            <point key="canvasLocation" x="1888" y="-1883"/>
+        </scene>
+        <!--All Recipes Collection View Controller-->
+        <scene sceneID="q3c-Ic-Wuf">
+            <objects>
+                <collectionViewController id="3OE-TZ-567" customClass="AllRecipesCollectionViewController" customModule="SousChef" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zjz-ZR-wnC">
+                        <rect key="frame" x="0.0" y="0.0" width="1112" height="834"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="tIz-MH-owO">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NotUsed" id="Bwq-RK-m2J">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="3OE-TZ-567" id="aqi-T7-CH4"/>
+                            <outlet property="delegate" destination="3OE-TZ-567" id="fc5-HE-CFG"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="ijn-ER-FJK"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k1k-50-h67" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1229" y="66"/>
         </scene>
         <!--Recipes-->
         <scene sceneID="Ftj-ee-0c9">
@@ -60,7 +96,24 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hCG-pY-O1z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-94.42446043165468" y="-1609.3525179856117"/>
+            <point key="canvasLocation" x="652" y="-2966"/>
+        </scene>
+        <!--All Recipes-->
+        <scene sceneID="gsK-Xe-QgP">
+            <objects>
+                <navigationController id="Msg-2F-M5a" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="All Recipes" id="HrY-H2-mX6"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="saP-Xh-Dy5">
+                        <rect key="frame" x="0.0" y="20" width="1112" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="3OE-TZ-567" kind="relationship" relationship="rootViewController" id="L62-Qb-r5k"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6OV-ZA-whF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-971" y="-294"/>
         </scene>
     </scenes>
 </document>

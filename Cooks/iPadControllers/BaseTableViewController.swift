@@ -42,7 +42,7 @@ class BaseTableViewController: UITableViewController {
 	}
 	
 	func commonInit() {
-		tableView.register(IngredientTableViewCell.self, forCellReuseIdentifier: IngredientTableViewController.baseTableViewCellReuseIdentifier)
+		tableView.register(DetailTableViewCell.self, forCellReuseIdentifier: IngredientTableViewController.baseTableViewCellReuseIdentifier)
 	}
 	
 	//MARK: UITableViewDelegate
