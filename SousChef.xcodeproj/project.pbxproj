@@ -60,6 +60,7 @@
 		56BC17B81F68E46300393863 /* InstructionsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */; };
 		56D42B302002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */; };
 		56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
+		56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F42272201D877A007CDCA9 /* ExpandingTextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,7 @@
 		56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsListTableViewController.swift; path = Controller/InstructionsListTableViewController.swift; sourceTree = "<group>"; };
 		56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIColor+SousChefAdditions.swift"; path = "Utility/UIColor+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientLinguisticTagger.swift; path = Model/IngredientLinguisticTagger.swift; sourceTree = "<group>"; };
+		56F42272201D877A007CDCA9 /* ExpandingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandingTextView.swift; path = iPadControllers/ExpandingTextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,8 +162,8 @@
 			children = (
 				56797B301FBC04A300052382 /* IngredientLinguisticTesterTests.swift */,
 				56797B321FBC04D600052382 /* MeasurementTests.swift */,
-				563C45691F9085E100B3CAF4 /* SousChefTests.swift */,
 				56A600361FCD2741000578CD /* RecipeDatabaseTests.swift */,
+				563C45691F9085E100B3CAF4 /* SousChefTests.swift */,
 				5690990E20156B1600A1F39C /* TextRecognizerTests.swift */,
 				563C456B1F9085E100B3CAF4 /* Info.plist */,
 			);
@@ -202,6 +204,7 @@
 				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
 				569330172011CB180017D16B /* AddRecipeViewController.swift */,
+				56F42272201D877A007CDCA9 /* ExpandingTextView.swift */,
 			);
 			name = iPadControllers;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 				56BC17B81F68E46300393863 /* InstructionsListTableViewController.swift in Sources */,
 				5693306A201412670017D16B /* UIImage+SousChefAdditions.swift in Sources */,
 				56D42B302002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift in Sources */,
+				56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */,
 				56BC17B61F68E1A600393863 /* InstructionsDetailViewController.swift in Sources */,
 				568258C21F63A45400A020A9 /* RecipeTableViewCell.swift in Sources */,
 				569330182011CB180017D16B /* AddRecipeViewController.swift in Sources */,

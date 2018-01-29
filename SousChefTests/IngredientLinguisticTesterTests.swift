@@ -8,7 +8,7 @@
 
 import XCTest
 
-// MARK: IngredientLinguisticTaggerTests
+// MARK: - IngredientLinguisticTaggerTests
 class IngredientLinguisticTesterTests: SousChefTestCase {
 	var ingredientLinguisticTagger = IngredientLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
 	
@@ -168,7 +168,7 @@ class IngredientLinguisticTesterTests: SousChefTestCase {
 		}
 	}
 	
-	// MARK: Fractional Measurements
+	// MARK: - Fractional Measurements
 	
 	// Expected failure until the radar is fixed.
 	func testLinguisticTaggerMeasurementTypeCupWithNoOf() {
@@ -248,7 +248,7 @@ class IngredientLinguisticTesterTests: SousChefTestCase {
 		}
 	}
 	
-	//MARK: Real World Tests
+	// MARK: - Real World Tests
 	
 	// Oh She Glows Vegan Cinnamon Rolls
 	func testOhSheGlowsVeganCinnamonRolls1() {
@@ -582,7 +582,7 @@ class IngredientLinguisticTesterTests: SousChefTestCase {
 		XCTAssertTrue(i.item.contains("onions"))
 	}
 
-	// MARK: Helpers
+	// MARK: - Helpers
 	
 	func ingredient(info: String) -> Ingredient {
 		ingredientLinguisticTagger.string = info
