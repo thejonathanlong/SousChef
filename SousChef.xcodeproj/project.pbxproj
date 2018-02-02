@@ -48,7 +48,7 @@
 		56933012201068CD0017D16B /* RecipeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56933011201068CD0017D16B /* RecipeCollectionViewCell.swift */; };
 		5693301420106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5693301320106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift */; };
 		569330162011C8AC0017D16B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569330152011C8AC0017D16B /* TestData.swift */; };
-		569330182011CB180017D16B /* AddRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569330172011CB180017D16B /* AddRecipeViewController.swift */; };
+		569330182011CB180017D16B /* AddWorkFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569330172011CB180017D16B /* AddWorkFlow.swift */; };
 		5693306A201412670017D16B /* UIImage+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56933069201412670017D16B /* UIImage+SousChefAdditions.swift */; };
 		5693306E2014601F0017D16B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5693306D2014601F0017D16B /* libz.tbd */; };
 		56933070201460340017D16B /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5693306F201460340017D16B /* libstdc++.tbd */; };
@@ -112,7 +112,7 @@
 		56933011201068CD0017D16B /* RecipeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipeCollectionViewCell.swift; path = Views/RecipeCollectionViewCell.swift; sourceTree = "<group>"; };
 		5693301320106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSLayoutConstraint+SousChefAdditions.swift"; path = "Utility/NSLayoutConstraint+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		569330152011C8AC0017D16B /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
-		569330172011CB180017D16B /* AddRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddRecipeViewController.swift; path = iPadControllers/AddRecipeViewController.swift; sourceTree = "<group>"; };
+		569330172011CB180017D16B /* AddWorkFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddWorkFlow.swift; path = iPadControllers/AddWorkFlow.swift; sourceTree = "<group>"; };
 		56933069201412670017D16B /* UIImage+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		5693306D2014601F0017D16B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		5693306F201460340017D16B /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -203,7 +203,7 @@
 				560CA6B8200062AA00807784 /* IngredientTableViewController.swift */,
 				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
-				569330172011CB180017D16B /* AddRecipeViewController.swift */,
+				569330172011CB180017D16B /* AddWorkFlow.swift */,
 				56F42272201D877A007CDCA9 /* ExpandingTextView.swift */,
 			);
 			name = iPadControllers;
@@ -472,7 +472,7 @@
 				56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */,
 				56BC17B61F68E1A600393863 /* InstructionsDetailViewController.swift in Sources */,
 				568258C21F63A45400A020A9 /* RecipeTableViewCell.swift in Sources */,
-				569330182011CB180017D16B /* AddRecipeViewController.swift in Sources */,
+				569330182011CB180017D16B /* AddWorkFlow.swift in Sources */,
 				56932FEF200F0B490017D16B /* BaseTableViewController.swift in Sources */,
 				56932FED200F02B40017D16B /* SousChefStyling.swift in Sources */,
 				56933010201068AA0017D16B /* AllRecipesCollectionViewController.swift in Sources */,

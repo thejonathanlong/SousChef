@@ -9,6 +9,7 @@
 import UIKit
 
 class HeaderView: UIView {
+	
 	let headerLabel = UILabel()
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -33,18 +34,14 @@ class HeaderView: UIView {
 		let constraints = NSLayoutConstraint.constraintsPinningEdges(of: headerLabel, toEdgesOf: self)
 		NSLayoutConstraint.activate(constraints)
 	}
-	
-	override var intrinsicContentSize: CGSize {
-		return headerLabel.intrinsicContentSize
-	}
 }
 
-// It is the clients responsibility to shrink this view. The internal Views should shrink appropriately.
-class ExpandingTextView: UIView {
+class ExpandingTextView: UIView, UITextViewDelegate {
+	
 	// MARK: - Private interface
 	private let headerView = HeaderView()
 	private let textView = UITextView()
-	private var contentStackViewHeightConstraint = NSLayoutConstraint()
+	private var textViewHeightConstraint = NSLayoutConstraint()
 	private let contentStackView = UIStackView()
 	
 	// MARK: - Public interface
@@ -54,22 +51,20 @@ class ExpandingTextView: UIView {
 		}
 	}
 	
-	var isExpanded = true {
-		didSet {
-			isExpanded ? expand() : contract()
+	var isExpanded = false {
+		didSet (newValue) {
+			newValue ? expand(animated: true) : contract(animated: true)
 		}
 	}
 	
 	var text = "" {
 		didSet {
 			textView.text = text
+			textViewDidChange(textView)
 		}
 	}
 	
-	override var intrinsicContentSize: CGSize {
-		return contentStackView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
-	}
-	
+	// MARK: - Initializers
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()
@@ -85,48 +80,73 @@ class ExpandingTextView: UIView {
 	}
 	
 	func commonInit() {
+		// This needs to be set for the animation to work... ??
+		clipsToBounds = true
 		
 		headerView.translatesAutoresizingMaskIntoConstraints = false
-		headerView.headerLabel.setContentHuggingPriority(.required, for: .vertical)
-		textView.backgroundColor = UIColor.clear
 		textView.translatesAutoresizingMaskIntoConstraints = false
-		textView.text = "The Texas Longhorns football program is the intercollegiate team representing the University of Texas at Austin (variously Texas or UT) in the sport of American football. The Longhorns compete in the NCAA Division I Football Bowl Subdivision (formerly Division I-A) as a member of the Big 12 Conference. The team is coached by Tom Herman and home games are played at Darrell K Royal–Texas Memorial Stadium in Austin, Texas."
-		
 		contentStackView.translatesAutoresizingMaskIntoConstraints = false
-		contentStackView.axis = .vertical
+		
+		textView.backgroundColor = UIColor.clear
+		textView.delegate = self
+		
 		contentStackView.alignment = .leading
-		contentStackView.distribution = .fillProportionally
+		contentStackView.axis = .vertical
+		contentStackView.distribution = .fill
 		
 		contentStackView.addArrangedSubview(headerView)
 		contentStackView.addArrangedSubview(textView)
 		addSubview(contentStackView)
 		
 		
-		contentStackViewHeightConstraint = contentStackView.heightAnchor.constraint(equalTo: self.heightAnchor)
+		textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: 25)
 		let constraints = [
 			contentStackView.widthAnchor.constraint(equalTo: self.widthAnchor),
 			contentStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 			contentStackView.topAnchor.constraint(equalTo: self.topAnchor),
-			contentStackViewHeightConstraint,
-			textView.heightAnchor.constraint(greaterThanOrEqualToConstant: 25),
+			contentStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 			textView.widthAnchor.constraint(equalTo: self.widthAnchor),
+			textView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+			textViewHeightConstraint
 			]
 		
 		NSLayoutConstraint.activate(constraints)
 	}
 	
-	func contract() {
-		textView.isHidden = true
-//		contentStackViewHeightConstraint.isActive = false
-//		contentStackViewHeightConstraint = contentStackView.heightAnchor.constraint(equalToConstant: headerView.intrinsicContentSize.height)
-//		contentStackViewHeightConstraint.isActive = true
+	// MARK: - Layout
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		textViewDidChange(textView)
+	}
+}
+
+//MARK: - Actions
+extension ExpandingTextView {
+	
+	func contract(animated: Bool) {
+		let animationDuration = animated ? 0.3 : 0.0
+		UIView.animate(withDuration: animationDuration) {
+			self.textView.isHidden = true
+		}
 	}
 	
-	func expand() {
-		textView.isHidden = false
-//		contentStackViewHeightConstraint.isActive = false
-//		contentStackViewHeightConstraint = contentStackView.heightAnchor.constraint(equalTo: self.heightAnchor)
-//		contentStackViewHeightConstraint.isActive = true
+	func expand(animated: Bool) {
+		let animationDuration = animated ? 0.3 : 0.0
+		UIView.animate(withDuration: animationDuration) {
+			self.textView.isHidden = false
+		}
+	}
+}
+
+//MARK: - UITextViewDelegate
+extension ExpandingTextView {
+	
+	func textViewDidChange(_ textView: UITextView) {
+		let width = self.frame.width
+		let newSize = textView.sizeThatFits(CGSize(width: width, height: CGFloat.greatestFiniteMagnitude))
+		textViewHeightConstraint.isActive = false
+		textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: newSize.height)
+		textViewHeightConstraint.isActive = true
 	}
 }
 

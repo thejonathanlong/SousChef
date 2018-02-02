@@ -41,8 +41,10 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	}
 	
 	@objc func addRecipe() {
-		let vc = AddRecipeViewController()
-		navigationController?.pushViewController(vc, animated: true)
+		let vc = RecipeReviewViewController()
+		vc.modalPresentationStyle = .formSheet
+//		navigationController?.pushViewController(vc, animated: true)
+		present(vc, animated: true, completion: nil)
 	}
 }
 
