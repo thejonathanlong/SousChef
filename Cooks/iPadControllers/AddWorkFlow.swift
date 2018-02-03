@@ -8,6 +8,93 @@
 
 import UIKit
 
+class RecipeSmartAddViewController: UIViewController {
+	
+	let titleLabel = UILabel()
+	let buttonStackView = UIStackView()
+	let cameraButton = UIButton(type: .system)
+	let photosButton = UIButton(type: .system)
+	let textButton = UIButton(type: .system)
+	
+	override func loadView() {
+		super.loadView()
+		
+		view.backgroundColor = UIColor.white
+		titleLabel.translatesAutoresizingMaskIntoConstraints = false
+		buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+		cameraButton.translatesAutoresizingMaskIntoConstraints = false
+		photosButton.translatesAutoresizingMaskIntoConstraints = false
+		textButton.translatesAutoresizingMaskIntoConstraints = false
+
+		cameraButton.setTitle("Camera", for: .normal)
+		photosButton.setTitle("Photo", for: .normal)
+		textButton.setTitle("Text", for: .normal)
+		
+		titleLabel.textColor = SousChefStyling.darkColor
+		cameraButton.titleLabel?.textColor = SousChefStyling.darkColor
+		photosButton.titleLabel?.textColor = SousChefStyling.darkColor
+		textButton.titleLabel?.textColor = SousChefStyling.darkColor
+		
+		cameraButton.backgroundColor = UIColor.blue
+		photosButton.backgroundColor = UIColor.red
+		textButton.backgroundColor = UIColor.green
+		
+		
+		cameraButton.isHidden = false
+		
+		cameraButton.addTarget(self, action: #selector(presentCamera(sender:)), for: .primaryActionTriggered)
+		photosButton.addTarget(self, action: #selector(presentPhotoPicker(sender:)), for: .primaryActionTriggered)
+		textButton.addTarget(self, action: #selector(presentTextInput(sender:)), for: .primaryActionTriggered)
+		
+		buttonStackView.axis = .horizontal
+		buttonStackView.alignment = .center
+		buttonStackView.distribution = .fillEqually
+		buttonStackView.spacing = 25.0 // this number probably isn't right
+		
+		buttonStackView.addArrangedSubview(cameraButton)
+		buttonStackView.addArrangedSubview(photosButton)
+		buttonStackView.addArrangedSubview(textButton)
+		
+		view.addSubview(titleLabel)
+		view.addSubview(buttonStackView)
+		
+		let constraints = [
+			titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+			titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			buttonStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+			buttonStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 25.0), // This number should be the same as the spacing probably
+			buttonStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25.0),
+		]
+		
+		NSLayoutConstraint.activate(constraints)
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+	}
+}
+
+//MARK: - Button Actions
+extension RecipeSmartAddViewController {
+	@objc func presentCamera(sender: UIButton) {
+		
+	}
+	
+	@objc func presentPhotoPicker(sender: UIButton) {
+		let imagePickerController = UIImagePickerController(nibName: nil, bundle: nil)
+		imagePickerController.sourceType = .photoLibrary
+		imagePickerController.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+		
+		present(imagePickerController, animated: true, completion: nil)
+		
+		
+	}
+	
+	@objc func presentTextInput(sender: UIButton) {
+		
+	}
+}
+
 class RecipeReviewViewController: UIViewController, UITextViewDelegate {
 	
 	let titleTextView = UITextView()
@@ -69,10 +156,6 @@ class RecipeReviewViewController: UIViewController, UITextViewDelegate {
 	
 	@objc func expandDirectionDetails(gesture: UITapGestureRecognizer) {
 		directionExpandingTextView.isExpanded = !directionExpandingTextView.isExpanded
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
 	}
 }
 

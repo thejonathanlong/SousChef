@@ -17,6 +17,8 @@ class SousChefDatabase: NSObject {
 	
 	let publicDB = CKContainer.default().publicCloudDatabase
 	let privateDB = CKContainer.default().privateCloudDatabase
+	
+	static let shared = SousChefDatabase()
 }
 
 // MARK: - Fetching Recipes

@@ -204,7 +204,6 @@
 				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
 				569330172011CB180017D16B /* AddWorkFlow.swift */,
-				56F42272201D877A007CDCA9 /* ExpandingTextView.swift */,
 			);
 			name = iPadControllers;
 			sourceTree = "<group>";
@@ -212,6 +211,7 @@
 		56766A5D1FDCFDE300C91E0C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				56F42272201D877A007CDCA9 /* ExpandingTextView.swift */,
 				568258C11F63A45400A020A9 /* RecipeTableViewCell.swift */,
 				56766A5E1FDCFE1E00C91E0C /* DetailTableViewCell.swift */,
 				56933011201068CD0017D16B /* RecipeCollectionViewCell.swift */,

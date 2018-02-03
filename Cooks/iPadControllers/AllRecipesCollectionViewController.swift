@@ -11,11 +11,22 @@ import UIKit
 class AllRecipesCollectionViewController: UICollectionViewController {
 	static let recipeCollectionViewCellReuseIdentifier = "recipeCollectionViewCellReuseIdentifier"
 	
-	var recipes: [Recipe] = TestData.testRecipes {
+	var recipes: [Recipe] = [] {
 		didSet {
 			// Update based on the new recipe that was given
 			recipesDidChange()
 		}
+	}
+	
+	private let database = SousChefDatabase.shared
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		database.recipes { (recipes) in
+			self.recipes = recipes
+		}
+		
 	}
 	
     override func viewDidLoad() {
@@ -38,12 +49,16 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	
 	func recipesDidChange() {
 		//Update because the recipes changed...
+		DispatchQueue.main.async {
+			self.collectionView?.reloadData()
+		}
+		
 	}
 	
 	@objc func addRecipe() {
-		let vc = RecipeReviewViewController()
+		let vc = RecipeSmartAddViewController()
+		vc.titleLabel.text = "Tell me the ingredient list"
 		vc.modalPresentationStyle = .formSheet
-//		navigationController?.pushViewController(vc, animated: true)
 		present(vc, animated: true, completion: nil)
 	}
 }
@@ -71,5 +86,13 @@ extension AllRecipesCollectionViewController {
 
 // MARK: UICollectionViewDelegate
 extension AllRecipesCollectionViewController {
+	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		let recipe = recipes[indexPath.row]
+		let recipeDetailViewController = RecipeDetailViewController(nibName: nil, bundle: nil)
+		recipeDetailViewController.recipe = recipe
+		
+		navigationController?.pushViewController(recipeDetailViewController, animated: true)
+	}
 	
 }

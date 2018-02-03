@@ -45,8 +45,6 @@ class Recipe: NSObject {
 		super.init()
 	}
 	
-	
-	
 	init(record: CKRecord) {
 		name = record[Recipe.recordNameKey] as! String
 		if let references = record[Recipe.recordIngredientsKey] as? [CKReference] {
@@ -69,17 +67,8 @@ class Recipe: NSObject {
 	
 	//MARK: Helpers
 	static func recipeImage(_ record: CKRecord) -> UIImage? {
-		guard let asset = record[Recipe.recordImageKey] as? CKAsset else { return nil }
-		
-		do {
-			let data = try Data(contentsOf: asset.fileURL)
-			return UIImage(data: data)
-		}
-		catch {
-			print("There was an error creating the data from the file \(asset.fileURL) - \(error)")
-		}
-		
-		return nil
+		guard let data = record[Recipe.recordImageKey] as? Data else { return nil }
+		return UIImage(data: data)
 	}
 	
 	//MARK: Ingredient Interaction

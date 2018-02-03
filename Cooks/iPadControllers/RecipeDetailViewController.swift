@@ -24,6 +24,7 @@ class RecipeDetailViewController: UIViewController {
 	private let slidingViewVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
 	private let contentView = UIView()
 	private let recipeTitleLabel = UILabel()
+	private let database = SousChefDatabase.shared
 	
 	private let ingredientViewController = IngredientTableViewController(style: .plain)
 	private let instructionViewController = InstructionsTableViewController(style: .plain)
@@ -118,6 +119,11 @@ class RecipeDetailViewController: UIViewController {
 		}
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		instructionViewController.instructions = recipe.instructions
+	}
+	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
 		scrollView.contentInset = UIEdgeInsets(top: 0, left: (size.width * (1 - RecipeDetailViewController.instructionTableViewWidthMultipler)) - 18.0, bottom: 0, right: 0)
@@ -125,6 +131,11 @@ class RecipeDetailViewController: UIViewController {
 	
 	// The recipe has changed so update the content appropriately
 	func recipeDidChange() {
+		database.ingredients(for: recipe) { (ingredients) in
+			DispatchQueue.main.async {
+				self.recipe.ingredients = ingredients
+			}
+		}
 		recipeTitleLabel.text = recipe.name
 		backgroundImageView.image = recipe.image
 		backgroundImageView.setNeedsDisplay()
