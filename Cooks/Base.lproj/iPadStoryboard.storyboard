@@ -90,6 +90,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LnQ-4b-Ln3">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="z45-XB-NgJ" kind="relationship" relationship="rootViewController" id="pod-xQ-mWc"/>
                     </connections>
@@ -101,12 +104,14 @@
         <!--All Recipes-->
         <scene sceneID="gsK-Xe-QgP">
             <objects>
-                <navigationController id="Msg-2F-M5a" sceneMemberID="viewController">
+                <navigationController navigationBarHidden="YES" hidesBarsOnSwipe="YES" id="Msg-2F-M5a" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="All Recipes" id="HrY-H2-mX6"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="saP-Xh-Dy5">
-                        <rect key="frame" x="0.0" y="20" width="1112" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lgb-zR-tRz">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="3OE-TZ-567" kind="relationship" relationship="rootViewController" id="L62-Qb-r5k"/>
                     </connections>

@@ -81,7 +81,7 @@ extension RecipeSmartAddViewController {
 	}
 	
 	@objc func presentPhotoPicker(sender: UIButton) {
-		let imagePickerController = UIImagePickerController(nibName: nil, bundle: nil)
+		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .photoLibrary
 		imagePickerController.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
 		

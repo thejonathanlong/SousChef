@@ -18,7 +18,7 @@ class RecipeCollectionViewCell: UICollectionViewCell {
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		
 		imageView.contentMode = .scaleAspectFill
-		titleLabel.font = SousChefStyling.preferredFont(for: .headline)
+		titleLabel.font = SousChefStyling.preferredFont(for: .subheadline)
 		titleLabel.textColor = SousChefStyling.lightColor
 		
 		contentView.addSubview(imageView)

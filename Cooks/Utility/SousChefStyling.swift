@@ -15,7 +15,7 @@ struct SousChefStyling {
 //MARK - Font
 extension SousChefStyling {
 	static let defaultFontName = "Didot"
-	static let defaultTitleFontName = "Didot-Bold"
+	static let defaultBoldFontName = "Didot-Bold"
 	
 	static func preferredFont(for textStyle: UIFontTextStyle) -> UIFont {
 		switch textStyle {
@@ -27,7 +27,7 @@ extension SousChefStyling {
 			return font
 		
 		case .title1:
-			guard let font = UIFont(name: SousChefStyling.defaultTitleFontName, size: 32) else {
+			guard let font = UIFont(name: SousChefStyling.defaultBoldFontName, size: 32) else {
 				print("Default font (\(SousChefStyling.defaultFontName)) was not loaded for some reason.. using systems default")
 				return UIFont.preferredFont(forTextStyle: textStyle)
 			}
@@ -35,6 +35,13 @@ extension SousChefStyling {
 			
 		case .headline:
 			guard let font = UIFont(name: SousChefStyling.defaultFontName, size: 24) else {
+				print("Default font (\(SousChefStyling.defaultFontName)) was not loaded for some reason.. using systems default")
+				return UIFont.preferredFont(forTextStyle: textStyle)
+			}
+			return font
+		
+		case .subheadline:
+			guard let font = UIFont(name: SousChefStyling.defaultBoldFontName, size: 20) else {
 				print("Default font (\(SousChefStyling.defaultFontName)) was not loaded for some reason.. using systems default")
 				return UIFont.preferredFont(forTextStyle: textStyle)
 			}
