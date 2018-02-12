@@ -31,6 +31,7 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+		collectionView?.backgroundColor = UIColor.white
         collectionView!.register(RecipeCollectionViewCell.self, forCellWithReuseIdentifier: AllRecipesCollectionViewController.recipeCollectionViewCellReuseIdentifier)
 		collectionView!.contentInset = UIEdgeInsets(top: 25.0, left: 50.0, bottom: 25.0, right: 50.0)
 		
@@ -41,11 +42,14 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 		flowLayout.scrollDirection = .horizontal
 		
 		self.view.backgroundColor = SousChefStyling.lightColor
-		
-		let addRecipeButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRecipe))
-		addRecipeButtonItem.tintColor = SousChefStyling.darkColor
-		self.navigationItem.setRightBarButton(addRecipeButtonItem, animated: true)
     }
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
+			baseNavigationController.addFloatingButton(image: UIImage(named: "Add"), target: self, action: #selector(addRecipe), viewController: self)
+		}
+	}
 	
 	func recipesDidChange() {
 		//Update because the recipes changed...
@@ -56,10 +60,10 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	}
 	
 	@objc func addRecipe() {
-		let vc = RecipeSmartAddViewController()
-		vc.titleLabel.text = "Tell me the ingredient list"
-		vc.modalPresentationStyle = .formSheet
-		present(vc, animated: true, completion: nil)
+		let vc = AddRecipeViewController(nibName: nil, bundle: nil)
+		
+//		vc.titleLabel.text = "Tell me the ingredient list"
+		navigationController?.pushViewController(vc, animated: true)
 	}
 }
 

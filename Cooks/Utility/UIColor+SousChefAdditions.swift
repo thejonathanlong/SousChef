@@ -32,4 +32,16 @@ extension UIColor {
 			return UIColor(displayP3Red: 49.0/255.0, green: 49.0/255.0, blue: 49.0/255.0, alpha: 1.0)
 		}
 	}
+	
+	static var paleGreen: UIColor {
+		get {
+			return UIColor(displayP3Red: 152.0/255.0, green: 251.0/255.0, blue: 152.0/255.0, alpha: 1.0)
+		}
+	}
+	
+	static var powderBlue: UIColor {
+		get {
+			return UIColor(displayP3Red: 176.0/255.0, green: 224.0/255.0, blue: 230.0/255.0, alpha: 1.0)
+		}
+	}
 }

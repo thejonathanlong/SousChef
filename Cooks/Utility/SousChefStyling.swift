@@ -17,6 +17,9 @@ extension SousChefStyling {
 	static let defaultFontName = "Didot"
 	static let defaultBoldFontName = "Didot-Bold"
 	
+//	static let defaultFontName = "PingFangTC-Regular"
+//	static let defaultBoldFontName = "PingFangTC-Semibold"
+	
 	static func preferredFont(for textStyle: UIFontTextStyle) -> UIFont {
 		switch textStyle {
 		case .body:
@@ -61,10 +64,18 @@ extension SousChefStyling {
 
 //MARK - Margins
 extension SousChefStyling {
-	static let smallestAllowableMargin: CGFloat = 10.0
+	static let largestAllowableMargin: CGFloat = 25.0
+	static let allowableMargin: CGFloat = 10.0
+	static let smallestAllowableMargin: CGFloat = SousChefStyling.allowableMargin/2.0
 }
 
 //MARK: - Assets
 extension SousChefStyling {
 	static let calendarImage = UIImage(named: "calendar-3")
+}
+
+//MARK: - Layout
+extension SousChefStyling {
+	static let navigationFloatingButtonWidth: CGFloat = 50.0
+	static let navigationFloatingButtonHeight: CGFloat = 50.0
 }

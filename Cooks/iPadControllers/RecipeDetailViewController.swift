@@ -32,10 +32,6 @@ class RecipeDetailViewController: UIViewController {
 	override func loadView() {
 		super.loadView()
 		
-		let planButtomItem = UIBarButtonItem(image: SousChefStyling.calendarImage, style: .plain, target: self, action: #selector(presentAddRecipe))
-		planButtomItem.tintColor = SousChefStyling.darkColor
-		self.navigationItem.setRightBarButton(planButtomItem, animated: true)
-		
 		if let theView = self.view, let ingredientTableView = ingredientViewController.view, let instructionTableView = instructionViewController.view {
 			backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
 			scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -99,16 +95,16 @@ class RecipeDetailViewController: UIViewController {
 							   contentView.centerYAnchor.constraint(equalTo: slidingView.centerYAnchor),
 							   contentView.widthAnchor.constraint(equalTo: theView.widthAnchor),
 							   contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.85),
-							   ingredientTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.smallestAllowableMargin),
+							   ingredientTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.allowableMargin),
 							   ingredientTableView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: RecipeDetailViewController.instructionTableViewWidthMultipler),
 							   ingredientTableView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.67),
 							   ingredientTableView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-							   instructionTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -SousChefStyling.smallestAllowableMargin),
-							   instructionTableView.leadingAnchor.constraint(equalTo: ingredientTableView.trailingAnchor, constant: SousChefStyling.smallestAllowableMargin),
-							   instructionTableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SousChefStyling.smallestAllowableMargin),
-							   instructionTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.smallestAllowableMargin),
+							   instructionTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -SousChefStyling.allowableMargin),
+							   instructionTableView.leadingAnchor.constraint(equalTo: ingredientTableView.trailingAnchor, constant: SousChefStyling.allowableMargin),
+							   instructionTableView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SousChefStyling.allowableMargin),
+							   instructionTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.allowableMargin),
 							   recipeTitleLabel.leadingAnchor.constraint(equalTo: theView.leadingAnchor, constant: 25.0),
-							   recipeTitleLabel.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: -SousChefStyling.smallestAllowableMargin),
+							   recipeTitleLabel.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: -SousChefStyling.allowableMargin),
 							   slidingViewVisualEffectView.centerXAnchor.constraint(equalTo: slidingView.centerXAnchor),
 							   slidingViewVisualEffectView.centerYAnchor.constraint(equalTo: slidingView.centerYAnchor),
 							   slidingViewVisualEffectView.widthAnchor.constraint(equalTo: slidingView.widthAnchor),

@@ -15,7 +15,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let tabBarController = UITabBarController()
+		
+		let allRecipesViewController = AllRecipesCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+		allRecipesViewController.title = "Recipes"
+		
+		allRecipesViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
+		
+		let controllers = [allRecipesViewController]
+		tabBarController.viewControllers = controllers.map {
+			let navController = FloatingButtonNavigationController(rootViewController: $0)
+			navController.isNavigationBarHidden = true
+			
+			return navController
+		}
+		
+		window?.rootViewController = tabBarController
         return true
     }
 
