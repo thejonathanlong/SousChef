@@ -11,6 +11,7 @@ import MobileCoreServices
 
 //MARK: - HeaderView
 class HeaderView: UIView, UITextViewDelegate {
+	
 	private let verticalStackView = UIStackView()
 	private let horizontalStackView = UIStackView()
 	private let textView = UITextView()
@@ -90,6 +91,7 @@ class HeaderView: UIView, UITextViewDelegate {
 }
 
 extension HeaderView {
+	
 	func textViewDidChange(_ textView: UITextView) {
 		let width = self.frame.width
 		let newSize = textView.sizeThatFits(CGSize(width: width, height: CGFloat.greatestFiniteMagnitude))
@@ -101,6 +103,7 @@ extension HeaderView {
 }
 
 extension HeaderView {
+	
 	func addActionButton(target: Any, action: Selector, image: UIImage?) {
 		let button = SousChefButton(frame: .zero)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -116,9 +119,14 @@ extension HeaderView {
 		
 		NSLayoutConstraint.activate(constraints)
 	}
+	
+	func contains(button: UIButton) -> Bool {
+		return self.horizontalStackView.arrangedSubviews.contains(button)
+	}
 }
 
 class SmartAddViewController: UIViewController {
+	
 	let header = HeaderView(frame: .zero)
 	let resultingTextView = UITextView()
 	
@@ -155,6 +163,10 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 	let titleHeaderView = HeaderView(frame: .zero)
 	let ingredientSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
 	let instructionSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
+	var textViewUnderRecognition = UITextView()
+	
+	let database = SousChefDatabase.shared
+	let ingredientTagger = IngredientLinguisticTagger()
 	
 	override func loadView() {
 		super.loadView()
@@ -173,15 +185,17 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		
 		let ingredientSmartAddView = ingredientSmartAddViewController.view!
 		ingredientSmartAddViewController.header.text = "Ingredients"
-		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera), image: cameraImage)
-		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto), image: photoImage)
+		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera(sender:)), image: cameraImage)
+		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto(sender:)), image: photoImage)
 		ingredientSmartAddView.translatesAutoresizingMaskIntoConstraints = false
+		ingredientSmartAddViewController.resultingTextView.text = "ingredient list goes here"
 		
 		let instructionSmartAddView = instructionSmartAddViewController.view!
 		instructionSmartAddViewController.header.text = "Instructions"
-		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera), image: cameraImage)
-		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto), image: photoImage)
+		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera(sender:)), image: cameraImage)
+		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto(sender:)), image: photoImage)
 		instructionSmartAddView.translatesAutoresizingMaskIntoConstraints = false
+		instructionSmartAddViewController.resultingTextView.text = "instructions go here"
 		
 		titleHeaderView.translatesAutoresizingMaskIntoConstraints = false
 		titleHeaderView.isEditable = true
@@ -224,9 +238,29 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		NSLayoutConstraint.activate(constraints)
 	}
 	
-	@objc func extractFromCamera() {
-		let imagePickerController = UIImagePickerController()
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
+			baseNavigationController.addFloatingButton(title: "Done", target: self, action: #selector(done(sender:)), viewController: self)
+		}
+	}
+	
+	@objc func done(sender: UIButton) {
+		let recipeName = titleHeaderView.text
 		
+		ingredientTagger.string = ingredientSmartAddViewController.resultingTextView.text
+		let ingredientList = ingredientTagger.ingredients()
+		
+		let instructionList = instructionSmartAddViewController.resultingTextView.text.split(separator: "\n")
+		
+		let recipe = Recipe(name: recipeName, ingredients: ingredientList, instructions: instructionList, image: <#T##UIImage?#>, tags: [])
+	}
+	
+	@objc func extractFromCamera(sender: UIButton) {
+		
+		textViewUnderRecognition = ingredientSmartAddViewController.header.subviews.contains(sender) ? ingredientSmartAddViewController.resultingTextView : instructionSmartAddViewController.resultingTextView
+		
+		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .camera
 		imagePickerController.mediaTypes = [kUTTypeImage as String]
 		imagePickerController.delegate = self
@@ -234,11 +268,14 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		present(imagePickerController, animated: true, completion: nil)
 	}
 	
-	@objc func extractFromPhoto() {
-		let imagePickerController = UIImagePickerController()
+	@objc func extractFromPhoto(sender: UIButton) {
 		
+		textViewUnderRecognition = ingredientSmartAddViewController.header.contains(button: sender) ? ingredientSmartAddViewController.resultingTextView : instructionSmartAddViewController.resultingTextView
+		
+		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .savedPhotosAlbum
 		imagePickerController.mediaTypes = [kUTTypeImage as String]
+		imagePickerController.allowsEditing = true
 		imagePickerController.delegate = self
 		
 		present(imagePickerController, animated: true, completion: nil)
@@ -247,11 +284,22 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 
 //MARK: - UIImagePickercontrollerDelegate
 extension AddRecipeViewController {
-	func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: AnyObject]) {
-		let uncroppedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
+	
+	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+		print("Did Finish picking media")
+//		let uncroppedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
 		let croppedImage = info[UIImagePickerControllerEditedImage] as? UIImage
-		let cropRect = info[UIImagePickerControllerCropRect]!.cgRectValue
 		
+		TextRecognizer.shared.recognizeText(in: croppedImage!) { (recognizedText) in
+			let textWithoutNewlines = recognizedText.replacingOccurrences(of: "\n", with: " ")
+			let sentences = self.findSentences(text: textWithoutNewlines)
+			let paragraph = sentences.joined(separator: "\n")
+			DispatchQueue.main.async {
+				print("identified text: \(recognizedText)")
+				self.textViewUnderRecognition.text = paragraph
+			}
+			
+		}
 		picker.dismiss(animated: true, completion: nil)
 	}
 	
@@ -259,4 +307,24 @@ extension AddRecipeViewController {
 		picker.dismiss(animated: true, completion: nil)
 	}
 	
+}
+
+extension AddRecipeViewController {
+	// Splits a chunk of texts up by sentences.
+	func findSentences(text: String) -> [String] {
+		var sentences: [String] = []
+		let sentenceTagger = NSLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
+		sentenceTagger.string = text
+		sentenceTagger.enumerateTags(in: NSMakeRange(0, text.count), unit: .sentence, scheme: .language, options: .joinNames) { (tagOrNil, range, stop) in
+			let start = text.index(text.startIndex, offsetBy: range.location)
+			let end = text.index(text.startIndex, offsetBy: (range.location + range.length))
+			let tokenInQuestion = String(text[start..<end])
+			if (tokenInQuestion != "\n")
+			{
+				sentences.append(tokenInQuestion)
+			}
+		}
+		
+		return sentences
+	}
 }

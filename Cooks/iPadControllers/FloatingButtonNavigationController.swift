@@ -108,6 +108,27 @@ extension FloatingButtonNavigationController {
 		}
 	}
 	
+	func addFloatingButton(title: String, target: Any, action: Selector, viewController: UIViewController?) {
+		let floatingButton = SousChefButton(frame: .zero)
+		floatingButton.setTitle(title, for: .normal)
+		floatingButton.addTarget(target, action: action, for: .primaryActionTriggered)
+		floatingButton.translatesAutoresizingMaskIntoConstraints = false
+		
+		let constraints = [
+			floatingButton.widthAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
+			floatingButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight)
+		]
+		NSLayoutConstraint.activate(constraints)
+		floatingButtonStack.addArrangedSubview(floatingButton)
+		
+		if let vc = viewController {
+			if !buttonsForViewController.keys.contains(vc) {
+				buttonsForViewController[vc] = []
+			}
+			buttonsForViewController[vc]?.append(floatingButton)
+		}
+	}
+	
 	func removeFloatingButtons(for viewController: UIViewController) {
 		UIView.animate(withDuration: 0.33) {
 			self.buttonsForViewController[viewController]?.forEach({ $0.removeFromSuperview() })

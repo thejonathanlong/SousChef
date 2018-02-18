@@ -23,6 +23,22 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 	
 	static let exceptions = ["thyme", "cinnamon", "salt", "quinoa"]
 	
+	func ingredients() -> [Ingredient] {
+		assert(string != nil)
+		guard let inputString = self.string else { return [] }
+		let ingredientTexts = inputString.split(separator: "\n")
+		var ingredients: [Ingredient] = []
+		
+		for ingredientText in ingredientTexts {
+			string = String(ingredientText)
+			enumerateTags(using: { (ingredient) in
+				ingredients.append(ingredient)
+			});
+		}
+		
+		return ingredients
+	}
+	
 	func enumerateTags(using block: (Ingredient) -> Void) {
 		guard let inputString = self.string else { return }
 		var measurementRanges: Array<NSRange> = Array<NSRange>()

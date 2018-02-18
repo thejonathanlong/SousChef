@@ -8,6 +8,7 @@
 
 import UIKit
 import TesseractOCR
+import Vision
 
 typealias TextRecognizerCompletionHandler = (String) -> Void
 
@@ -17,19 +18,25 @@ class TextRecognizer: NSObject, G8TesseractDelegate {
 	private let operationQueue = OperationQueue()
 	
 	func recognizeText(in image: UIImage, completionHandler: @escaping TextRecognizerCompletionHandler) {
-		let image = UIImage.grayScale(image: image)
+		let interestingImage = image.cropImageToInterestingText()
+		let image = UIImage.grayScale(image: interestingImage)
 		tesseract?.image = image
 
-		operationQueue.addOperation {
+		let textRecognitionBlockerOperation = BlockOperation {
 			self.tesseract?.recognize()
 			guard let recognizedText = self.tesseract?.recognizedText else {
 				completionHandler("")
 				return
 			}
-			
 			completionHandler(recognizedText)
 		}
 		
+		operationQueue.addOperation(textRecognitionBlockerOperation)
+		
+		let timeoutTime = DispatchTime.now() + .seconds(15)
+		DispatchQueue.main.asyncAfter(deadline: timeoutTime) {
+			print("Canceling textRecognition block because it has been 15 seconds...")
+			textRecognitionBlockerOperation.cancel()
+		}
 	}
-	
 }
