@@ -60,13 +60,15 @@ extension SousChefStyling {
 extension SousChefStyling {
 	static let lightColor = UIColor.whiteSmoke
 	static let darkColor = UIColor.almostBlack
+	static let highlightColor = UIColor.powderBlue
 }
 
 //MARK - Margins
 extension SousChefStyling {
-	static let largestAllowableMargin: CGFloat = 25.0
-	static let allowableMargin: CGFloat = 10.0
-	static let smallestAllowableMargin: CGFloat = SousChefStyling.allowableMargin/2.0
+	static let veryLargeMargin: CGFloat = 65.0
+	static let largeMargin: CGFloat = 25.0
+	static let standardMargin: CGFloat = 10.0
+	static let smallestMargin: CGFloat = SousChefStyling.standardMargin/2.0
 }
 
 //MARK: - Assets

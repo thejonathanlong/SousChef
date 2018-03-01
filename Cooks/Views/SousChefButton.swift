@@ -41,8 +41,10 @@ class SousChefButton: UIButton {
 	
 	func commonInit() {
 		setBackgroundColor(SousChefStyling.lightColor, for: .normal)
-		setBackgroundColor(UIColor.powderBlue, for: .highlighted)
-		layer.borderColor = UIColor.powderBlue.cgColor
+		setBackgroundColor(SousChefStyling.highlightColor, for: .highlighted)
+		setTitleColor(SousChefStyling.lightColor, for: .highlighted)
+		setTitleColor(SousChefStyling.darkColor, for: .normal)
+		layer.borderColor = SousChefStyling.highlightColor.cgColor
 		layer.borderWidth = 2.0
 	}
 	

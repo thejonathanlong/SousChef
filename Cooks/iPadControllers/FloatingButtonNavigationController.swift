@@ -58,9 +58,9 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		view.addSubview(floatingButtonStack)
 		
 		let constraint = [
-			floatingButtonStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: SousChefStyling.allowableMargin),
-			floatingButtonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SousChefStyling.allowableMargin),
-			dummyView.widthAnchor.constraint(equalToConstant: 0),
+			floatingButtonStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: SousChefStyling.standardMargin),
+			floatingButtonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SousChefStyling.standardMargin),
+			dummyView.widthAnchor.constraint(equalToConstant: 1),
 			backButton.widthAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
 			backButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight)
 		]
@@ -81,6 +81,19 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 			return viewController
 		}
 		return nil
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+//		let pleaseSignIntoTheCloudAlertController = UIAlertController(title: "Please Sign into iCloud", message: "In order for Sous Chef to work properly you need to be signed into iCloud. You can do this in System Preferences.", preferredStyle: .alert)
+//		let isSignedIntoTheCloud = FileManager.default.ubiquityIdentityToken != nil
+//		if !isSignedIntoTheCloud {
+////			pushViewController(pleaseSignIntoTheCloudAlertController, animated: true)
+//			topViewController?.present(pleaseSignIntoTheCloudAlertController, animated: true, completion: nil)
+//		} else if presentedViewController == pleaseSignIntoTheCloudAlertController {
+////			popViewController(animated: true)
+//			pleaseSignIntoTheCloudAlertController.dismiss(animated: true, completion: nil)
+//		}
 	}
 }
 

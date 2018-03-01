@@ -30,7 +30,7 @@ class IngredientLinguisticTagger: NSLinguisticTagger {
 		var ingredients: [Ingredient] = []
 		
 		for ingredientText in ingredientTexts {
-			string = String(ingredientText)
+			string = String(ingredientText).lowercased()
 			enumerateTags(using: { (ingredient) in
 				ingredients.append(ingredient)
 			});

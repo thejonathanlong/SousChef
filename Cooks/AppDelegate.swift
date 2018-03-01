@@ -15,22 +15,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let tabBarController = UITabBarController()
+//        let tabBarController = UITabBarController()
 		
 		let allRecipesViewController = AllRecipesCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
 		allRecipesViewController.title = "Recipes"
 		
 		allRecipesViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 0)
 		
-		let controllers = [allRecipesViewController]
-		tabBarController.viewControllers = controllers.map {
-			let navController = FloatingButtonNavigationController(rootViewController: $0)
-			navController.isNavigationBarHidden = true
-			
-			return navController
-		}
+//		let controllers = [allRecipesViewController]
+//		tabBarController.viewControllers = controllers.map {
+//			let navController = FloatingButtonNavigationController(rootViewController: $0)
+//			navController.isNavigationBarHidden = true
+//
+//			return navController
+//		}
+		let navController = FloatingButtonNavigationController(rootViewController: allRecipesViewController)
+		navController.isNavigationBarHidden = true
 		
-		window?.rootViewController = tabBarController
+		window?.rootViewController = navController
         return true
     }
 

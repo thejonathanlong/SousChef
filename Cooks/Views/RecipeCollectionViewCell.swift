@@ -38,8 +38,8 @@ class RecipeCollectionViewCell: UICollectionViewCell {
 		constraints.append(imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 300))
 		
 		
-		let titleLabelConstraints = [titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.allowableMargin),
-									 titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.allowableMargin),
+		let titleLabelConstraints = [titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.standardMargin),
+									 titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.standardMargin),
 									 visualEffectView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 									 visualEffectView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
 									 visualEffectView.widthAnchor.constraint(equalTo: contentView.widthAnchor),

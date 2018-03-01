@@ -27,6 +27,7 @@
 		56797B381FBC115300052382 /* AddRecipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56797B371FBC115300052382 /* AddRecipeTableViewController.swift */; };
 		56797B3B1FBD440200052382 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56797B3A1FBD440200052382 /* CloudKit.framework */; };
 		567ABD5820369785005ECF09 /* CoreGraphics+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567ABD5720369785005ECF09 /* CoreGraphics+SousChefAdditions.swift */; };
+		567ABD59203A3E1C005ECF09 /* CoreGraphics+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567ABD5720369785005ECF09 /* CoreGraphics+SousChefAdditions.swift */; };
 		568258AA1F63A31800A020A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568258A91F63A31800A020A9 /* AppDelegate.swift */; };
 		568258AF1F63A31800A020A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 568258AD1F63A31800A020A9 /* Main.storyboard */; };
 		568258B11F63A31800A020A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 568258B01F63A31800A020A9 /* Assets.xcassets */; };
@@ -390,6 +391,7 @@
 				TargetAttributes = {
 					563C45661F9085E100B3CAF4 = {
 						CreatedOnToolsVersion = 9.0;
+						DevelopmentTeam = 52UN9P9E5H;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 568258A51F63A31800A020A9;
 					};
@@ -460,6 +462,7 @@
 				56797B361FBC0EA000052382 /* Ingredient.swift in Sources */,
 				5690991020156B7B00A1F39C /* TextRecognizer.swift in Sources */,
 				569099162015AC0600A1F39C /* UIImage+SousChefAdditions.swift in Sources */,
+				567ABD59203A3E1C005ECF09 /* CoreGraphics+SousChefAdditions.swift in Sources */,
 				563C456A1F9085E100B3CAF4 /* SousChefTests.swift in Sources */,
 				56A600371FCD2741000578CD /* RecipeDatabaseTests.swift in Sources */,
 				56797B311FBC04A300052382 /* IngredientLinguisticTesterTests.swift in Sources */,
@@ -551,8 +554,9 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jonathan Long (YZS37U2J8Z)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 52UN9P9E5H;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = SousChefTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -572,8 +576,9 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jonathan Long (YZS37U2J8Z)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 52UN9P9E5H;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = SousChefTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

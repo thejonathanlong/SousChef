@@ -35,15 +35,20 @@ class HeaderView: UIView, UITextViewDelegate {
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		commonInit()
+		commonInit(isDividerBelow: true)
+	}
+	
+	init(frame: CGRect, isDividerBelow: Bool) {
+		super.init(frame: frame)
+		commonInit(isDividerBelow: isDividerBelow)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-		commonInit()
+		commonInit(isDividerBelow: true)
 	}
 	
-	func commonInit() {
+	func commonInit(isDividerBelow: Bool) {
 		textView.isEditable = isEditable
 		
 		verticalStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -67,8 +72,15 @@ class HeaderView: UIView, UITextViewDelegate {
 		headerDivider.backgroundColor = SousChefStyling.darkColor
 		
 		horizontalStackView.addArrangedSubview(textView)
-		verticalStackView.addArrangedSubview(horizontalStackView)
-		verticalStackView.addArrangedSubview(headerDivider)
+		if isDividerBelow {
+			verticalStackView.addArrangedSubview(horizontalStackView)
+			verticalStackView.addArrangedSubview(headerDivider)
+		}
+		else {
+			verticalStackView.addArrangedSubview(headerDivider)
+			verticalStackView.addArrangedSubview(horizontalStackView)
+		}
+		
 		
 		addSubview(verticalStackView)
 		
@@ -145,7 +157,7 @@ class SmartAddViewController: UIViewController {
 			header.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
 			header.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 			header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-			resultingTextView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: SousChefStyling.smallestAllowableMargin),
+			resultingTextView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: SousChefStyling.smallestMargin),
 			resultingTextView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
 			resultingTextView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 			resultingTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -160,13 +172,17 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 
 	let contentView = UIView()
 	let backgroundImageView = UIImageView()
+	let recipeImageCameraButton = SousChefButton(frame: .zero)
+	let recipeImagePhotoButton = SousChefButton(frame: .zero)
+	
 	let titleHeaderView = HeaderView(frame: .zero)
+	let tagsHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
 	let ingredientSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
 	let instructionSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
-	var textViewUnderRecognition = UITextView()
 	
+	var resultingView = UIView()
 	let database = SousChefDatabase.shared
-	let ingredientTagger = IngredientLinguisticTagger()
+	let ingredientTagger = IngredientLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
 	
 	override func loadView() {
 		super.loadView()
@@ -179,6 +195,14 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		backgroundImageView.contentMode = .scaleAspectFill
 		backgroundImageView.clipsToBounds = true
 		backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+		
+		recipeImagePhotoButton.translatesAutoresizingMaskIntoConstraints = false
+		recipeImagePhotoButton.addTarget(self, action: #selector(recipeImageFromPhoto(sender:)), for: .primaryActionTriggered)
+		recipeImagePhotoButton.setImage(photoImage, for: .normal)
+		
+		recipeImageCameraButton.translatesAutoresizingMaskIntoConstraints = false
+		recipeImageCameraButton.addTarget(self, action: #selector(recipeImageFromCamera(sender:)), for: .primaryActionTriggered)
+		recipeImageCameraButton.setImage(cameraImage, for: .normal)
 		
 		contentView.backgroundColor = SousChefStyling.lightColor
 		contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -201,8 +225,14 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		titleHeaderView.isEditable = true
 		titleHeaderView.text = "Recipe Name"
 		
+		tagsHeaderView.translatesAutoresizingMaskIntoConstraints = false
+		tagsHeaderView.isEditable = true
+		tagsHeaderView.text = "Tags"
+		
 		view.addSubview(backgroundImageView)
 		view.addSubview(contentView)
+		view.addSubview(recipeImageCameraButton)
+		view.addSubview(recipeImagePhotoButton)
 		
 		addChildViewController(ingredientSmartAddViewController)
 		contentView.addSubview(ingredientSmartAddView)
@@ -210,27 +240,42 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		
 		addChildViewController(instructionSmartAddViewController)
 		contentView.addSubview(instructionSmartAddView)
-		instructionSmartAddView.clipsToBounds = true
 		instructionSmartAddViewController.didMove(toParentViewController: self)
 		
 		contentView.addSubview(titleHeaderView)
+		contentView.addSubview(tagsHeaderView)
 		
 		var constraints = NSLayoutConstraint.constraintsPinningEdges(of: backgroundImageView, toEdgesOf: view)
-		let contentViewConstraints = NSLayoutConstraint.constraintsPinningEdges(of: contentView, toEdgesOf: view, insetBy: SousChefStyling.largestAllowableMargin)
+		let contentViewConstraints = NSLayoutConstraint.constraintsPinningEdges(of: contentView, toEdgesOf: view, insetBy: SousChefStyling.veryLargeMargin)
 		constraints.append(contentsOf: contentViewConstraints)
 		
 		let contentConstraints = [
-			titleHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.allowableMargin),
-			titleHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SousChefStyling.allowableMargin),
-			titleHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -SousChefStyling.allowableMargin),
-			ingredientSmartAddView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.allowableMargin),
-			ingredientSmartAddView.topAnchor.constraint(equalTo: titleHeaderView.bottomAnchor, constant: SousChefStyling.smallestAllowableMargin),
-			ingredientSmartAddView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
-			ingredientSmartAddView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.smallestAllowableMargin),
-			instructionSmartAddView.leadingAnchor.constraint(equalTo: ingredientSmartAddView.trailingAnchor, constant: SousChefStyling.allowableMargin),
-			instructionSmartAddView.topAnchor.constraint(equalTo: titleHeaderView.bottomAnchor, constant: SousChefStyling.smallestAllowableMargin),
-			instructionSmartAddView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -SousChefStyling.allowableMargin*3),
-			instructionSmartAddView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.smallestAllowableMargin),
+			recipeImagePhotoButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SousChefStyling.standardMargin),
+			recipeImagePhotoButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -SousChefStyling.standardMargin),
+			recipeImageCameraButton.trailingAnchor.constraint(equalTo: recipeImagePhotoButton.leadingAnchor, constant: -8),
+			recipeImageCameraButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SousChefStyling.standardMargin),
+			recipeImagePhotoButton.widthAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
+			recipeImagePhotoButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
+			recipeImageCameraButton.widthAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
+			recipeImageCameraButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
+			
+			titleHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.standardMargin),
+			titleHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: SousChefStyling.standardMargin),
+			titleHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -SousChefStyling.standardMargin),
+			
+			ingredientSmartAddView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.standardMargin),
+			ingredientSmartAddView.topAnchor.constraint(equalTo: titleHeaderView.bottomAnchor, constant: SousChefStyling.smallestMargin),
+			ingredientSmartAddView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.33),
+			ingredientSmartAddView.bottomAnchor.constraint(equalTo: tagsHeaderView.topAnchor, constant: -SousChefStyling.smallestMargin),
+			
+			instructionSmartAddView.leadingAnchor.constraint(equalTo: ingredientSmartAddView.trailingAnchor, constant: SousChefStyling.standardMargin),
+			instructionSmartAddView.topAnchor.constraint(equalTo: titleHeaderView.bottomAnchor, constant: SousChefStyling.smallestMargin),
+			instructionSmartAddView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.65, constant: -SousChefStyling.standardMargin*3),
+			instructionSmartAddView.bottomAnchor.constraint(equalTo: tagsHeaderView.topAnchor, constant: -SousChefStyling.smallestMargin),
+			
+			tagsHeaderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.standardMargin),
+			tagsHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.standardMargin),
+			tagsHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -SousChefStyling.standardMargin),
 		]
 		
 		constraints.append(contentsOf: contentConstraints)
@@ -238,27 +283,44 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		NSLayoutConstraint.activate(constraints)
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
 			baseNavigationController.addFloatingButton(title: "Done", target: self, action: #selector(done(sender:)), viewController: self)
 		}
 	}
-	
+}
+
+//MARK: - Actions
+extension AddRecipeViewController {
+
 	@objc func done(sender: UIButton) {
 		let recipeName = titleHeaderView.text
 		
-		ingredientTagger.string = ingredientSmartAddViewController.resultingTextView.text
-		let ingredientList = ingredientTagger.ingredients()
+//		ingredientTagger.string = ingredientSmartAddViewController.resultingTextView.text.split(separator: "\n")
+		ingredientTagger.string = "6 Tbsp ghee, palm shortening, or grass—fed unsalted butter"
+//		let ingredientList = ingredientTagger.ingredients()
+		var ingredientList: [Ingredient] = []
+		 ingredientTagger.enumerateTags { (ing) in
+			ingredientList.append(ing)
+		}
 		
-		let instructionList = instructionSmartAddViewController.resultingTextView.text.split(separator: "\n")
+		let instructionList = instructionSmartAddViewController.resultingTextView.text.split(separator: "\n").map(String.init)
 		
-		let recipe = Recipe(name: recipeName, ingredients: ingredientList, instructions: instructionList, image: <#T##UIImage?#>, tags: [])
+		let recipe = Recipe(name: recipeName, ingredients: ingredientList, instructions: instructionList, image: nil, tags: [])
+		
+		print(recipe)
+		
+		//		database.save(recipes: <#T##[Recipe]#>, onCompletionBlock: <#T##([CKRecord]?, [CKRecordID]?, Error?) -> Void#>)
 	}
 	
 	@objc func extractFromCamera(sender: UIButton) {
-		
-		textViewUnderRecognition = ingredientSmartAddViewController.header.subviews.contains(sender) ? ingredientSmartAddViewController.resultingTextView : instructionSmartAddViewController.resultingTextView
+		if ingredientSmartAddViewController.header.subviews.contains(sender) {
+			resultingView = ingredientSmartAddViewController.resultingTextView
+		}
+		else if instructionSmartAddViewController.header.subviews.contains(sender) {
+			resultingView = instructionSmartAddViewController.resultingTextView
+		}
 		
 		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .camera
@@ -269,13 +331,40 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 	}
 	
 	@objc func extractFromPhoto(sender: UIButton) {
-		
-		textViewUnderRecognition = ingredientSmartAddViewController.header.contains(button: sender) ? ingredientSmartAddViewController.resultingTextView : instructionSmartAddViewController.resultingTextView
+		if ingredientSmartAddViewController.header.subviews.contains(sender) {
+			resultingView = ingredientSmartAddViewController.resultingTextView
+		}
+		else if instructionSmartAddViewController.header.subviews.contains(sender) {
+			resultingView = instructionSmartAddViewController.resultingTextView
+		}
 		
 		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .savedPhotosAlbum
 		imagePickerController.mediaTypes = [kUTTypeImage as String]
 		imagePickerController.allowsEditing = true
+		imagePickerController.delegate = self
+		
+		present(imagePickerController, animated: true, completion: nil)
+	}
+	
+	@objc func recipeImageFromPhoto(sender: UIButton) {
+		resultingView = backgroundImageView
+		
+		let imagePickerController = UIImagePickerController()
+		imagePickerController.sourceType = .savedPhotosAlbum
+		imagePickerController.mediaTypes = [kUTTypeImage as String]
+		imagePickerController.allowsEditing = true
+		imagePickerController.delegate = self
+		
+		present(imagePickerController, animated: true, completion: nil)
+	}
+	
+	@objc func recipeImageFromCamera(sender: UIButton) {
+		resultingView = backgroundImageView
+		
+		let imagePickerController = UIImagePickerController()
+		imagePickerController.sourceType = .camera
+		imagePickerController.mediaTypes = [kUTTypeImage as String]
 		imagePickerController.delegate = self
 		
 		present(imagePickerController, animated: true, completion: nil)
@@ -287,18 +376,25 @@ extension AddRecipeViewController {
 	
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 		print("Did Finish picking media")
-//		let uncroppedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
-		let croppedImage = info[UIImagePickerControllerEditedImage] as? UIImage
-		
-		TextRecognizer.shared.recognizeText(in: croppedImage!) { (recognizedText) in
-			let textWithoutNewlines = recognizedText.replacingOccurrences(of: "\n", with: " ")
-			let sentences = self.findSentences(text: textWithoutNewlines)
-			let paragraph = sentences.joined(separator: "\n")
-			DispatchQueue.main.async {
-				print("identified text: \(recognizedText)")
-				self.textViewUnderRecognition.text = paragraph
+		let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage
+		if resultingView is UITextView {
+			TextRecognizer.shared.recognizeText(in: editedImage!) { (recognizedText) in
+				DispatchQueue.main.async {
+					let text = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? recognizedText.replacingOccurrences(of: "\n", with: " ") : recognizedText
+					let sentences = self.findSentences(text: text)
+					let paragraph = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? sentences.joined(separator: "\n") : sentences.joined(separator: "")
+					print("identified text: \(paragraph)")
+					if let resultingTextView = self.resultingView as? UITextView {
+						resultingTextView.text = paragraph
+					}
+					else {
+						print("There was a problem... the resulting view should be a text view... not \(self.resultingView.self)")
+					}
+				}
 			}
-			
+		}
+		else {
+			backgroundImageView.image = editedImage
 		}
 		picker.dismiss(animated: true, completion: nil)
 	}
@@ -309,7 +405,9 @@ extension AddRecipeViewController {
 	
 }
 
+// MARK: - Utility
 extension AddRecipeViewController {
+	
 	// Splits a chunk of texts up by sentences.
 	func findSentences(text: String) -> [String] {
 		var sentences: [String] = []

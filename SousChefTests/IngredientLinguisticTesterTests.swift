@@ -581,6 +581,23 @@ class IngredientLinguisticTesterTests: SousChefTestCase {
 		XCTAssertTrue(i.item.contains("green"))
 		XCTAssertTrue(i.item.contains("onions"))
 	}
+	
+	// MARK: - Other Tests
+	func testNoMeasurement1() {
+		let i = ingredient(info: "roast chickpeas")
+		XCTAssertTrue(i.measurement.amount == 0.0)
+		XCTAssertTrue(i.measurement.type == .other)
+		XCTAssertTrue(i.item.contains("roast"))
+		XCTAssertTrue(i.item.contains("chickpeas"))
+	}
+	
+	func testIngredientsFromStuff() {
+		let text = "roast chickpeas\n2 green onions\n1/2 cup orzo"
+		ingredientLinguisticTagger.string = text
+		let i = ingredientLinguisticTagger.ingredients()
+		
+		XCTAssertTrue(i.count == 3)
+	}
 
 	// MARK: - Helpers
 	

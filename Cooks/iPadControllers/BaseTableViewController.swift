@@ -22,7 +22,7 @@ class BaseTableViewController: UITableViewController {
 		headerLabel.textAlignment = .right
 		headerLabel.text = headerText
 		headerLabel.font = SousChefStyling.preferredFont(for: .headline)
-		let sizeConstraint = CGSize(width: tableView.frame.size.width - (SousChefStyling.allowableMargin * 2), height: .greatestFiniteMagnitude)
+		let sizeConstraint = CGSize(width: tableView.frame.size.width - (SousChefStyling.standardMargin * 2), height: .greatestFiniteMagnitude)
 		let attributes = [NSAttributedStringKey.font : SousChefStyling.preferredFont(for: .headline)]
 		let boundingSize = NSString(string: headerText).boundingRect(with: sizeConstraint, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: attributes, context: nil).size
 		headerLabel.frame = CGRect(x: 0.0, y: 0.0, width: boundingSize.width, height: boundingSize.height)
@@ -40,7 +40,7 @@ class BaseTableViewController: UITableViewController {
 		headerView.addSubview(tableHeaderLabel)
 		headerView.addSubview(headerDivider)
 		
-		headerView.frame = CGRect(x: SousChefStyling.allowableMargin, y: 0.0, width: tableView.frame.width, height: tableHeaderLabel.frame.height)
+		headerView.frame = CGRect(x: SousChefStyling.standardMargin, y: 0.0, width: tableView.frame.width, height: tableHeaderLabel.frame.height)
 		headerDivider.frame = CGRect(x: 0.0, y: tableHeaderLabel.frame.height + 3, width: headerView.frame.width, height: 1.5)
 		
 		return headerView
