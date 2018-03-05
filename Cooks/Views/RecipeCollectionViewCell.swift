@@ -58,9 +58,4 @@ class RecipeCollectionViewCell: UICollectionViewCell {
 		super.init(coder: aDecoder)
 		commonInit()
 	}
-	
-	override func prepareForReuse() {
-		imageView.image = nil
-		titleLabel.text = ""
-	}
 }

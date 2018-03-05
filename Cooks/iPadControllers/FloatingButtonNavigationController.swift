@@ -132,7 +132,11 @@ extension FloatingButtonNavigationController {
 			floatingButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight)
 		]
 		NSLayoutConstraint.activate(constraints)
-		floatingButtonStack.addArrangedSubview(floatingButton)
+		UIView.animate(withDuration: 0.33) {
+			self.floatingButtonStack.addArrangedSubview(floatingButton)
+			self.view.layoutIfNeeded()
+		}
+		
 		
 		if let vc = viewController {
 			if !buttonsForViewController.keys.contains(vc) {

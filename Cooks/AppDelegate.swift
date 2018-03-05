@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -33,6 +34,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		navController.isNavigationBarHidden = true
 		
 		window?.rootViewController = navController
+		
+		CKContainer.default() .accountStatus { (status, errorOrNil) in
+			if status == CKAccountStatus.noAccount {
+				let alert = UIAlertController(title: "Sign in to iCloud", message: "Sign in to your iCloud account to use Sous Chef. On the Home screen, launch Settings, tap iCloud, and enter your Apple ID. Turn iCloud Drive on. If you don't have an iCloud account, tap Create a new Apple ID.", preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+				self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+			}
+		}
         return true
     }
 
@@ -52,6 +61,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+		CKContainer.default() .accountStatus { (status, errorOrNil) in
+			if status == CKAccountStatus.noAccount {
+				let alert = UIAlertController(title: "Sign in to iCloud", message: "Sign in to your iCloud account to use Sous Chef. On the Home screen, launch Settings, tap iCloud, and enter your Apple ID. Turn iCloud Drive on. If you don't have an iCloud account, tap Create a new Apple ID.", preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+				self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+			}
+		}
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

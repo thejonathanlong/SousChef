@@ -69,10 +69,10 @@ class RecipeDetailViewController: UIViewController {
 			scrollView.contentInset = UIEdgeInsets(top: 0.0, left: (theView.frame.width * (1 - RecipeDetailViewController.instructionTableViewWidthMultipler)) - 18.0, bottom: 0.0, right: 0.0)
 			
 			backgroundImageView.contentMode = .scaleAspectFill
-			backgroundImageView.image = UIImage(named: "vcr")
+//			backgroundImageView.image = UIImage(named: "vcr")
 			backgroundImageView.clipsToBounds = true
 			
-			recipeTitleLabel.text = "Vegan Cinnamon Rolls"
+//			recipeTitleLabel.text = "Vegan Cinnamon Rolls"
 			recipeTitleLabel.font = SousChefStyling.preferredFont(for: .title1)
 			recipeTitleLabel.textColor = UIColor.whiteSmoke
 			
@@ -120,6 +120,13 @@ class RecipeDetailViewController: UIViewController {
 		instructionViewController.instructions = recipe.instructions
 	}
 	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
+			baseNavigationController.addFloatingButton(image: UIImage(named: "Trash"), target: self, action: #selector(deleteRecipe(sender:)), viewController: self)
+		}
+	}
+	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
 		scrollView.contentInset = UIEdgeInsets(top: 0, left: (size.width * (1 - RecipeDetailViewController.instructionTableViewWidthMultipler)) - 18.0, bottom: 0, right: 0)
@@ -127,19 +134,38 @@ class RecipeDetailViewController: UIViewController {
 	
 	// The recipe has changed so update the content appropriately
 	func recipeDidChange() {
-		database.ingredients(for: recipe) { (ingredients) in
-			DispatchQueue.main.async {
-				self.recipe.ingredients = ingredients
+		if recipe.ingredients.isEmpty {
+			database.ingredients(for: recipe) { (ingredients) in
+				DispatchQueue.main.async {
+					self.recipe.ingredients = ingredients
+					self.ingredientViewController.ingredients = ingredients
+					self.ingredientViewController.tableView.reloadData()
+				}
 			}
 		}
+		else {
+			self.ingredientViewController.ingredients = recipe.ingredients
+			self.ingredientViewController.tableView.reloadData()
+		}
+		
 		recipeTitleLabel.text = recipe.name
 		backgroundImageView.image = recipe.image
 		backgroundImageView.setNeedsDisplay()
 	}
 }
 
+//MARK: DeleteViewController
 extension RecipeDetailViewController {
-	@objc func presentAddRecipe() {
+	@objc func deleteRecipe(sender: UIButton) {
+		SousChefDatabase.shared.delete(recipe: recipe) { (recordIDOrNil, errorOrNil) in
+			if let error = errorOrNil { print("There was an error trying to delete the recipe: \(self.recipe) - \(error)"); return }
+			guard let recordID = recordIDOrNil else { print("No record Id when delete recipe \(self.recipe)"...); return; }
+			
+			print("Deleted recipe \(self.recipe) with ID \(recordID)")
+			DispatchQueue.main.async {
+				self.navigationController?.popViewController(animated: true)
+			}
+		}
 		
 	}
 }

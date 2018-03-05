@@ -52,7 +52,6 @@
 		56933012201068CD0017D16B /* RecipeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56933011201068CD0017D16B /* RecipeCollectionViewCell.swift */; };
 		5693301420106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5693301320106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift */; };
 		569330162011C8AC0017D16B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569330152011C8AC0017D16B /* TestData.swift */; };
-		569330182011CB180017D16B /* AddWorkFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569330172011CB180017D16B /* AddWorkFlow.swift */; };
 		5693306A201412670017D16B /* UIImage+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56933069201412670017D16B /* UIImage+SousChefAdditions.swift */; };
 		5693306E2014601F0017D16B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5693306D2014601F0017D16B /* libz.tbd */; };
 		56933070201460340017D16B /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5693306F201460340017D16B /* libstdc++.tbd */; };
@@ -64,6 +63,7 @@
 		56BC17B81F68E46300393863 /* InstructionsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */; };
 		56D42B302002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */; };
 		56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
+		56E43F46204D0827000D9273 /* TestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56E43F45204D0827000D9273 /* TestAssets.xcassets */; };
 		56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F42272201D877A007CDCA9 /* ExpandingTextView.swift */; };
 		56FEEA02202B8FC800D02C6F /* SousChefButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56FEEA01202B8FC800D02C6F /* SousChefButton.swift */; };
 /* End PBXBuildFile section */
@@ -120,7 +120,6 @@
 		56933011201068CD0017D16B /* RecipeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipeCollectionViewCell.swift; path = Views/RecipeCollectionViewCell.swift; sourceTree = "<group>"; };
 		5693301320106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSLayoutConstraint+SousChefAdditions.swift"; path = "Utility/NSLayoutConstraint+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		569330152011C8AC0017D16B /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
-		569330172011CB180017D16B /* AddWorkFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddWorkFlow.swift; path = iPadControllers/AddWorkFlow.swift; sourceTree = "<group>"; };
 		56933069201412670017D16B /* UIImage+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		5693306D2014601F0017D16B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		5693306F201460340017D16B /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -133,6 +132,7 @@
 		56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsListTableViewController.swift; path = Controller/InstructionsListTableViewController.swift; sourceTree = "<group>"; };
 		56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIColor+SousChefAdditions.swift"; path = "Utility/UIColor+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientLinguisticTagger.swift; path = Model/IngredientLinguisticTagger.swift; sourceTree = "<group>"; };
+		56E43F45204D0827000D9273 /* TestAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TestAssets.xcassets; sourceTree = "<group>"; };
 		56F42272201D877A007CDCA9 /* ExpandingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandingTextView.swift; path = iPadControllers/ExpandingTextView.swift; sourceTree = "<group>"; };
 		56FEEA01202B8FC800D02C6F /* SousChefButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SousChefButton.swift; path = Views/SousChefButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,6 +169,7 @@
 		563C45681F9085E100B3CAF4 /* SousChefTests */ = {
 			isa = PBXGroup;
 			children = (
+				56E43F45204D0827000D9273 /* TestAssets.xcassets */,
 				56797B301FBC04A300052382 /* IngredientLinguisticTesterTests.swift */,
 				56797B321FBC04D600052382 /* MeasurementTests.swift */,
 				56A600361FCD2741000578CD /* RecipeDatabaseTests.swift */,
@@ -208,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				5641851D202FA447003961F2 /* AddRecipeViewController.swift */,
-				569330172011CB180017D16B /* AddWorkFlow.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
 				560CA6B8200062AA00807784 /* IngredientTableViewController.swift */,
 				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
@@ -441,6 +441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56E43F46204D0827000D9273 /* TestAssets.xcassets in Resources */,
 				568258B41F63A31800A020A9 /* LaunchScreen.storyboard in Resources */,
 				568258B11F63A31800A020A9 /* Assets.xcassets in Resources */,
 				568258AF1F63A31800A020A9 /* Main.storyboard in Resources */,
@@ -488,7 +489,6 @@
 				56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */,
 				56BC17B61F68E1A600393863 /* InstructionsDetailViewController.swift in Sources */,
 				568258C21F63A45400A020A9 /* RecipeTableViewCell.swift in Sources */,
-				569330182011CB180017D16B /* AddWorkFlow.swift in Sources */,
 				56932FEF200F0B490017D16B /* BaseTableViewController.swift in Sources */,
 				56932FED200F02B40017D16B /* SousChefStyling.swift in Sources */,
 				56933010201068AA0017D16B /* AllRecipesCollectionViewController.swift in Sources */,

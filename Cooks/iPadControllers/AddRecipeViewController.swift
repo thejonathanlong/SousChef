@@ -19,10 +19,15 @@ class HeaderView: UIView, UITextViewDelegate {
 	private var textViewHeightConstraint = NSLayoutConstraint()
 	private var textViewHeight: CGFloat = 0.0
 	
-	var text = "" {
-		didSet {
-			textView.text = text
+	var text: String {
+		get {
+			return textView.text
+		}
+		
+		set (newText) {
+			textView.text = newText
 			textViewDidChange(textView)
+
 		}
 	}
 	
@@ -177,12 +182,14 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 	
 	let titleHeaderView = HeaderView(frame: .zero)
 	let tagsHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
+	let sourceHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
 	let ingredientSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
 	let instructionSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
 	
 	var resultingView = UIView()
 	let database = SousChefDatabase.shared
 	let ingredientTagger = IngredientLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
+	let defaultImage = UIImage(named: "Default")
 	
 	override func loadView() {
 		super.loadView()
@@ -191,7 +198,7 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		let cameraImage = UIImage(named: "Camera")
 		let photoImage = UIImage(named: "Photo")
 		
-		backgroundImageView.image = UIImage(named: "Default")
+		backgroundImageView.image = defaultImage
 		backgroundImageView.contentMode = .scaleAspectFill
 		backgroundImageView.clipsToBounds = true
 		backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -229,6 +236,10 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		tagsHeaderView.isEditable = true
 		tagsHeaderView.text = "Tags"
 		
+		sourceHeaderView.translatesAutoresizingMaskIntoConstraints = false
+		sourceHeaderView.isEditable = true
+		sourceHeaderView.text = "Source (i.e. Book Name, website URL, etc.)"
+		
 		view.addSubview(backgroundImageView)
 		view.addSubview(contentView)
 		view.addSubview(recipeImageCameraButton)
@@ -244,6 +255,7 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		
 		contentView.addSubview(titleHeaderView)
 		contentView.addSubview(tagsHeaderView)
+		contentView.addSubview(sourceHeaderView)
 		
 		var constraints = NSLayoutConstraint.constraintsPinningEdges(of: backgroundImageView, toEdgesOf: view)
 		let contentViewConstraints = NSLayoutConstraint.constraintsPinningEdges(of: contentView, toEdgesOf: view, insetBy: SousChefStyling.veryLargeMargin)
@@ -275,7 +287,12 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 			
 			tagsHeaderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.standardMargin),
 			tagsHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.standardMargin),
-			tagsHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -SousChefStyling.standardMargin),
+//			tagsHeaderView.trailingAnchor.constraint(equalTo: tagsHeaderView.leadingAnchor, constant: -SousChefStyling.standardMargin),
+			tagsHeaderView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -2 * SousChefStyling.standardMargin),
+			
+			sourceHeaderView.bottomAnchor.constraint(equalTo: tagsHeaderView.bottomAnchor),
+			sourceHeaderView.leadingAnchor.constraint(equalTo: tagsHeaderView.trailingAnchor, constant: SousChefStyling.standardMargin),
+			sourceHeaderView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -2 * SousChefStyling.standardMargin),
 		]
 		
 		constraints.append(contentsOf: contentConstraints)
@@ -297,28 +314,35 @@ extension AddRecipeViewController {
 	@objc func done(sender: UIButton) {
 		let recipeName = titleHeaderView.text
 		
-//		ingredientTagger.string = ingredientSmartAddViewController.resultingTextView.text.split(separator: "\n")
-		ingredientTagger.string = "6 Tbsp ghee, palm shortening, or grass—fed unsalted butter"
-//		let ingredientList = ingredientTagger.ingredients()
-		var ingredientList: [Ingredient] = []
-		 ingredientTagger.enumerateTags { (ing) in
-			ingredientList.append(ing)
-		}
-		
+		ingredientTagger.string = ingredientSmartAddViewController.resultingTextView.text
+		let ingredientList = ingredientTagger.ingredients()
 		let instructionList = instructionSmartAddViewController.resultingTextView.text.split(separator: "\n").map(String.init)
+		let tags = tagsHeaderView.text.replacingOccurrences(of: ", ", with: ",").replacingOccurrences(of: " ", with: ",").split(separator: ",").map { String($0) }
+		let image = backgroundImageView.image != defaultImage ? backgroundImageView.image : nil
 		
-		let recipe = Recipe(name: recipeName, ingredients: ingredientList, instructions: instructionList, image: nil, tags: [])
+		let recipe = Recipe(name: recipeName, ingredients: ingredientList, instructions: instructionList, image: image, tags: tags, source: sourceHeaderView.text)
 		
 		print(recipe)
 		
-		//		database.save(recipes: <#T##[Recipe]#>, onCompletionBlock: <#T##([CKRecord]?, [CKRecordID]?, Error?) -> Void#>)
+		database.save(recipe: recipe) { (recordOrNil, recordIDOrNil, errorOrNil) in
+			if let error = errorOrNil {
+				print("JLO: There was an error: \(error)")
+				return
+			}
+			if let record = recordOrNil, let recordID = recordIDOrNil {
+				print("JLO: Got the record: \(record) with recordID: \(recordID)")
+				DispatchQueue.main.async {
+					self.navigationController?.popViewController(animated: true)
+				}
+			}
+		}
 	}
 	
 	@objc func extractFromCamera(sender: UIButton) {
-		if ingredientSmartAddViewController.header.subviews.contains(sender) {
+		if ingredientSmartAddViewController.header.contains(sender) {
 			resultingView = ingredientSmartAddViewController.resultingTextView
 		}
-		else if instructionSmartAddViewController.header.subviews.contains(sender) {
+		else if instructionSmartAddViewController.header.contains(sender) {
 			resultingView = instructionSmartAddViewController.resultingTextView
 		}
 		
@@ -331,17 +355,16 @@ extension AddRecipeViewController {
 	}
 	
 	@objc func extractFromPhoto(sender: UIButton) {
-		if ingredientSmartAddViewController.header.subviews.contains(sender) {
+		if ingredientSmartAddViewController.header.contains(button: sender) {
 			resultingView = ingredientSmartAddViewController.resultingTextView
 		}
-		else if instructionSmartAddViewController.header.subviews.contains(sender) {
+		else if instructionSmartAddViewController.header.contains(button: sender) {
 			resultingView = instructionSmartAddViewController.resultingTextView
 		}
 		
 		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .savedPhotosAlbum
 		imagePickerController.mediaTypes = [kUTTypeImage as String]
-		imagePickerController.allowsEditing = true
 		imagePickerController.delegate = self
 		
 		present(imagePickerController, animated: true, completion: nil)
@@ -353,7 +376,6 @@ extension AddRecipeViewController {
 		let imagePickerController = UIImagePickerController()
 		imagePickerController.sourceType = .savedPhotosAlbum
 		imagePickerController.mediaTypes = [kUTTypeImage as String]
-		imagePickerController.allowsEditing = true
 		imagePickerController.delegate = self
 		
 		present(imagePickerController, animated: true, completion: nil)
@@ -376,9 +398,10 @@ extension AddRecipeViewController {
 	
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 		print("Did Finish picking media")
-		let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage
+		let image = info[UIImagePickerControllerOriginalImage] as? UIImage
+		
 		if resultingView is UITextView {
-			TextRecognizer.shared.recognizeText(in: editedImage!) { (recognizedText) in
+			TextRecognizer.shared.recognizeText(in: image!) { (recognizedText) in
 				DispatchQueue.main.async {
 					let text = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? recognizedText.replacingOccurrences(of: "\n", with: " ") : recognizedText
 					let sentences = self.findSentences(text: text)
@@ -394,7 +417,7 @@ extension AddRecipeViewController {
 			}
 		}
 		else {
-			backgroundImageView.image = editedImage
+			backgroundImageView.image = image
 		}
 		picker.dismiss(animated: true, completion: nil)
 	}

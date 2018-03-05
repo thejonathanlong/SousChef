@@ -69,7 +69,7 @@ class Ingredient: NSObject {
 	}
 }
 
-// MARK: - Ingredient from Record
+// MARK: - Records
 extension Ingredient {
 	static let recordItemKey = "item"
 	static let recordOriginalKey = "original"
@@ -81,5 +81,15 @@ extension Ingredient {
 		let measurementAmount = record[Ingredient.recordMeasurementAmountKey] as! Double
 		self.init(measurementType: MeasurementType(rawValue: measurementType.lowercased())!, amount: measurementAmount, item: record[Ingredient.recordItemKey] as! String, original: record[Ingredient.recordOriginalKey] as! String)
 		
+	}
+	
+	var record: CKRecord {
+		let ingredientRecord = CKRecord(recordType: SousChefDatabase.ingredientRecordType)
+		ingredientRecord[Ingredient.recordItemKey] = item as CKRecordValue
+		ingredientRecord[Ingredient.recordOriginalKey] = original as CKRecordValue
+		ingredientRecord[Ingredient.recordMeasurementAmountKey] = measurement.amount as CKRecordValue
+		ingredientRecord[Ingredient.recordMeasurementTypeKey] = measurement.type.rawValue as CKRecordValue
+		
+		return ingredientRecord
 	}
 }

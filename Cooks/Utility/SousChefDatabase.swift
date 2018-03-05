@@ -117,16 +117,88 @@ extension SousChefDatabase {
 
 // MARK - Saving Recipes
 extension SousChefDatabase {
-	func save(recipes: [Recipe], onCompletionBlock: @escaping ([CKRecord]?, [CKRecordID]?, Error?) -> Void) {
-		var records: [CKRecord] = []
-		for recipe in recipes {
-			records.append(recipe.record)
+	
+	func save(recipe: Recipe, onCompletionBlock: @escaping ([CKRecord]?, [CKRecordID]?, Error?) -> Void) {
+		var recordsToSave: [CKRecord] = []
+		var ingredientReferences: [CKReference] = []
+		let recipeRecord = recipe.record
+		if let recipeImage = recipe.image {
+			recipeRecord[Recipe.recordImageKey] = imageAsset(recipeRecord: recipeRecord, image: recipeImage)
 		}
-		let modifyRecordsOperation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: nil)
-		modifyRecordsOperation.modifyRecordsCompletionBlock = onCompletionBlock
+		for ingredient in recipe.ingredients {
+			let ingredientRecord = ingredient.record
+//			ingredientRecord.parent = CKReference(record: recipeRecord, action: .none)
+			recordsToSave.append(ingredientRecord)
+			ingredientReferences.append(CKReference(record: ingredientRecord, action: .deleteSelf))
+		}
+		
+		recipeRecord[Recipe.recordIngredientsKey] = ingredientReferences as CKRecordValue
+		
+		// Add the recipeRecord after setting the ingredient records on the recipe.
+		recordsToSave.append(recipeRecord)
+		let modifyRecordsOperation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: nil)
+		modifyRecordsOperation.modifyRecordsCompletionBlock = { recordsOrNil, reocrdIDsOrNil, errorOrNil in
+			recipe.backingRecord = recipeRecord
+			onCompletionBlock(recordsOrNil, reocrdIDsOrNil, errorOrNil)
+		}
 		modifyRecordsOperation.savePolicy = .changedKeys
 		
 		modifyRecordsOperation.start()
+		
+	}
+	
+	func imageAsset(recipeRecord: CKRecord, image: UIImage) -> CKAsset {
+		let temporaryDirectoryPath = NSTemporaryDirectory() as NSString
+		
+		let imagePath = temporaryDirectoryPath.appendingPathComponent(recipeRecord.recordID.recordName)
+		let imageURL = URL(fileURLWithPath: imagePath.appendingFormat(".%@.dat", UUID().uuidString))
+		let data = UIImagePNGRepresentation(image)
+		do {
+			try data?.write(to: imageURL)
+		}
+		catch {
+			print("There was an error writing to \(imageURL)")
+		}
+		
+		return CKAsset(fileURL: imageURL)
 	}
 }
+
+// MARK - Deleting Recipes
+extension SousChefDatabase {
+	func delete(recipe: Recipe, completion: @escaping (CKRecordID?, Error?) -> Void) {
+		privateDB.delete(withRecordID: recipe.record.recordID, completionHandler: completion)
+	}
+}
+
+// MARK - Saving Ingredients
+extension SousChefDatabase {
+	func saveSynchronously(ingredient item: String, original: String, measurementAmount: Double, measurementType: String) -> CKRecordID {
+		let ingredientRecord = CKRecord(recordType: SousChefDatabase.ingredientRecordType)
+		ingredientRecord[Ingredient.recordItemKey] = item as CKRecordValue
+		ingredientRecord[Ingredient.recordOriginalKey] = original as CKRecordValue
+		ingredientRecord[Ingredient.recordMeasurementAmountKey] = measurementAmount as CKRecordValue
+		ingredientRecord[Ingredient.recordMeasurementTypeKey] = measurementType as CKRecordValue
+		
+		let semaphore = DispatchSemaphore(value: 0)
+		var recordID = CKRecordID(recordName: SousChefDatabase.ingredientRecordType)
+		privateDB.save(ingredientRecord) { (recordOrNil, errorOrNil) in
+			guard let ingredientRecord = recordOrNil else { print("There was a problem saving the record..."); return }
+			if let error = errorOrNil {
+				print("There was a problem saving the record...\(error)")
+				return
+			}
+			recordID = ingredientRecord.recordID
+		}
+		semaphore.wait()
+		
+		return recordID
+	}
+	
+	func saveSynchronously(ingredient: Ingredient) -> CKRecordID {
+		return saveSynchronously(ingredient: ingredient.item, original: ingredient.original, measurementAmount: ingredient.measurement.amount, measurementType: ingredient.measurement.type.rawValue)
+	}
+}
+
+
 

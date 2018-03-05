@@ -16,6 +16,7 @@ class Recipe: NSObject {
 	static let recordInstructionsKey = "instructions"
 	static let recordImageKey = "image"
 	static let recordTagsKey = "tags"
+	static let recordSourceKey = "source"
 	
 	//MARK: - properties
 	let name: String
@@ -23,6 +24,9 @@ class Recipe: NSObject {
 	let instructions: [String]
 	let image: UIImage?
 	let tags: [String]
+	let source: String
+	
+	var backingRecord: CKRecord?
 	
 	internal let ingredientRecordIDs: [CKRecordID]
 	
@@ -33,19 +37,23 @@ class Recipe: NSObject {
 		self.instructions = []
 		self.image = nil
 		self.ingredientRecordIDs = []
+		self.source = ""
 		super.init()
 	}
 	
-	init(name: String, ingredients: [Ingredient], instructions: [String], image: UIImage?, tags: [String]) {
+	init(name: String, ingredients: [Ingredient], instructions: [String], image: UIImage?, tags: [String], source: String) {
 		self.name = name
 		self.instructions = instructions
 		self.image = image
 		self.tags = tags
+		self.ingredients = ingredients
 		ingredientRecordIDs = []
+		self.source = source
 		super.init()
 	}
 	
 	init(record: CKRecord) {
+		backingRecord = record
 		name = record[Recipe.recordNameKey] as! String
 		if let references = record[Recipe.recordIngredientsKey] as? [CKReference] {
 			var recordIDs : [CKRecordID] = []
@@ -62,13 +70,15 @@ class Recipe: NSObject {
 		image = Recipe.recipeImage(record)
 		
 		tags = record[Recipe.recordTagsKey] != nil ? record[Recipe.recordTagsKey] as! [String] : []
+		source = record[Recipe.recordSourceKey] != nil ?  record[Recipe.recordSourceKey] as! String : ""
 		super.init()
 	}
 	
 	//MARK: Helpers
 	static func recipeImage(_ record: CKRecord) -> UIImage? {
-		guard let data = record[Recipe.recordImageKey] as? Data else { return nil }
-		return UIImage(data: data)
+		guard let asset = record[Recipe.recordImageKey] as? CKAsset else { return nil }
+		
+		return UIImage(contentsOfFile: asset.fileURL.path)
 	}
 	
 	//MARK: Ingredient Interaction
@@ -113,15 +123,30 @@ class Recipe: NSObject {
 // MARK: - Record from Recipe
 extension Recipe {
 	var record: CKRecord {
-		let record = CKRecord(recordType: SousChefDatabase.recipeRecordType)
-		record[Recipe.recordNameKey] = name as CKRecordValue
-		record[Recipe.recordIngredientsKey] = ingredients as CKRecordValue
-		record[Recipe.recordTagsKey] = tags as CKRecordValue
-		record[Recipe.recordInstructionsKey] = instructions as CKRecordValue
-		if let image = image {
-			record[Recipe.recordImageKey] = image as? CKRecordValue
+		if let record = backingRecord {
+			return record
 		}
-		
-		return record
+		else {
+			let record = CKRecord(recordType: SousChefDatabase.recipeRecordType)
+			record[Recipe.recordNameKey] = name as CKRecordValue
+			record[Recipe.recordTagsKey] = tags as CKRecordValue
+			record[Recipe.recordInstructionsKey] = instructions as CKRecordValue
+			record[Recipe.recordSourceKey] = source as CKRecordValue
+			//		if let image = image {
+			//			record[Recipe.recordImageKey] = image as? CKRecordValue
+			//		}
+			
+			return record
+		}
+	}
+}
+
+//MARK: - Debug
+extension Recipe {
+	override var debugDescription: String {
+		return "\(Unmanaged.passUnretained(self).toOpaque()):\n\t\(ingredients)\n\t\(tags)"
+	}
+	override var description: String {
+		return debugDescription
 	}
 }

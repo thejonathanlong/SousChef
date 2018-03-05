@@ -24,7 +24,9 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 		super.viewWillAppear(animated)
 		
 		database.recipes { (recipes) in
-			self.recipes = recipes
+			DispatchQueue.main.async {
+				self.recipes = recipes
+			}
 		}
 		
 	}
