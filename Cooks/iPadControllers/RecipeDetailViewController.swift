@@ -120,8 +120,8 @@ class RecipeDetailViewController: UIViewController {
 		instructionViewController.instructions = recipe.instructions
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
 			baseNavigationController.addFloatingButton(image: UIImage(named: "Trash"), target: self, action: #selector(deleteRecipe(sender:)), viewController: self)
 		}
@@ -157,15 +157,33 @@ class RecipeDetailViewController: UIViewController {
 //MARK: DeleteViewController
 extension RecipeDetailViewController {
 	@objc func deleteRecipe(sender: UIButton) {
-		SousChefDatabase.shared.delete(recipe: recipe) { (recordIDOrNil, errorOrNil) in
-			if let error = errorOrNil { print("There was an error trying to delete the recipe: \(self.recipe) - \(error)"); return }
-			guard let recordID = recordIDOrNil else { print("No record Id when delete recipe \(self.recipe)"...); return; }
-			
-			print("Deleted recipe \(self.recipe) with ID \(recordID)")
+		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+		alertController.modalPresentationStyle = .popover
+		alertController.popoverPresentationController?.sourceView = sender
+		alertController.popoverPresentationController?.sourceRect = sender.frame
+		
+		let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+			SousChefDatabase.shared.delete(recipe: self.recipe) { (recordIDOrNil, errorOrNil) in
+				if let error = errorOrNil { print("There was an error trying to delete the recipe: \(self.recipe) - \(error)"); return }
+				guard let recordID = recordIDOrNil else { print("No record Id when delete recipe \(self.recipe)"...); return; }
+
+				print("Deleted recipe \(self.recipe) with ID \(recordID)")
+			}
 			DispatchQueue.main.async {
 				self.navigationController?.popViewController(animated: true)
 			}
 		}
 		
+		let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+			DispatchQueue.main.async {
+				self.navigationController?.popViewController(animated: true)
+				
+			}
+		}
+		
+		alertController.addAction(deleteAction)
+		alertController.addAction(cancelAction)
+		
+		present(alertController, animated: true, completion: nil)
 	}
 }

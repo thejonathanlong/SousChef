@@ -85,14 +85,14 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 	
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 		if let topViewController = self.topViewController {
-			removeFloatingButtons(for: topViewController)
+			removeFloatingButtons(for: topViewController, viewControllerCount: self.viewControllers.count + 1)
 		}
 		super.pushViewController(viewController, animated: animated)
 	}
 	
 	override func popViewController(animated: Bool) -> UIViewController? {
 		if let viewController = super.popViewController(animated: animated) {
-			removeFloatingButtons(for: viewController)
+			removeFloatingButtons(for: viewController, viewControllerCount: self.viewControllers.count - 1)
 			return viewController
 		}
 		return nil
@@ -119,7 +119,10 @@ extension FloatingButtonNavigationController {
 			floatingButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight)
 		]
 		NSLayoutConstraint.activate(constraints)
-		floatingButtonStack.addArrangedSubview(floatingButton)
+		UIView.animate(withDuration: 0.33) {
+			self.floatingButtonStack.addArrangedSubview(floatingButton)
+			self.view.layoutIfNeeded()
+		}
 		
 		if let vc = viewController {
 			if !buttonsForViewController.keys.contains(vc) {
@@ -154,9 +157,10 @@ extension FloatingButtonNavigationController {
 		}
 	}
 	
-	func removeFloatingButtons(for viewController: UIViewController) {
+	func removeFloatingButtons(for viewController: UIViewController, viewControllerCount: Int) {
 		UIView.animate(withDuration: 0.33) {
 			self.buttonsForViewController[viewController]?.forEach({ $0.removeFromSuperview() })
+			self.backButton.isHidden = viewControllerCount <= 1
 			self.view.layoutIfNeeded()
 		}
 	}
@@ -207,15 +211,5 @@ extension FloatingButtonNavigationController {
 extension FloatingButtonNavigationController {
 	func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
 		controller.dismiss(animated: true, completion: nil)
-	}
-}
-
-// MARK: - UINavigationControllerDelegate
-extension FloatingButtonNavigationController {
-	func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-		UIView.animate(withDuration: 0.1) {
-			self.backButton.isHidden = self.viewControllers.count <= 1
-			self.view.layoutIfNeeded()
-		}
 	}
 }
