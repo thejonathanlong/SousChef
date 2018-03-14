@@ -362,12 +362,14 @@ extension AddRecipeViewController {
 			resultingView = instructionSmartAddViewController.resultingTextView
 		}
 		
-		let imagePickerController = UIImagePickerController()
-		imagePickerController.sourceType = .savedPhotosAlbum
-		imagePickerController.mediaTypes = [kUTTypeImage as String]
-		imagePickerController.delegate = self
+//		let imagePickerController = UIImagePickerController()
+//		imagePickerController.sourceType = .savedPhotosAlbum
+//		imagePickerController.mediaTypes = [kUTTypeImage as String]
+//		imagePickerController.delegate = self
 		
-		present(imagePickerController, animated: true, completion: nil)
+		let photoPicker = RecentPhotosViewController(collectionViewLayout: UICollectionViewFlowLayout())
+		
+		present(photoPicker, animated: true, completion: nil)
 	}
 	
 	@objc func recipeImageFromPhoto(sender: UIButton) {

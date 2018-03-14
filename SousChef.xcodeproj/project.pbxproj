@@ -16,6 +16,7 @@
 		563C45751F9087A100B3CAF4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5669B1E01F6503C200AEB5FA /* Measurement.swift */; };
 		563C45761F9087AA00B3CAF4 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568258C31F63A53600A020A9 /* Recipe.swift */; };
 		5641851E202FA447003961F2 /* AddRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5641851D202FA447003961F2 /* AddRecipeViewController.swift */; };
+		5646DBA92058D1AC00B7B087 /* RecentPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5646DBA82058D1AC00B7B087 /* RecentPhotosViewController.swift */; };
 		5669B1E11F6503C200AEB5FA /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5669B1E01F6503C200AEB5FA /* Measurement.swift */; };
 		56766A551FDA69B700C91E0C /* iPadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56766A531FDA69B700C91E0C /* iPadStoryboard.storyboard */; };
 		56766A581FDA6A3300C91E0C /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */; };
@@ -87,6 +88,7 @@
 		563C456B1F9085E100B3CAF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		563C45731F90876F00B3CAF4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5641851D202FA447003961F2 /* AddRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddRecipeViewController.swift; path = iPadControllers/AddRecipeViewController.swift; sourceTree = "<group>"; };
+		5646DBA82058D1AC00B7B087 /* RecentPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecentPhotosViewController.swift; path = iPadControllers/RecentPhotosViewController.swift; sourceTree = "<group>"; };
 		5669B1E01F6503C200AEB5FA /* Measurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Measurement.swift; path = Model/Measurement.swift; sourceTree = "<group>"; };
 		5669B1E21F650EDD00AEB5FA /* RecipeDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecipeDetailsViewController.swift; path = Controller/RecipeDetailsViewController.swift; sourceTree = "<group>"; };
 		5669B1E41F650FBF00AEB5FA /* IngredientsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientsDetailViewController.swift; path = Controller/IngredientsDetailViewController.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
 				56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */,
 				5693300E201067D00017D16B /* BaseClasses */,
+				5646DBA82058D1AC00B7B087 /* RecentPhotosViewController.swift */,
 			);
 			name = iPadControllers;
 			sourceTree = "<group>";
@@ -495,6 +498,7 @@
 				568258AA1F63A31800A020A9 /* AppDelegate.swift in Sources */,
 				568625C81FBD46C80062175F /* SousChefDatabase.swift in Sources */,
 				5669B1E11F6503C200AEB5FA /* Measurement.swift in Sources */,
+				5646DBA92058D1AC00B7B087 /* RecentPhotosViewController.swift in Sources */,
 				56797B351FBC0A3500052382 /* Ingredient.swift in Sources */,
 				56797B381FBC115300052382 /* AddRecipeTableViewController.swift in Sources */,
 				5633F99B2006DB2800CF117E /* InstructionsTableViewController.swift in Sources */,
