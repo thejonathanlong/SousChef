@@ -235,7 +235,6 @@
 			children = (
 				568258A81F63A31800A020A9 /* Cooks */,
 				563C45681F9085E100B3CAF4 /* SousChefTests */,
-				568258BE1F63A35300A020A9 /* Supporting */,
 				568258A71F63A31800A020A9 /* Products */,
 				563C45721F90876E00B3CAF4 /* Frameworks */,
 			);
@@ -257,6 +256,7 @@
 				568258B01F63A31800A020A9 /* Assets.xcassets */,
 				56797B391FBD43FE00052382 /* Cooks.entitlements */,
 				568258A91F63A31800A020A9 /* AppDelegate.swift */,
+				568258B51F63A31800A020A9 /* Info.plist */,
 				56766A561FDA69EE00C91E0C /* iPadControllers */,
 				56766A5D1FDCFDE300C91E0C /* Views */,
 				56766A521FDA697F00C91E0C /* Storyboards */,
@@ -287,15 +287,6 @@
 				56797B371FBC115300052382 /* AddRecipeTableViewController.swift */,
 			);
 			name = Controller;
-			sourceTree = "<group>";
-		};
-		568258BE1F63A35300A020A9 /* Supporting */ = {
-			isa = PBXGroup;
-			children = (
-				568258B51F63A31800A020A9 /* Info.plist */,
-			);
-			name = Supporting;
-			path = Cooks;
 			sourceTree = "<group>";
 		};
 		568625C61FBD46A50062175F /* Utility */ = {

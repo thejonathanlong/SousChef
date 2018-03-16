@@ -69,10 +69,8 @@ class RecipeDetailViewController: UIViewController {
 			scrollView.contentInset = UIEdgeInsets(top: 0.0, left: (theView.frame.width * (1 - RecipeDetailViewController.instructionTableViewWidthMultipler)) - 18.0, bottom: 0.0, right: 0.0)
 			
 			backgroundImageView.contentMode = .scaleAspectFill
-//			backgroundImageView.image = UIImage(named: "vcr")
 			backgroundImageView.clipsToBounds = true
 			
-//			recipeTitleLabel.text = "Vegan Cinnamon Rolls"
 			recipeTitleLabel.font = SousChefStyling.preferredFont(for: .title1)
 			recipeTitleLabel.textColor = UIColor.whiteSmoke
 			
@@ -124,6 +122,7 @@ class RecipeDetailViewController: UIViewController {
 		super.viewDidLoad()
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
 			baseNavigationController.addFloatingButton(image: UIImage(named: "Trash"), target: self, action: #selector(deleteRecipe(sender:)), viewController: self)
+			baseNavigationController.addFloatingButton(image: UIImage(named: "Share"), target: self, action: #selector(shareRecipe(sender:)), viewController: self)
 		}
 	}
 	
@@ -154,8 +153,9 @@ class RecipeDetailViewController: UIViewController {
 	}
 }
 
-//MARK: DeleteViewController
+//MARK: Button Actions
 extension RecipeDetailViewController {
+	
 	@objc func deleteRecipe(sender: UIButton) {
 		let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		alertController.modalPresentationStyle = .popover
@@ -186,4 +186,9 @@ extension RecipeDetailViewController {
 		
 		present(alertController, animated: true, completion: nil)
 	}
+	
+	@objc func shareRecipe(sender: UIButton) {
+		
+	}
 }
+
