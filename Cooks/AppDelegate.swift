@@ -33,7 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let navController = FloatingButtonNavigationController(rootViewController: allRecipesViewController)
 		navController.isNavigationBarHidden = true
 		
-		window?.rootViewController = navController
+		let textTypeSelectionViewController = TextTypeSelectionViewController()
+		
+		
+		
+		window?.rootViewController = textTypeSelectionViewController
 		
 		CKContainer.default() .accountStatus { (status, errorOrNil) in
 			if status == CKAccountStatus.noAccount {

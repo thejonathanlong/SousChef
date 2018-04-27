@@ -23,11 +23,11 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		database.recipes { (recipes) in
-			DispatchQueue.main.async {
-				self.recipes = recipes
-			}
-		}
+//		database.recipes { (recipes) in
+//			DispatchQueue.main.async {
+//				self.recipes = recipes
+//			}
+//		}
 		
 	}
 	
@@ -50,6 +50,11 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 		super.viewDidAppear(animated)
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
 			baseNavigationController.addFloatingButton(image: UIImage(named: "Add"), target: self, action: #selector(addRecipe), viewController: self)
+		}
+		database.recipes { (recipes) in
+			DispatchQueue.main.async {
+				self.recipes = recipes
+			}
 		}
 	}
 	

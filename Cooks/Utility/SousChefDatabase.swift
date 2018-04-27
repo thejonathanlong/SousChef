@@ -15,10 +15,31 @@ class SousChefDatabase: NSObject {
 	static let ingredientRecordType = "Ingredient"
 	static let measurementRecordType = "Measurement"
 	
+	static let recipeRecordZoneName = "SousChefRecipes"
+	
 	let publicDB = CKContainer.default().publicCloudDatabase
 	let privateDB = CKContainer.default().privateCloudDatabase
 	
+	private var recordZone: CKRecordZone?
+	
 	static let shared = SousChefDatabase()
+	
+	func recipeRecordZone() -> CKRecordZone {
+		if recordZone == nil {
+			let newRecordZone = CKRecordZone(zoneName: SousChefDatabase.recipeRecordZoneName)
+			let modifyZones = CKModifyRecordZonesOperation(recordZonesToSave: [newRecordZone], recordZoneIDsToDelete: nil)
+			privateDB.add(modifyZones)
+			modifyZones.modifyRecordZonesCompletionBlock = { (savedRecordZonesOrNil, deletedRecordZoneIDsOrNil, errorOrNil) in
+				if let error = errorOrNil { print("There was an error creating the record zone. \(error)"); return }
+				guard let savedRecordZones = savedRecordZonesOrNil else { print("No record zones were saved..."); return }
+				guard let savedRecordZone = savedRecordZones.first else { print("The saved record zones array was empty..."); return }
+				self.recordZone = savedRecordZone
+			}
+			modifyZones.waitUntilFinished()
+		}
+		
+		return recordZone!
+	}
 }
 
 // MARK: - Fetching Recipes
@@ -44,9 +65,11 @@ extension SousChefDatabase {
 	}
 	
 	func databaseRecipeQuery(predicate: NSPredicate, loadingIngredients: Bool, completion: @escaping RecipeFetchCompletion) {
+		
+		let zoneID = recipeRecordZone().zoneID
 		let recipeQuery = CKQuery(recordType: SousChefDatabase.recipeRecordType, predicate: predicate)
 		
-		privateDB.perform(recipeQuery, inZoneWith: nil) { (recordsOrNil, errorOrNil) in
+		privateDB.perform(recipeQuery, inZoneWith: zoneID) { (recordsOrNil, errorOrNil) in
 			
 			guard let records = recordsOrNil else {
 				print("rcords were nil for query: \(recipeQuery)")
@@ -84,8 +107,9 @@ extension SousChefDatabase {
 	func ingredients(for recipe: Recipe, completion: @escaping IngredientFetchCompletion) {
 		let predicate = NSPredicate(format: "name = %@", recipe.name)
 		let query = CKQuery(recordType: SousChefDatabase.recipeRecordType, predicate: predicate)
+		let zoneID = recipeRecordZone().zoneID
 		
-		privateDB.perform(query, inZoneWith: nil) { (recordsOrNil, errorOrNil) in
+		privateDB.perform(query, inZoneWith: zoneID) { (recordsOrNil, errorOrNil) in
 			guard let records = recordsOrNil, let firstRecord = records.first else {
 				print("records were nil for query: \(query)")
 				completion([])
@@ -101,8 +125,9 @@ extension SousChefDatabase {
 	func ingredient(from reference: CKReference, completion: @escaping IngredientFetchCompletion) {
 		let predicate = NSPredicate(format: "recordName = %@", reference.recordID.recordName)
 		let query = CKQuery(recordType: SousChefDatabase.ingredientRecordType, predicate: predicate)
+		let zoneID = recipeRecordZone().zoneID
 		
-		privateDB.perform(query, inZoneWith: nil) { (recordsOrNil, errorOrNil) in
+		privateDB.perform(query, inZoneWith: zoneID) { (recordsOrNil, errorOrNil) in
 			guard let records = recordsOrNil, let firstRecord = records.first else {
 				print("records were nil for query: \(query)")
 				completion([])
@@ -121,21 +146,21 @@ extension SousChefDatabase {
 	func save(recipe: Recipe, onCompletionBlock: @escaping ([CKRecord]?, [CKRecordID]?, Error?) -> Void) {
 		var recordsToSave: [CKRecord] = []
 		var ingredientReferences: [CKReference] = []
+		
 		let recipeRecord = recipe.record
 		if let recipeImage = recipe.image {
 			recipeRecord[Recipe.recordImageKey] = imageAsset(recipeRecord: recipeRecord, image: recipeImage)
 		}
+		
 		for ingredient in recipe.ingredients {
 			let ingredientRecord = ingredient.record
 //			ingredientRecord.parent = CKReference(record: recipeRecord, action: .none)
 			recordsToSave.append(ingredientRecord)
 			ingredientReferences.append(CKReference(record: ingredientRecord, action: .deleteSelf))
 		}
-		
 		recipeRecord[Recipe.recordIngredientsKey] = ingredientReferences as CKRecordValue
-		
-		// Add the recipeRecord after setting the ingredient records on the recipe.
 		recordsToSave.append(recipeRecord)
+		
 		let modifyRecordsOperation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: nil)
 		modifyRecordsOperation.modifyRecordsCompletionBlock = { recordsOrNil, reocrdIDsOrNil, errorOrNil in
 			recipe.backingRecord = recipeRecord
@@ -144,7 +169,6 @@ extension SousChefDatabase {
 		modifyRecordsOperation.savePolicy = .changedKeys
 		
 		modifyRecordsOperation.start()
-		
 	}
 	
 	func imageAsset(recipeRecord: CKRecord, image: UIImage) -> CKAsset {
