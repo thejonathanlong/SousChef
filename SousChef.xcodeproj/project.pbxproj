@@ -64,6 +64,7 @@
 		56BC17B81F68E46300393863 /* InstructionsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */; };
 		56D42B302002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */; };
 		56D698B12079C79B00E70483 /* AddWorkFlowControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */; };
+		56D698D22092F4BC00E70483 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D698D12092F4BC00E70483 /* Logging.swift */; };
 		56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
 		56E43F46204D0827000D9273 /* TestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56E43F45204D0827000D9273 /* TestAssets.xcassets */; };
 		56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F42272201D877A007CDCA9 /* ExpandingTextView.swift */; };
@@ -135,6 +136,7 @@
 		56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsListTableViewController.swift; path = Controller/InstructionsListTableViewController.swift; sourceTree = "<group>"; };
 		56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIColor+SousChefAdditions.swift"; path = "Utility/UIColor+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddWorkFlowControllers.swift; path = iPadControllers/AddWorkFlowControllers.swift; sourceTree = "<group>"; };
+		56D698D12092F4BC00E70483 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = Utility/Logging.swift; sourceTree = "<group>"; };
 		56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientLinguisticTagger.swift; path = Model/IngredientLinguisticTagger.swift; sourceTree = "<group>"; };
 		56E43F45204D0827000D9273 /* TestAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TestAssets.xcassets; sourceTree = "<group>"; };
 		56F42272201D877A007CDCA9 /* ExpandingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandingTextView.swift; path = iPadControllers/ExpandingTextView.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				569330772014613A0017D16B /* TextRecognizer.swift */,
 				567ABD5720369785005ECF09 /* CoreGraphics+SousChefAdditions.swift */,
 				56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */,
+				56D698D12092F4BC00E70483 /* Logging.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				568258C21F63A45400A020A9 /* RecipeTableViewCell.swift in Sources */,
 				56932FEF200F0B490017D16B /* BaseTableViewController.swift in Sources */,
 				56932FED200F02B40017D16B /* SousChefStyling.swift in Sources */,
+				56D698D22092F4BC00E70483 /* Logging.swift in Sources */,
 				56933010201068AA0017D16B /* AllRecipesCollectionViewController.swift in Sources */,
 				568258AA1F63A31800A020A9 /* AppDelegate.swift in Sources */,
 				568625C81FBD46C80062175F /* SousChefDatabase.swift in Sources */,

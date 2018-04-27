@@ -18,7 +18,7 @@ class TextRecognizer: NSObject, G8TesseractDelegate {
 	private let operationQueue = OperationQueue()
 	
 	func recognizeText(in image: UIImage, completionHandler: @escaping TextRecognizerCompletionHandler) {
-		let interestingImage = image.cropImageToInterestingText()
+		let interestingImage = image//image.cropImageToInterestingText()
 		let image = UIImage.grayScale(image: interestingImage)
 		tesseract?.image = image
 

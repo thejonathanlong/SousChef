@@ -34,78 +34,37 @@ extension UIImage {
 		
 		return UIImage(cgImage: cgimg)
 	}
-	
-//	func textRects() -> [CGRect] {
-//		var rects: [CGRect] = []
-//		let imageRequestHandler = VNImageRequestHandler(cgImage: underlyingCGImage, options: [:])
-//		let request = VNDetectTextRectanglesRequest { (request, error) in
-//			if let err = error {
-//				print("There was an error:\(err)")
-//				return
-//			}
-//
-//			guard let observations = request.results else {
-//				print("No results")
-//				return
-//			}
-//
-//			// Get all the rects that have identified Text.
-//			let textObservations = observations.map({$0 as? VNTextObservation})
-//			for textObservation in textObservations {
-//				if let to = textObservation {
-//					let wordRect = self.wordRectangle(from: to)
-//					rects.append(wordRect)
-//				}
-//			}
-//		}
-//	}
-	
-	
+
 	func aggregatedWordRects() -> [CGRect] {
 		var aggregatedRects = [CGRect]()
 		guard let underlyingCGImage = cgImage else { return aggregatedRects }
 		
 		let textRectanglesWaiter = DispatchSemaphore(value: 0)
 		let imageRequestHandler = VNImageRequestHandler(cgImage: underlyingCGImage, options: [:])
-		let request = VNDetectTextRectanglesRequest { (request, error) in
+		let textRectangleRequest = VNDetectTextRectanglesRequest { (request, error) in
 			if let err = error { print("There was an error: \(err)"); return } // There was an error abort.
 			guard let observations = request.results else { print("Didn't get any results, did the request fail?"); return }
 			
-			var normalizedRects = [CGRect]()
+			var textRectangleObservations = [TextRectangleObservation]()
 			// Get all the rects that have identified Text.
 			let textObservations = observations.map({$0 as! VNTextObservation})
 			for textObservation in textObservations {
-//				let wordRect = self.normalizedWordRectangles(from: textObservation)
-				let wordObservation = self.wordRectangle(from: textObservation)
-//				aggregatedRects.append(otherWordRect)
-				normalizedRects.append(wordObservation.normalized)
+				let textRectangleObservation = textObservation.textRectangleObservation(with: self.size)
+				textRectangleObservations.append(textRectangleObservation)
 			}
 			
-//			for rect1 in normalizedRects {
-//				for rect2 in normalizedRects {
-//					if (rect1 != rect2) {
-//						let groupedRect = self.shouldGroup(rect1, rect2)
-//						if groupedRect != .null {
-//							if let rect1Index = normalizedRects.index(of: rect1), let rect2Index = normalizedRects.index(of: rect2) {
-//								normalizedRects.insert(groupedRect, at: min(rect1Index, rect2Index))
-//								normalizedRects.remove(at: rect1Index)
-//								normalizedRects.remove(at: rect2Index)
-//							}
-//						}
-//					}
-//				}
-//			}
+			let groupedObservations = TextRectangleObservation.group(observations: textRectangleObservations)
 			
-//			for rect in normalizedRects {
-//				aggregatedRects.append(self.wordRect(from: rect))
-//			}
+			for rectObservation in groupedObservations {
+				aggregatedRects.append(rectObservation.rect)
+			}
 			
 			textRectanglesWaiter.signal()
 		}
-		request.reportCharacterBoxes = true
+		textRectangleRequest.reportCharacterBoxes = true
 		
 		do {
-			try imageRequestHandler.perform([request])
+			try imageRequestHandler.perform([textRectangleRequest])
 		}
 		catch {
 			print("ImageRequstHandler.perform() threw....")
@@ -116,111 +75,74 @@ extension UIImage {
 		return aggregatedRects
 		
 	}
+}
+
+struct TextRectangleObservation: CustomDebugStringConvertible, CustomStringConvertible {
+	let normalizedRect: CGRect
+	let rect: CGRect
+
+	var debugDescription: String {
+		return "\(normalizedRect) -> \(rect)"
+	}
 	
-	func cropImageToInterestingText() -> UIImage {
-		if let underlyingCGImage = cgImage {
-			var newImage = UIImage()
-			let semaphore = DispatchSemaphore(value: 0)
-			var interestingRects: [CGRect] = []
-			let imageRequestHandler = VNImageRequestHandler(cgImage: underlyingCGImage, options: [:])
-			let request = VNDetectTextRectanglesRequest { (request, error) in
-				if let err = error {
-					print("There was an error:\(err)")
-					return
-				}
-				
-				guard let observations = request.results else {
-					print("No results")
-					return
-				}
-				
-				// Get all the rects that have identified Text.
-				let textObservations = observations.map({$0 as? VNTextObservation})
-				for textObservation in textObservations {
-					if let to = textObservation {
-						let wordRect = self.wordRectangle(from: to)
-						interestingRects.append(wordRect.r)
+	var description: String {
+		return debugDescription
+	}
+	
+	static func +(left: TextRectangleObservation, right: TextRectangleObservation) -> TextRectangleObservation {
+		return TextRectangleObservation(normalizedRect: left.normalizedRect + right.normalizedRect, rect: left.rect + right.rect)
+	}
+	
+	
+	// Compare all observations to each other. If two observations normalized rects should be grouped remove those observations and add a new observation that is the combination of the two.
+	static func group(observations: [TextRectangleObservation]) -> [TextRectangleObservation] {
+		var mutableObservations = observations
+		var successfullyGroupedRects = true
+		while successfullyGroupedRects {
+			successfullyGroupedRects = false
+			for (index1, observation1) in mutableObservations.enumerated() {
+				for (index2, observation2) in mutableObservations.enumerated() {
+					if index1 != index2 && CGRect.shouldGroup(rect1: observation1.normalizedRect, rect2: observation2.normalizedRect) {
+						successfullyGroupedRects = true
+						let mindex = min(index1, index2)
+						let maxIndex = max(index1, index2)
+						let newObservation = observation1 + observation2
+						mutableObservations[mindex] = newObservation
+						mutableObservations[maxIndex] = TextRectangleObservation(normalizedRect: .null, rect: .null)
 					}
 				}
-				
-				let combinedRect = CGRect(rects: interestingRects)
-				if let croppedCGImage = underlyingCGImage.cropping(to: combinedRect) {
-					newImage = UIImage(cgImage: croppedCGImage)
-				}
-				
-				semaphore.signal()
 			}
-			
-			do {
-				request.reportCharacterBoxes = true
-				try imageRequestHandler.perform([request])
-			}
-			catch {
-				print("ImageRequstHandler.perform() threw....")
-				semaphore.signal()
-			}
-			semaphore.wait()
-			
-			return newImage
 		}
 		
-		return UIImage()
+		return mutableObservations
+	}
+}
+
+extension CGRect {
+	static func +(left: CGRect, right: CGRect) -> CGRect {
+		let normalizedMinY = min(left.minY, right.minY)
+		let normalizedMinX = min(left.minX, right.minX)
+		let normalizedWidth = max(left.maxX, right.maxX) - normalizedMinX
+		let normalizedHeight = max(left.maxY, right.maxY) - normalizedMinY
+		
+		return CGRect(x: normalizedMinX , y: normalizedMinY, width: normalizedWidth, height: normalizedHeight)
 	}
 	
 	// rect1 and rect 2 should be normalized
-	func shouldGroup(_ rect1: CGRect, _ rect2: CGRect) -> CGRect {
+	static func shouldGroup(rect1: CGRect, rect2: CGRect) -> Bool {
 		let xOrigin1 = rect1.minX
 		let xOrigin2 = rect2.minX
 		
 		let yOrigin1 = rect1.minY
 		let yOrigin2 = rect2.minY
 		
-		if (fabs(xOrigin1 - xOrigin2) <= 0.01 && fabs(yOrigin1 - yOrigin2) <= 0.05) {
-			let y = min(rect1.minY, rect2.minY)
-			return CGRect(x: min(rect1.minX, rect2.minX), y: y, width: max(rect1.width, rect2.width), height: min(rect1.maxY, rect2.maxY) - y)
-		}
-		else {
-			return .null
-		}
+		return rect1.intersects(rect2) || fabs(xOrigin1 - xOrigin2) <= 0.01 && fabs(yOrigin1 - yOrigin2) <= 0.05
 	}
-	
-	func normalizedWordRectangles(from textObservation: VNTextObservation) -> CGRect {
-		guard let characterBoxes = textObservation.characterBoxes else { return .zero }
-		
-		var maxX: CGFloat = CGFloat.greatestFiniteMagnitude
-		var minX: CGFloat = 0.0
-		var maxY: CGFloat = CGFloat.greatestFiniteMagnitude
-		var minY: CGFloat = 0.0
-		
-		for char in characterBoxes {
-			if char.bottomLeft.x < maxX {
-				maxX = char.bottomLeft.x
-			}
-			if char.bottomRight.x > minX {
-				minX = char.bottomRight.x
-			}
-			if char.bottomRight.y < maxY {
-				maxY = char.bottomRight.y
-			}
-			if char.topRight.y > minY {
-				minY = char.topRight.y
-			}
-		}
+}
 
-		return CGRect(x: minX, y: minY, width: minX - maxX, height: minY - maxY)
-	}
-	
-	func wordRect(from rect: CGRect) -> CGRect {
-		let xCord = rect.maxX * size.width
-		let yCord = (1 - rect.minY) * size.height
-		let width = rect.width * size.width
-		let height = rect.height * size.height
-		
-		return CGRect(x: xCord, y: yCord, width: width, height: height)
-	}
-	
-	func wordRectangle(from textObservation: VNTextObservation) -> (normalized: CGRect, r: CGRect){
-		guard let characterBoxes = textObservation.characterBoxes else { return (.zero, .zero) }
+extension VNTextObservation {
+	func textRectangleObservation(with size: CGSize) -> TextRectangleObservation {
+		guard let characterBoxes = self.characterBoxes else { return TextRectangleObservation(normalizedRect: .null, rect: .null) }
 		
 		var maxX: CGFloat = CGFloat.greatestFiniteMagnitude
 		var minX: CGFloat = 0.0
@@ -241,7 +163,6 @@ extension UIImage {
 				minY = char.topRight.y
 			}
 		}
-		
 		
 		let xCord = maxX * size.width
 		let yCord = (1 - minY) * size.height
@@ -249,9 +170,29 @@ extension UIImage {
 		let height = (minY - maxY) * size.height
 		
 		let normalizedRect = CGRect(x: xCord/size.width, y: yCord/size.height, width: width/size.width, height: height/size.height)
-		let r = CGRect(x: xCord, y: yCord, width: width, height: height)
-		print("\(normalizedRect) -> \(r)")
+		let rect = CGRect(x: xCord, y: yCord, width: width, height: height)
+		print("\(normalizedRect) -> \(rect)")
 		
-		return (normalizedRect, r)
+		return TextRectangleObservation(normalizedRect: normalizedRect, rect: rect)
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
