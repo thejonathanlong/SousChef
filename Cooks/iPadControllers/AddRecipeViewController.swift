@@ -303,7 +303,7 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
-			baseNavigationController.addFloatingButton(title: "Done", target: self, action: #selector(done(sender:)), viewController: self)
+			baseNavigationController.addTrailingFloatingButton(title: "Done", image:nil, target: self, action: #selector(done(sender:)), viewController: self)
 		}
 	}
 }

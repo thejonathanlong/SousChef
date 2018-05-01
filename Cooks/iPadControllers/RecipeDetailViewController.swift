@@ -121,8 +121,8 @@ class RecipeDetailViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
-			baseNavigationController.addFloatingButton(image: UIImage(named: "Trash"), target: self, action: #selector(deleteRecipe(sender:)), viewController: self)
-			baseNavigationController.addFloatingButton(image: UIImage(named: "Share"), target: self, action: #selector(shareRecipe(sender:)), viewController: self)
+			baseNavigationController.addLeadingFloatingButton(title: nil, image: UIImage(named: "Trash"), target: self, action: #selector(deleteRecipe(sender:)), viewController: self)
+			baseNavigationController.addTrailingFloatingButton(title: nil, image: UIImage(named: "Share"), target: self, action: #selector(shareRecipe(sender:)), viewController: self)
 		}
 	}
 	
