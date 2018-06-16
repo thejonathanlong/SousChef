@@ -25,7 +25,7 @@ class Ingredient: NSObject {
 	}
 	
 	override var description: String {
-		return "\(measurement.amount) \(measurement.type) \(original)"
+		return "\(original)"
 	}
 	
 	override var debugDescription: String {
@@ -84,7 +84,7 @@ extension Ingredient {
 	}
 	
 	var record: CKRecord {
-		let ingredientRecord = CKRecord(recordType: SousChefDatabase.ingredientRecordType)
+		let ingredientRecord = CKRecord(recordType: SousChefDatabase.ingredientRecordType, zoneID: SousChefDatabase.shared.recipeRecordZone().zoneID)
 		ingredientRecord[Ingredient.recordItemKey] = item as CKRecordValue
 		ingredientRecord[Ingredient.recordOriginalKey] = original as CKRecordValue
 		ingredientRecord[Ingredient.recordMeasurementAmountKey] = measurement.amount as CKRecordValue

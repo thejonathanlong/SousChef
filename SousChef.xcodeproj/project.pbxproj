@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5607AF3D2094248100112496 /* RecipePhotoSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5607AF3C2094248100112496 /* RecipePhotoSelectionViewController.swift */; };
 		560CA6B9200062AA00807784 /* IngredientTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 560CA6B8200062AA00807784 /* IngredientTableViewController.swift */; };
 		56137D2A202773F8003917BD /* FloatingButtonNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */; };
+		56157B70205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */; };
+		561AB9932095027100EC794E /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561AB9922095027100EC794E /* PhotoCollectionViewCell.swift */; };
+		561AB9952099782F00EC794E /* RecipeComponentSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */; };
 		5633F99B2006DB2800CF117E /* InstructionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */; };
 		563C456A1F9085E100B3CAF4 /* SousChefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563C45691F9085E100B3CAF4 /* SousChefTests.swift */; };
 		563C45711F9086D900B3CAF4 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
@@ -62,6 +66,8 @@
 		56BC17B61F68E1A600393863 /* InstructionsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B51F68E1A600393863 /* InstructionsDetailViewController.swift */; };
 		56BC17B81F68E46300393863 /* InstructionsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */; };
 		56D42B302002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */; };
+		56D698B12079C79B00E70483 /* AddWorkFlowControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */; };
+		56D698D22092F4BC00E70483 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D698D12092F4BC00E70483 /* Logging.swift */; };
 		56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
 		56E43F46204D0827000D9273 /* TestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56E43F45204D0827000D9273 /* TestAssets.xcassets */; };
 		56F42273201D877A007CDCA9 /* ExpandingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F42272201D877A007CDCA9 /* ExpandingTextView.swift */; };
@@ -79,8 +85,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5607AF3C2094248100112496 /* RecipePhotoSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipePhotoSelectionViewController.swift; path = iPadControllers/RecipePhotoSelectionViewController.swift; sourceTree = "<group>"; };
 		560CA6B8200062AA00807784 /* IngredientTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IngredientTableViewController.swift; path = iPadControllers/IngredientTableViewController.swift; sourceTree = "<group>"; };
 		56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FloatingButtonNavigationController.swift; path = iPadControllers/FloatingButtonNavigationController.swift; sourceTree = "<group>"; };
+		56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSLinguisticTagger+SousChefAdditions.swift"; path = "Utility/NSLinguisticTagger+SousChefAdditions.swift"; sourceTree = "<group>"; };
+		561AB9922095027100EC794E /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoCollectionViewCell.swift; path = Views/PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipeComponentSelectionViewController.swift; path = iPadControllers/RecipeComponentSelectionViewController.swift; sourceTree = "<group>"; };
 		5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InstructionsTableViewController.swift; path = iPadControllers/InstructionsTableViewController.swift; sourceTree = "<group>"; };
 		563C45671F9085E100B3CAF4 /* SousChefTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SousChefTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		563C45691F9085E100B3CAF4 /* SousChefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SousChefTests.swift; sourceTree = "<group>"; };
@@ -131,6 +141,8 @@
 		56BC17B51F68E1A600393863 /* InstructionsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsDetailViewController.swift; path = Controller/InstructionsDetailViewController.swift; sourceTree = "<group>"; };
 		56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsListTableViewController.swift; path = Controller/InstructionsListTableViewController.swift; sourceTree = "<group>"; };
 		56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIColor+SousChefAdditions.swift"; path = "Utility/UIColor+SousChefAdditions.swift"; sourceTree = "<group>"; };
+		56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddWorkFlowControllers.swift; path = iPadControllers/AddWorkFlowControllers.swift; sourceTree = "<group>"; };
+		56D698D12092F4BC00E70483 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = Utility/Logging.swift; sourceTree = "<group>"; };
 		56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientLinguisticTagger.swift; path = Model/IngredientLinguisticTagger.swift; sourceTree = "<group>"; };
 		56E43F45204D0827000D9273 /* TestAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TestAssets.xcassets; sourceTree = "<group>"; };
 		56F42272201D877A007CDCA9 /* ExpandingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpandingTextView.swift; path = iPadControllers/ExpandingTextView.swift; sourceTree = "<group>"; };
@@ -208,11 +220,15 @@
 		56766A561FDA69EE00C91E0C /* iPadControllers */ = {
 			isa = PBXGroup;
 			children = (
+				56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */,
 				5641851D202FA447003961F2 /* AddRecipeViewController.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
 				560CA6B8200062AA00807784 /* IngredientTableViewController.swift */,
 				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
 				56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */,
+				56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */,
+				5607AF3C2094248100112496 /* RecipePhotoSelectionViewController.swift */,
+				561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */,
 				5693300E201067D00017D16B /* BaseClasses */,
 			);
 			name = iPadControllers;
@@ -226,6 +242,7 @@
 				56766A5E1FDCFE1E00C91E0C /* DetailTableViewCell.swift */,
 				56933011201068CD0017D16B /* RecipeCollectionViewCell.swift */,
 				56FEEA01202B8FC800D02C6F /* SousChefButton.swift */,
+				561AB9922095027100EC794E /* PhotoCollectionViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -235,7 +252,6 @@
 			children = (
 				568258A81F63A31800A020A9 /* Cooks */,
 				563C45681F9085E100B3CAF4 /* SousChefTests */,
-				568258BE1F63A35300A020A9 /* Supporting */,
 				568258A71F63A31800A020A9 /* Products */,
 				563C45721F90876E00B3CAF4 /* Frameworks */,
 			);
@@ -257,6 +273,7 @@
 				568258B01F63A31800A020A9 /* Assets.xcassets */,
 				56797B391FBD43FE00052382 /* Cooks.entitlements */,
 				568258A91F63A31800A020A9 /* AppDelegate.swift */,
+				568258B51F63A31800A020A9 /* Info.plist */,
 				56766A561FDA69EE00C91E0C /* iPadControllers */,
 				56766A5D1FDCFDE300C91E0C /* Views */,
 				56766A521FDA697F00C91E0C /* Storyboards */,
@@ -289,15 +306,6 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
-		568258BE1F63A35300A020A9 /* Supporting */ = {
-			isa = PBXGroup;
-			children = (
-				568258B51F63A31800A020A9 /* Info.plist */,
-			);
-			name = Supporting;
-			path = Cooks;
-			sourceTree = "<group>";
-		};
 		568625C61FBD46A50062175F /* Utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,6 +318,8 @@
 				56933069201412670017D16B /* UIImage+SousChefAdditions.swift */,
 				569330772014613A0017D16B /* TextRecognizer.swift */,
 				567ABD5720369785005ECF09 /* CoreGraphics+SousChefAdditions.swift */,
+				56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */,
+				56D698D12092F4BC00E70483 /* Logging.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -318,7 +328,6 @@
 			isa = PBXGroup;
 			children = (
 				56932FEE200F0B490017D16B /* BaseTableViewController.swift */,
-				56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */,
 			);
 			name = BaseClasses;
 			sourceTree = "<group>";
@@ -479,6 +488,7 @@
 			files = (
 				56766A5F1FDCFE1E00C91E0C /* DetailTableViewCell.swift in Sources */,
 				569330162011C8AC0017D16B /* TestData.swift in Sources */,
+				56D698B12079C79B00E70483 /* AddWorkFlowControllers.swift in Sources */,
 				569330782014613A0017D16B /* TextRecognizer.swift in Sources */,
 				560CA6B9200062AA00807784 /* IngredientTableViewController.swift in Sources */,
 				56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */,
@@ -491,21 +501,26 @@
 				568258C21F63A45400A020A9 /* RecipeTableViewCell.swift in Sources */,
 				56932FEF200F0B490017D16B /* BaseTableViewController.swift in Sources */,
 				56932FED200F02B40017D16B /* SousChefStyling.swift in Sources */,
+				56D698D22092F4BC00E70483 /* Logging.swift in Sources */,
 				56933010201068AA0017D16B /* AllRecipesCollectionViewController.swift in Sources */,
 				568258AA1F63A31800A020A9 /* AppDelegate.swift in Sources */,
 				568625C81FBD46C80062175F /* SousChefDatabase.swift in Sources */,
 				5669B1E11F6503C200AEB5FA /* Measurement.swift in Sources */,
 				56797B351FBC0A3500052382 /* Ingredient.swift in Sources */,
+				561AB9932095027100EC794E /* PhotoCollectionViewCell.swift in Sources */,
 				56797B381FBC115300052382 /* AddRecipeTableViewController.swift in Sources */,
 				5633F99B2006DB2800CF117E /* InstructionsTableViewController.swift in Sources */,
 				5641851E202FA447003961F2 /* AddRecipeViewController.swift in Sources */,
 				5693301420106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift in Sources */,
+				561AB9952099782F00EC794E /* RecipeComponentSelectionViewController.swift in Sources */,
 				568258C01F63A39800A020A9 /* CooksTableViewController.swift in Sources */,
 				567ABD5820369785005ECF09 /* CoreGraphics+SousChefAdditions.swift in Sources */,
 				56137D2A202773F8003917BD /* FloatingButtonNavigationController.swift in Sources */,
 				56933012201068CD0017D16B /* RecipeCollectionViewCell.swift in Sources */,
+				5607AF3D2094248100112496 /* RecipePhotoSelectionViewController.swift in Sources */,
 				56766A581FDA6A3300C91E0C /* RecipeDetailViewController.swift in Sources */,
 				568258C41F63A53600A020A9 /* Recipe.swift in Sources */,
+				56157B70205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -127,7 +127,7 @@ extension Recipe {
 			return record
 		}
 		else {
-			let record = CKRecord(recordType: SousChefDatabase.recipeRecordType)
+			let record = CKRecord(recordType: SousChefDatabase.recipeRecordType, zoneID: SousChefDatabase.shared.recipeRecordZone().zoneID)
 			record[Recipe.recordNameKey] = name as CKRecordValue
 			record[Recipe.recordTagsKey] = tags as CKRecordValue
 			record[Recipe.recordInstructionsKey] = instructions as CKRecordValue

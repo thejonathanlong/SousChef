@@ -27,7 +27,7 @@ class HeaderView: UIView, UITextViewDelegate {
 		set (newText) {
 			textView.text = newText
 			textViewDidChange(textView)
-
+			
 		}
 	}
 	
@@ -36,7 +36,7 @@ class HeaderView: UIView, UITextViewDelegate {
 			textView.isEditable = isEditable
 		}
 	}
-
+	
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -72,7 +72,7 @@ class HeaderView: UIView, UITextViewDelegate {
 		
 		textView.font = SousChefStyling.preferredFont(for: .headline)
 		textView.textColor = SousChefStyling.darkColor
-
+		
 		textView.delegate = self
 		headerDivider.backgroundColor = SousChefStyling.darkColor
 		
@@ -132,7 +132,7 @@ extension HeaderView {
 		let constraints = [
 			button.heightAnchor.constraint(equalToConstant: textViewHeight),
 			button.widthAnchor.constraint(equalToConstant: textViewHeight),
-		]
+			]
 		
 		NSLayoutConstraint.activate(constraints)
 	}
@@ -174,7 +174,7 @@ class SmartAddViewController: UIViewController {
 
 //MARK: - AddRecipeViewController
 class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+	
 	let contentView = UIView()
 	let backgroundImageView = UIImageView()
 	let recipeImageCameraButton = SousChefButton(frame: .zero)
@@ -287,13 +287,13 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 			
 			tagsHeaderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -SousChefStyling.standardMargin),
 			tagsHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: SousChefStyling.standardMargin),
-//			tagsHeaderView.trailingAnchor.constraint(equalTo: tagsHeaderView.leadingAnchor, constant: -SousChefStyling.standardMargin),
+			//			tagsHeaderView.trailingAnchor.constraint(equalTo: tagsHeaderView.leadingAnchor, constant: -SousChefStyling.standardMargin),
 			tagsHeaderView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -2 * SousChefStyling.standardMargin),
 			
 			sourceHeaderView.bottomAnchor.constraint(equalTo: tagsHeaderView.bottomAnchor),
 			sourceHeaderView.leadingAnchor.constraint(equalTo: tagsHeaderView.trailingAnchor, constant: SousChefStyling.standardMargin),
 			sourceHeaderView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -2 * SousChefStyling.standardMargin),
-		]
+			]
 		
 		constraints.append(contentsOf: contentConstraints)
 		
@@ -303,14 +303,14 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
-			baseNavigationController.addFloatingButton(title: "Done", target: self, action: #selector(done(sender:)), viewController: self)
+			baseNavigationController.addTrailingFloatingButton(title: "Done", image:nil, target: self, action: #selector(done(sender:)), viewController: self)
 		}
 	}
 }
 
 //MARK: - Actions
 extension AddRecipeViewController {
-
+	
 	@objc func done(sender: UIButton) {
 		let recipeName = titleHeaderView.text
 		
@@ -404,7 +404,25 @@ extension AddRecipeViewController {
 			TextRecognizer.shared.recognizeText(in: image!) { (recognizedText) in
 				DispatchQueue.main.async {
 					let text = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? recognizedText.replacingOccurrences(of: "\n", with: " ") : recognizedText
-					let sentences = self.findSentences(text: text)
+					let sentences = self.findSentences(text: text, removingLeadingNumbers: self.resultingView == self.instructionSmartAddViewController.resultingTextView)
+					
+					
+//					let removedLeadingNumberResults: ([String], [Bool]) = self.removeLeadingNumberFromSentence(sentences: sentences)
+//					var removedLeadingNumber = removedLeadingNumberResults.1
+//					let sentencesMinusLeadingNumbers = removedLeadingNumberResults.0
+//					var groupedSentences: [String] = []
+//					var currentSentenceIndex = 0
+//					var currentBoolIndex = 0
+//					for didRemoveLeadingNumber in removedLeadingNumber {
+//						if didRemoveLeadingNumber {
+//							groupedSentences.append(sentencesMinusLeadingNumbers[currentBoolIndex])
+//							currentSentenceIndex += 1
+//						} else {
+//							groupedSentences[currentSentenceIndex].append(sentencesMinusLeadingNumbers[currentBoolIndex])
+//						}
+//						currentBoolIndex += 1
+//					}
+					
 					let paragraph = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? sentences.joined(separator: "\n") : sentences.joined(separator: "")
 					print("identified text: \(paragraph)")
 					if let resultingTextView = self.resultingView as? UITextView {
@@ -432,8 +450,9 @@ extension AddRecipeViewController {
 extension AddRecipeViewController {
 	
 	// Splits a chunk of texts up by sentences.
-	func findSentences(text: String) -> [String] {
+	func findSentences(text: String, removingLeadingNumbers: Bool) -> [String] {
 		var sentences: [String] = []
+		var currentGroup = ""
 		let sentenceTagger = NSLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
 		sentenceTagger.string = text
 		sentenceTagger.enumerateTags(in: NSMakeRange(0, text.count), unit: .sentence, scheme: .language, options: .joinNames) { (tagOrNil, range, stop) in
@@ -442,10 +461,79 @@ extension AddRecipeViewController {
 			let tokenInQuestion = String(text[start..<end])
 			if (tokenInQuestion != "\n")
 			{
-				sentences.append(tokenInQuestion)
+				if removingLeadingNumbers {
+					let sentenceWithoutNumber = self.removeLeadingNumberFromSentence(sentence: tokenInQuestion)
+					let didRemoveNumber = sentenceWithoutNumber != tokenInQuestion
+					if didRemoveNumber && currentGroup != "" {
+						sentences.append(currentGroup)
+						currentGroup = sentenceWithoutNumber
+					} else if currentGroup == "" {
+						currentGroup = sentenceWithoutNumber
+					}
+					else {
+						currentGroup.append(sentenceWithoutNumber)
+					}
+				} else {
+					sentences.append(tokenInQuestion)
+				}
 			}
 		}
 		
 		return sentences
+	}
+	
+	func removeLeadingNumberFromSentence(sentence: String) -> String {
+		var newSentence = sentence
+		let numberRemoverTagger = NSLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
+		numberRemoverTagger.string = sentence
+		var tokenNumber = 0
+		var foundNumber = false
+		var replacementRangeOffset = 0
+		numberRemoverTagger.enumerateTagsAndTokens(in: NSMakeRange(0, sentence.count), unit: .word, scheme: .lexicalClass, using: { (tag, tokenInQuestion, range, stop) in
+			tokenNumber += 1
+			switch tag {
+			case .punctuation:
+				if foundNumber { replacementRangeOffset += range.length }
+				
+			case .sentenceTerminator:
+				if foundNumber { replacementRangeOffset += range.length }
+				
+			case .whitespace:
+				if foundNumber {
+					replacementRangeOffset += range.length
+				}
+				else {
+					stop.pointee = true
+				}
+				
+				
+			case .number:
+				foundNumber = true
+				replacementRangeOffset += range.length
+			
+			case .otherWord:
+				let probablyANumber = self.tokenIsProbablyANumber(token: tokenInQuestion)
+				if probablyANumber {
+					print("Found other word \(tokenInQuestion) it's probably a number...")
+				}
+				foundNumber = probablyANumber
+				
+			default: break
+				
+			}
+			
+			if tokenNumber == 3 { stop.pointee = true }
+		})
+		
+		if replacementRangeOffset != 0 {
+			let endIndex = sentence.index(sentence.startIndex, offsetBy:replacementRangeOffset)
+			newSentence.replaceSubrange(sentence.startIndex...endIndex, with: "")
+		}
+		
+		return newSentence
+	}
+	
+	func tokenIsProbablyANumber(token: String) -> Bool {
+		return token.contains("0") || token.contains("1") || token.contains("2") || token.contains("3") || token.contains("4") || token.contains("5") || token.contains("6") || token.contains("7") || token.contains("8") || token.contains("9")
 	}
 }

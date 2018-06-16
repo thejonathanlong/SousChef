@@ -8,6 +8,7 @@
 
 import UIKit
 
+//MARK: - AllRecipesCollectionViewController
 class AllRecipesCollectionViewController: UICollectionViewController {
 	static let recipeCollectionViewCellReuseIdentifier = "recipeCollectionViewCellReuseIdentifier"
 	
@@ -23,11 +24,11 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		database.recipes { (recipes) in
-			DispatchQueue.main.async {
-				self.recipes = recipes
-			}
-		}
+//		database.recipes { (recipes) in
+//			DispatchQueue.main.async {
+//				self.recipes = recipes
+//			}
+//		}
 		
 	}
 	
@@ -49,7 +50,12 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
-			baseNavigationController.addFloatingButton(image: UIImage(named: "Add"), target: self, action: #selector(addRecipe), viewController: self)
+			baseNavigationController.addLeadingFloatingButton(title: nil, image: UIImage(named: "Add"), target: self, action: #selector(addRecipe), viewController: self)
+		}
+		database.recipes { (recipes) in
+			DispatchQueue.main.async {
+				self.recipes = recipes
+			}
 		}
 	}
 	
@@ -62,14 +68,14 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	}
 	
 	@objc func addRecipe() {
-		let vc = AddRecipeViewController(nibName: nil, bundle: nil)
-		
+//		let vc = AddRecipeViewController(nibName: nil, bundle: nil)
+		let recipePhotoSelection = RecipePhotoSelectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
 //		vc.titleLabel.text = "Tell me the ingredient list"
-		navigationController?.pushViewController(vc, animated: true)
+		navigationController?.pushViewController(recipePhotoSelection, animated: true)
 	}
 }
 
-// MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 extension AllRecipesCollectionViewController {
 	override func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 1
@@ -90,7 +96,7 @@ extension AllRecipesCollectionViewController {
 	}
 }
 
-// MARK: UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
 extension AllRecipesCollectionViewController {
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
