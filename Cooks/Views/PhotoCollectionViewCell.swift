@@ -44,7 +44,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
 	//MAKR: - View life cycle
 	override func prepareForReuse() {
 		super.prepareForReuse()
-		thumbnailImage = nil
+//		thumbnailImage = nil
 		selectedImageView.image = nil
 		isSelected = false
 	}

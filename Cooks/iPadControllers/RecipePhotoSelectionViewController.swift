@@ -28,7 +28,7 @@ class RecipePhotoSelectionViewController: UICollectionViewController {
 	fileprivate var thumbnailSize: CGSize!
 	fileprivate var previousPreheatRect = CGRect.zero
 	
-	fileprivate var selectedImages: Array<UIImage> = Array()
+	fileprivate var selectedAssets: Array<PHAsset> = Array()
 	
 	//MARK: - Init
 	static func commonInit(photoSelectionViewController: RecipePhotoSelectionViewController) {
@@ -126,21 +126,18 @@ class RecipePhotoSelectionViewController: UICollectionViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PhotoCollectionViewCell.self), for: indexPath) as? PhotoCollectionViewCell else { fatalError("unexpected cell in collection view") }
-		guard let selectedImage = cell.imageView.image else { fatalError("A cell was selected that did not have an image. Cell - \(cell)") }
-		
-		cell.isSelected = !cell.isSelected
-		if cell.isSelected {
-			selectedImages.append(selectedImage)
-		}
-		else if let selectedItemIndex = selectedImages.index(of: selectedImage) {
-			selectedImages.remove(at: selectedItemIndex)
+		let selectedAsset = fetchResult[indexPath.item]
+		selectedAssets.append(selectedAsset)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+		let selectedAsset = fetchResult[indexPath.item]
+		if let selectedItemIndex = selectedAssets.index(of: selectedAsset) {
+			selectedAssets.remove(at: selectedItemIndex)
 		}
 		else {
-			print("Tried to remove an image that was not selected: \(selectedImage)")
+			print("Tried to remove an asset that was not selected: \(selectedAsset)")
 		}
-		
-		
 	}
 	
 	// MARK: - UIScrollView
@@ -215,7 +212,10 @@ class RecipePhotoSelectionViewController: UICollectionViewController {
 //MARK: - Actions
 extension RecipePhotoSelectionViewController {
 	@objc func next(sender: SousChefButton) {
+		let componentSelectionViewController = RecipeComponentSelectionPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options:nil)
+		componentSelectionViewController.textSelectionAssets = selectedAssets
 		
+		navigationController?.pushViewController(componentSelectionViewController, animated: true)
 	}
 }
 // MARK: - PHPhotoLibraryChangeObserver

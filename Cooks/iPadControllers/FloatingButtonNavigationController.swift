@@ -9,17 +9,24 @@
 import UIKit
 import MessageUI
 
+//MARK: FloatingButtonNavigationController
 class FloatingButtonNavigationController: UINavigationController, UINavigationControllerDelegate, MFMailComposeViewControllerDelegate {
 
-	let leadingFloatingButtonStack = UIStackView()
-	let trailingFloatingButtonStack = UIStackView()
-	let backButton = SousChefButton(frame: .zero)
-	let bugButton = SousChefButton(frame: .zero)
-	// Without the dummyView the stackView animates weird when hiding and unhiding the buttons.
-	let dummyView = UIView()
+	//MARK: - Public properties
+	let contentView = UIView()
 	
-	var buttonsForViewController = [UIViewController : [SousChefButton]]()
+	// MARK: - Private properties
+	private let containingStackView = UIStackView()
 	
+	private let leadingFloatingButtonStack = UIStackView()
+	
+	private let trailingFloatingButtonStack = UIStackView()
+	
+	private let backButton = SousChefButton(frame: .zero)
+	
+	private var buttonsForViewController = [UIViewController : [SousChefButton]]()
+	
+	// MARK: - Initializers
 	override init(rootViewController: UIViewController) {
 		super.init(rootViewController: rootViewController)
 		commonInit()
@@ -41,6 +48,10 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 	}
 	
 	func commonInit() {
+		if self.leadingFloatingButtonStack.arrangedSubviews.count > 0 && self.trailingFloatingButtonStack.arrangedSubviews.count > 0 {
+			return
+		}
+		
 		delegate = self
 		view.clipsToBounds = true
 		leadingFloatingButtonStack.axis = .horizontal
@@ -61,16 +72,24 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		backButton.translatesAutoresizingMaskIntoConstraints = false
 		backButton.isHidden = true
 		
+		let bugButton = SousChefButton(frame: .zero)
 		let bugButtonImage = UIImage(named: "Bug")!
 		bugButton.setImage(bugButtonImage, for: .normal)
 		bugButton.addTarget(self, action: #selector(reportBug), for: .primaryActionTriggered)
 		bugButton.translatesAutoresizingMaskIntoConstraints = false
 		
-		dummyView.translatesAutoresizingMaskIntoConstraints = false
+		// Without the dummyView the stackView animates weird when hiding and unhiding the buttons.
+		let leadingDummyView = UIView()
+		leadingDummyView.translatesAutoresizingMaskIntoConstraints = false
 		
-		leadingFloatingButtonStack.addArrangedSubview(dummyView)
+		let trailingDummyView = UIView()
+		trailingDummyView.translatesAutoresizingMaskIntoConstraints = false
+		
+		leadingFloatingButtonStack.addArrangedSubview(leadingDummyView)
 		leadingFloatingButtonStack.addArrangedSubview(backButton)
 		leadingFloatingButtonStack.addArrangedSubview(bugButton)
+		
+		trailingFloatingButtonStack.addArrangedSubview(trailingDummyView)
 		
 		view.addSubview(leadingFloatingButtonStack)
 		view.addSubview(trailingFloatingButtonStack)
@@ -82,8 +101,10 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 			trailingFloatingButtonStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -SousChefStyling.standardMargin),
 			trailingFloatingButtonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SousChefStyling.standardMargin),
 			trailingFloatingButtonStack.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
-//			dummyView.widthAnchor.constraint(equalToConstant: 1),
-//			dummyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 1),
+			leadingDummyView.widthAnchor.constraint(equalToConstant: 1),
+			leadingDummyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 1),
+			trailingDummyView.widthAnchor.constraint(equalToConstant: 1),
+			trailingDummyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 1),
 			backButton.widthAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
 			backButton.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
 			bugButton.widthAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonWidth),
@@ -93,7 +114,10 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		
 		NSLayoutConstraint.activate(constraint)
 	}
-	
+}
+
+//MARK: - Overridden Methods
+extension FloatingButtonNavigationController {
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
 		if let topViewController = self.topViewController {
 			removeFloatingButtons(for: topViewController, viewControllerCount: self.viewControllers.count + 1)
@@ -116,12 +140,7 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 	}
 }
 
-// MARK: - Floating Button Stack Additions
-private enum FloatingButtonAlignment {
-	case leading
-	case trailing
-}
-
+// MARK: - Methods
 extension FloatingButtonNavigationController {
 	
 	func addTrailingFloatingButton(title: String?, image: UIImage?, target: Any, action: Selector, viewController: UIViewController?) {
@@ -147,14 +166,23 @@ extension FloatingButtonNavigationController {
 		
 		return floatingButton
 	}
+}
+
+//MARK: - Utilities
+private enum FloatingButtonAlignment {
+	case leading
+	case trailing
+}
+extension FloatingButtonNavigationController {
 	
 	private func addFloatingButton(title: String?, image: UIImage?, target: Any, action: Selector, viewController: UIViewController?, alignment: FloatingButtonAlignment) {
 		let button = floatingButton(title: title, image: image, target: target, action: action)
 		let stackView = alignment == .leading ? leadingFloatingButtonStack : trailingFloatingButtonStack
+		button.isHidden = true
 		stackView.addArrangedSubview(button)
-		
+		stackView.layoutIfNeeded()
 		UIView.animate(withDuration: 0.33) {
-			self.view.layoutIfNeeded()
+			button.isHidden = false
 			stackView.layoutIfNeeded()
 		}
 		
@@ -167,12 +195,31 @@ extension FloatingButtonNavigationController {
 	}
 	
 	private func removeFloatingButtons(for viewController: UIViewController, viewControllerCount: Int) {
-		UIView.animate(withDuration: 0.33) {
-			self.buttonsForViewController[viewController]?.forEach({ $0.removeFromSuperview() })
-			self.backButton.alpha = viewControllerCount <= 1 ? 0 : 1
+		UIView.animate(withDuration: 0.33, animations: {
+			self.buttonsForViewController[viewController]?.forEach({ $0.isHidden = true })
 			self.backButton.isHidden = viewControllerCount <= 1
 			self.view.layoutIfNeeded()
+			self.leadingFloatingButtonStack.layoutIfNeeded()
+			self.trailingFloatingButtonStack.layoutIfNeeded()
+		}) { (completed) in
+			if completed {
+				self.buttonsForViewController[viewController]?.forEach({ $0.removeFromSuperview() })
+			}
 		}
+	}
+	
+	private func screenshot() -> UIImage? {
+		if let topViewController = topViewController {
+			let size = topViewController.view.frame.size
+			UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+			topViewController.view.drawHierarchy(in: topViewController.view.frame, afterScreenUpdates: true)
+			let image = UIGraphicsGetImageFromCurrentImageContext()
+			UIGraphicsEndImageContext()
+			
+			return image
+		}
+		
+		return nil
 	}
 }
 
@@ -199,21 +246,6 @@ extension FloatingButtonNavigationController {
 		}
 		else {
 		}
-	}
-	
-	//Utility
-	private func screenshot() -> UIImage? {
-		if let topViewController = topViewController {
-			let size = topViewController.view.frame.size
-			UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-			topViewController.view.drawHierarchy(in: topViewController.view.frame, afterScreenUpdates: true)
-			let image = UIGraphicsGetImageFromCurrentImageContext()
-			UIGraphicsEndImageContext()
-			
-			return image
-		}
-		
-		return nil
 	}
 }
 

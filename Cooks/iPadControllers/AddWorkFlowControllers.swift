@@ -34,7 +34,7 @@ class TextTypeSelectionViewController: UIViewController {
 		]
 		NSLayoutConstraint.activate(constraints)
 		if let img = imageView.image {
-			let rects = img.aggregatedWordRects()
+			let rects = img.aggregatedWordRects(in: imageView.frame)
 			
 			for rect in rects {
 				let layer = CALayer()

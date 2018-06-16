@@ -12,6 +12,7 @@
 		56137D2A202773F8003917BD /* FloatingButtonNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */; };
 		56157B70205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */; };
 		561AB9932095027100EC794E /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561AB9922095027100EC794E /* PhotoCollectionViewCell.swift */; };
+		561AB9952099782F00EC794E /* RecipeComponentSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */; };
 		5633F99B2006DB2800CF117E /* InstructionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */; };
 		563C456A1F9085E100B3CAF4 /* SousChefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563C45691F9085E100B3CAF4 /* SousChefTests.swift */; };
 		563C45711F9086D900B3CAF4 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
@@ -89,6 +90,7 @@
 		56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FloatingButtonNavigationController.swift; path = iPadControllers/FloatingButtonNavigationController.swift; sourceTree = "<group>"; };
 		56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSLinguisticTagger+SousChefAdditions.swift"; path = "Utility/NSLinguisticTagger+SousChefAdditions.swift"; sourceTree = "<group>"; };
 		561AB9922095027100EC794E /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoCollectionViewCell.swift; path = Views/PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipeComponentSelectionViewController.swift; path = iPadControllers/RecipeComponentSelectionViewController.swift; sourceTree = "<group>"; };
 		5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InstructionsTableViewController.swift; path = iPadControllers/InstructionsTableViewController.swift; sourceTree = "<group>"; };
 		563C45671F9085E100B3CAF4 /* SousChefTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SousChefTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		563C45691F9085E100B3CAF4 /* SousChefTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SousChefTests.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 		56766A561FDA69EE00C91E0C /* iPadControllers */ = {
 			isa = PBXGroup;
 			children = (
+				56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */,
 				5641851D202FA447003961F2 /* AddRecipeViewController.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
 				560CA6B8200062AA00807784 /* IngredientTableViewController.swift */,
@@ -225,6 +228,7 @@
 				56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */,
 				56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */,
 				5607AF3C2094248100112496 /* RecipePhotoSelectionViewController.swift */,
+				561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */,
 				5693300E201067D00017D16B /* BaseClasses */,
 			);
 			name = iPadControllers;
@@ -324,7 +328,6 @@
 			isa = PBXGroup;
 			children = (
 				56932FEE200F0B490017D16B /* BaseTableViewController.swift */,
-				56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */,
 			);
 			name = BaseClasses;
 			sourceTree = "<group>";
@@ -509,6 +512,7 @@
 				5633F99B2006DB2800CF117E /* InstructionsTableViewController.swift in Sources */,
 				5641851E202FA447003961F2 /* AddRecipeViewController.swift in Sources */,
 				5693301420106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift in Sources */,
+				561AB9952099782F00EC794E /* RecipeComponentSelectionViewController.swift in Sources */,
 				568258C01F63A39800A020A9 /* CooksTableViewController.swift in Sources */,
 				567ABD5820369785005ECF09 /* CoreGraphics+SousChefAdditions.swift in Sources */,
 				56137D2A202773F8003917BD /* FloatingButtonNavigationController.swift in Sources */,
