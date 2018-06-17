@@ -91,16 +91,25 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		
 		trailingFloatingButtonStack.addArrangedSubview(trailingDummyView)
 		
-		view.addSubview(leadingFloatingButtonStack)
-		view.addSubview(trailingFloatingButtonStack)
+		containingStackView.axis = .horizontal
+		containingStackView.alignment = .center
+		containingStackView.translatesAutoresizingMaskIntoConstraints = false
+		
+		containingStackView.addArrangedSubview(leadingFloatingButtonStack)
+		containingStackView.addArrangedSubview(contentView)
+		containingStackView.addArrangedSubview(trailingFloatingButtonStack)
 
+		contentView.translatesAutoresizingMaskIntoConstraints = false
+		
+		view.addSubview(containingStackView)
+		
 		let constraint = [
-			leadingFloatingButtonStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: SousChefStyling.standardMargin),
-			leadingFloatingButtonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SousChefStyling.standardMargin),
-			leadingFloatingButtonStack.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
-			trailingFloatingButtonStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -SousChefStyling.standardMargin),
-			trailingFloatingButtonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SousChefStyling.standardMargin),
-			trailingFloatingButtonStack.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
+			containingStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: SousChefStyling.standardMargin),
+			containingStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -SousChefStyling.standardMargin),
+			containingStackView.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
+			containingStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -SousChefStyling.standardMargin),
+			containingStackView.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
+			contentView.heightAnchor.constraint(equalToConstant: SousChefStyling.navigationFloatingButtonHeight),
 			leadingDummyView.widthAnchor.constraint(equalToConstant: 1),
 			leadingDummyView.heightAnchor.constraint(greaterThanOrEqualToConstant: 1),
 			trailingDummyView.widthAnchor.constraint(equalToConstant: 1),
