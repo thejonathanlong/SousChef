@@ -44,6 +44,24 @@ class RecipeComponentSelectionPageViewController: UIPageViewController {
 		
 		delegate = self
 		dataSource = self
+        
+        if let floatingNavigationController = navigationController as? FloatingButtonNavigationController {
+            let tapInstructionsLabel = UILabel()
+            tapInstructionsLabel.numberOfLines = 3
+            tapInstructionsLabel.text = "Tap once on the areas that represent ingredients.\nTap twice on the areas the represent th recipe directions.\nTap three times on the areas that represent other information."
+            tapInstructionsLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+            floatingNavigationController.contentView.addSubview(tapInstructionsLabel)
+            
+            let tapInstructionConstraints = [
+                tapInstructionsLabel.topAnchor.constraint(equalTo: floatingNavigationController.contentView.topAnchor),
+                tapInstructionsLabel.bottomAnchor.constraint(equalTo: floatingNavigationController.contentView.bottomAnchor),
+                tapInstructionsLabel.leftAnchor.constraint(equalTo: floatingNavigationController.contentView.leftAnchor),
+                tapInstructionsLabel.rightAnchor.constraint(equalTo: floatingNavigationController.contentView.rightAnchor),
+            ]
+            
+            NSLayoutConstraint.activate(tapInstructionConstraints)
+        }
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

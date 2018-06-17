@@ -56,13 +56,13 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		view.clipsToBounds = true
 		leadingFloatingButtonStack.axis = .horizontal
 		leadingFloatingButtonStack.distribution = .equalSpacing
-		leadingFloatingButtonStack.alignment = .fill
+		leadingFloatingButtonStack.alignment = .leading
 		leadingFloatingButtonStack.spacing = 5.0
 		leadingFloatingButtonStack.translatesAutoresizingMaskIntoConstraints = false
 		
 		trailingFloatingButtonStack.axis = .horizontal
 		trailingFloatingButtonStack.distribution = .equalSpacing
-		trailingFloatingButtonStack.alignment = .fill
+		trailingFloatingButtonStack.alignment = .trailing
 		trailingFloatingButtonStack.spacing = 5.0
 		trailingFloatingButtonStack.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -92,7 +92,8 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		trailingFloatingButtonStack.addArrangedSubview(trailingDummyView)
 		
 		containingStackView.axis = .horizontal
-		containingStackView.alignment = .center
+		containingStackView.alignment = .leading
+        containingStackView.distribution = .equalSpacing
 		containingStackView.translatesAutoresizingMaskIntoConstraints = false
 		
 		containingStackView.addArrangedSubview(leadingFloatingButtonStack)
@@ -100,7 +101,8 @@ class FloatingButtonNavigationController: UINavigationController, UINavigationCo
 		containingStackView.addArrangedSubview(trailingFloatingButtonStack)
 
 		contentView.translatesAutoresizingMaskIntoConstraints = false
-		
+		contentView.backgroundColor = UIColor.clear
+        
 		view.addSubview(containingStackView)
 		
 		let constraint = [
