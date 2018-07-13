@@ -10,9 +10,11 @@ import UIKit
 
 //MARK: - AllRecipesCollectionViewController
 class AllRecipesCollectionViewController: UICollectionViewController {
+    //MARK: - Class Properties
 	static let recipeCollectionViewCellReuseIdentifier = "recipeCollectionViewCellReuseIdentifier"
 	
-	var recipes: [Recipe] = [] {
+    //MARK: - Private Properties
+	private var recipes: [Recipe] = [] {
 		didSet {
 			// Update based on the new recipe that was given
 			recipesDidChange()
@@ -20,7 +22,10 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 	}
 	
 	private let database = SousChefDatabase.shared
-	
+}
+
+//MARK: - Overridden
+extension AllRecipesCollectionViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
@@ -58,21 +63,27 @@ class AllRecipesCollectionViewController: UICollectionViewController {
 			}
 		}
 	}
-	
-	func recipesDidChange() {
-		//Update because the recipes changed...
-		DispatchQueue.main.async {
-			self.collectionView?.reloadData()
-		}
-		
-	}
-	
-	@objc func addRecipe() {
-//		let vc = AddRecipeViewController(nibName: nil, bundle: nil)
-		let recipePhotoSelection = RecipePhotoSelectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
-//		vc.titleLabel.text = "Tell me the ingredient list"
-		navigationController?.pushViewController(recipePhotoSelection, animated: true)
-	}
+}
+
+//MARK: - Utilities
+extension AllRecipesCollectionViewController {
+    func recipesDidChange() {
+        //Update because the recipes changed...
+        DispatchQueue.main.async {
+            self.collectionView?.reloadData()
+        }
+        
+    }
+}
+
+//MARK: - Actions
+extension AllRecipesCollectionViewController {
+    @objc func addRecipe() {
+        //        let vc = AddRecipeViewController(nibName: nil, bundle: nil)
+        let recipePhotoSelection = RecipePhotoSelectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        //        vc.titleLabel.text = "Tell me the ingredient list"
+        navigationController?.pushViewController(recipePhotoSelection, animated: true)
+    }
 }
 
 // MARK: - UICollectionViewDataSource

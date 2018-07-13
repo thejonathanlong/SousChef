@@ -79,20 +79,14 @@ extension SousChefDatabase {
 			
 			let recipes = self.recipesfrom(records: records)
 			if loadingIngredients {
-				for recipe in recipes {
-					recipe.loadAllIngredients()
-				}
+                recipes.forEach{ $0.loadAllIngredients() }
 			}
 			completion(recipes)
 		}
 	}
 	
 	func recipesfrom(records: [CKRecord]) -> [Recipe] {
-		var recipes: [Recipe] = []
-		for record in records {
-			let recipe = Recipe(record: record)
-			recipes.append(recipe)
-		}
+		let recipes = records.map{ Recipe(record: $0) }
 		return recipes
 	}
 	

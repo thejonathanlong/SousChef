@@ -56,10 +56,7 @@ class Recipe: NSObject {
 		backingRecord = record
 		name = record[Recipe.recordNameKey] as! String
 		if let references = record[Recipe.recordIngredientsKey] as? [CKReference] {
-			var recordIDs : [CKRecordID] = []
-			for ingredientReference in references {
-				recordIDs.append(ingredientReference.recordID)
-			}
+            let recordIDs = references.map{ $0.recordID}
 			ingredientRecordIDs = recordIDs
 		}
 		else {
@@ -94,12 +91,8 @@ class Recipe: NSObject {
 		if shouldWaitForIngredientsToLoad {
 			ingredientsFetchOperation.fetchRecordsCompletionBlock = { [unowned self] recordsByRecordIDOrNil, errorOrNil in
 				guard let recordsByRecordID = recordsByRecordIDOrNil else { print("There were no records for the ingredient record IDs."); return }
-				
-				for recordValue in recordsByRecordID.values {
-					let ingredient = Ingredient(record: recordValue)
-					self.ingredients.append(ingredient)
-				}
-				
+                
+                self.ingredients.append(contentsOf: recordsByRecordID.values.map{ Ingredient(record: $0) })
 				print("All ingredients loaded!")
 				allIngredientsLoadedSemaphore.signal()
 			}

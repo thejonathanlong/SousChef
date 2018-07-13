@@ -17,6 +17,8 @@ class RecipeComponentSelectionPageViewController: UIPageViewController {
 			textIdentificationViewControllers = textSelectionAssets.map { (asset) -> TextIdentificationViewController in
 				let textIdentificationViewController = TextIdentificationViewController(nibName: nil, bundle: nil)
 				textIdentificationViewController.asset = asset
+                textIdentificationViewController.instructionAreaViews = instructionAreaViews
+                textIdentificationViewController.ingredientAreaViews = ingredientAreaViews
 				return textIdentificationViewController
 			}
 			
@@ -37,6 +39,10 @@ class RecipeComponentSelectionPageViewController: UIPageViewController {
 	private var currentViewControllerIndex = 0
 	
 	private var nextViewController: TextIdentificationViewController?
+    
+    private var instructionAreaViews: [UIView] = []
+    
+    private var ingredientAreaViews: [UIView] = []
 	
 	//MARK: - overridden methods
 	override func loadView() {
@@ -64,11 +70,26 @@ class RecipeComponentSelectionPageViewController: UIPageViewController {
         }
 	}
 	
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let baseNavigationController = navigationController as? FloatingButtonNavigationController {
+            baseNavigationController.addTrailingFloatingButton(title: "Next", image: nil, target: self, action: #selector(next(sender:)), viewController: self)
+        }
+    }
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		
 		nextViewController?.drawAggregatedRects()
 	}
+}
+
+//MARK: - Actions
+extension RecipeComponentSelectionPageViewController {
+    @objc func next(sender: SousChefButton) {
+        // Send all of this to the detail view for processing and stuff....
+        let addRecipeViewController = AddRecipeViewController(nibName: nil, bundle: nil)
+//        addRecipeViewController.ingredientText =
+    }
 }
 
 //MARK: - UIPageViewControllerDataSource
@@ -119,23 +140,34 @@ class TextIdentificationViewController: UIViewController {
 				let options = PHImageRequestOptions()
 				options.deliveryMode = .highQualityFormat
 				options.isNetworkAccessAllowed = true
-				PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: {[unowned self] image, _ in
-					guard let image = image else { return }
-					self.image = image
-				})
+                  self.image = UIImage(named:"TestPhoto6")
+//                PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: {[unowned self] image, _ in
+//                    guard let image = image else { return }
+//                    self.image = image
+//                    //TODO: REMOVE ME
+//                    self.image = UIImage(named:"TestPhoto6")
+//                })
 			}
 		}
 	}
 	
+    //MARK: - fileprivate
+    fileprivate var ingredientAreaViews: [UIView] = []
+    
+    fileprivate var instructionAreaViews: [UIView] = []
+    
 	//MARK: - Private Properties
 	private var interestingAreaViews: [UIView] = []
 	
 	private let imageView = UIImageView()
 	
-	private var image: UIImage = UIImage() {
-		didSet {
-			self.imageView.image = image
+	private var image: UIImage? {
+		set {
+            self.imageView.image = UIImage(named: "TestPhoto6")
 		}
+        get {
+            return imageView.image
+        }
 	}
 	
 	private var targetSize: CGSize {
@@ -144,6 +176,8 @@ class TextIdentificationViewController: UIViewController {
 	}
 	
 	private var aggregatedRects: [CGRect] = []
+    
+    private var borderedViewImages: [BorderedView : UIImage] = [:]
 	
 	private var didDrawAggregatedRects = false
 
@@ -171,9 +205,9 @@ class TextIdentificationViewController: UIViewController {
 		doubleTapGestureRecognizer.numberOfTapsRequired = 2
 		view.addGestureRecognizer(doubleTapGestureRecognizer)
 		
-		let tripleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tripleTapHandler(sender:)))
-		tripleTapGestureRecognizer.numberOfTapsRequired = 3
-		view.addGestureRecognizer(tripleTapGestureRecognizer)
+//        let tripleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tripleTapHandler(sender:)))
+//        tripleTapGestureRecognizer.numberOfTapsRequired = 3
+//        view.addGestureRecognizer(tripleTapGestureRecognizer)
 	}
 }
 
@@ -181,7 +215,7 @@ class TextIdentificationViewController: UIViewController {
 extension TextIdentificationViewController {
 	
 	func drawAggregatedRects() {
-		if !didDrawAggregatedRects {
+		if !didDrawAggregatedRects, let image = image {
 			image.generateAggregatedWordRectsAsynchronously(in: imageView.frame) { [weak self] (aggregatedRects) in
 				guard let strongSelf = self else { return }
 				strongSelf.aggregatedRects = aggregatedRects
@@ -191,6 +225,10 @@ extension TextIdentificationViewController {
 						let borderedView = BorderedView(frame: rect)
 						strongSelf.view.addSubview(borderedView)
 						strongSelf.interestingAreaViews.append(borderedView)
+                        if let image = strongSelf.image, let cgImage = image.cgImage {
+                            guard let croppedCGImage = cgImage.cropping(to: rect) else { print("Failed to crop CGImage to \(rect)."); return }
+                            strongSelf.borderedViewImages[borderedView] = UIImage(cgImage: croppedCGImage)
+                        }
 					}
 				}
 			}
@@ -220,6 +258,7 @@ extension TextIdentificationViewController {
 			let borderedView = tappedView as! BorderedView
 			borderedView.borderColor = borderedView.borderColor == UIColor.black ? UIColor.yellow : UIColor.black
 		}
+//        if ingredient
 	}
 	
 	@objc func doubleTapHandler(sender: UITapGestureRecognizer) {

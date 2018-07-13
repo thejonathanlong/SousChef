@@ -174,23 +174,43 @@ class SmartAddViewController: UIViewController {
 
 //MARK: - AddRecipeViewController
 class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    //MARK: - Public Properties
+    var ingredientText: String {
+        set {
+            ingredientSmartAddViewController.resultingTextView.text = ingredientText
+        }
+        get {
+            return ingredientSmartAddViewController.resultingTextView.text
+        }
+    }
+    
+    var instructionText: String {
+        set {
+            instructionSmartAddViewController.resultingTextView.text = instructionText
+        }
+        get {
+            return instructionSmartAddViewController.resultingTextView.text
+        }
+    }
+    
+    //MARK: - Private Properties
+	private let contentView = UIView()
+	private let backgroundImageView = UIImageView()
+	private let recipeImageCameraButton = SousChefButton(frame: .zero)
+	private let recipeImagePhotoButton = SousChefButton(frame: .zero)
 	
-	let contentView = UIView()
-	let backgroundImageView = UIImageView()
-	let recipeImageCameraButton = SousChefButton(frame: .zero)
-	let recipeImagePhotoButton = SousChefButton(frame: .zero)
+	private let titleHeaderView = HeaderView(frame: .zero)
+	private let tagsHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
+	private let sourceHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
+	private let ingredientSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
+	private let instructionSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
 	
-	let titleHeaderView = HeaderView(frame: .zero)
-	let tagsHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
-	let sourceHeaderView = HeaderView(frame: .zero, isDividerBelow: false)
-	let ingredientSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
-	let instructionSmartAddViewController = SmartAddViewController(nibName: nil, bundle: nil)
+	private var resultingView = UIView()
+	private let database = SousChefDatabase.shared
+	private let ingredientTagger = IngredientLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
+	private let defaultImage = UIImage(named: "Default")
 	
-	var resultingView = UIView()
-	let database = SousChefDatabase.shared
-	let ingredientTagger = IngredientLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
-	let defaultImage = UIImage(named: "Default")
-	
+    //MARK: - Overridden Methods
 	override func loadView() {
 		super.loadView()
 		view.backgroundColor = SousChefStyling.lightColor
@@ -219,14 +239,14 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera(sender:)), image: cameraImage)
 		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto(sender:)), image: photoImage)
 		ingredientSmartAddView.translatesAutoresizingMaskIntoConstraints = false
-		ingredientSmartAddViewController.resultingTextView.text = "ingredient list goes here"
+		ingredientText = "ingredient list goes here"
 		
 		let instructionSmartAddView = instructionSmartAddViewController.view!
 		instructionSmartAddViewController.header.text = "Instructions"
 		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera(sender:)), image: cameraImage)
 		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto(sender:)), image: photoImage)
 		instructionSmartAddView.translatesAutoresizingMaskIntoConstraints = false
-		instructionSmartAddViewController.resultingTextView.text = "instructions go here"
+		instructionText = "instructions go here"
 		
 		titleHeaderView.translatesAutoresizingMaskIntoConstraints = false
 		titleHeaderView.isEditable = true
@@ -314,9 +334,9 @@ extension AddRecipeViewController {
 	@objc func done(sender: UIButton) {
 		let recipeName = titleHeaderView.text
 		
-		ingredientTagger.string = ingredientSmartAddViewController.resultingTextView.text
+		ingredientTagger.string = ingredientText
 		let ingredientList = ingredientTagger.ingredients()
-		let instructionList = instructionSmartAddViewController.resultingTextView.text.split(separator: "\n").map(String.init)
+		let instructionList = instructionText.split(separator: "\n").map(String.init)
 		let tags = tagsHeaderView.text.replacingOccurrences(of: ", ", with: ",").replacingOccurrences(of: " ", with: ",").split(separator: ",").map { String($0) }
 		let image = backgroundImageView.image != defaultImage ? backgroundImageView.image : nil
 		

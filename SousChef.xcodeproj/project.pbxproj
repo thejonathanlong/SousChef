@@ -66,7 +66,6 @@
 		56BC17B61F68E1A600393863 /* InstructionsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B51F68E1A600393863 /* InstructionsDetailViewController.swift */; };
 		56BC17B81F68E46300393863 /* InstructionsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */; };
 		56D42B302002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */; };
-		56D698B12079C79B00E70483 /* AddWorkFlowControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */; };
 		56D698D22092F4BC00E70483 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D698D12092F4BC00E70483 /* Logging.swift */; };
 		56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */; };
 		56E43F46204D0827000D9273 /* TestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56E43F45204D0827000D9273 /* TestAssets.xcassets */; };
@@ -141,7 +140,6 @@
 		56BC17B51F68E1A600393863 /* InstructionsDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsDetailViewController.swift; path = Controller/InstructionsDetailViewController.swift; sourceTree = "<group>"; };
 		56BC17B71F68E46300393863 /* InstructionsListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsListTableViewController.swift; path = Controller/InstructionsListTableViewController.swift; sourceTree = "<group>"; };
 		56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIColor+SousChefAdditions.swift"; path = "Utility/UIColor+SousChefAdditions.swift"; sourceTree = "<group>"; };
-		56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddWorkFlowControllers.swift; path = iPadControllers/AddWorkFlowControllers.swift; sourceTree = "<group>"; };
 		56D698D12092F4BC00E70483 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = Utility/Logging.swift; sourceTree = "<group>"; };
 		56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IngredientLinguisticTagger.swift; path = Model/IngredientLinguisticTagger.swift; sourceTree = "<group>"; };
 		56E43F45204D0827000D9273 /* TestAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TestAssets.xcassets; sourceTree = "<group>"; };
@@ -181,6 +179,7 @@
 		563C45681F9085E100B3CAF4 /* SousChefTests */ = {
 			isa = PBXGroup;
 			children = (
+				569330152011C8AC0017D16B /* TestData.swift */,
 				56E43F45204D0827000D9273 /* TestAssets.xcassets */,
 				56797B301FBC04A300052382 /* IngredientLinguisticTesterTests.swift */,
 				56797B321FBC04D600052382 /* MeasurementTests.swift */,
@@ -221,14 +220,9 @@
 			isa = PBXGroup;
 			children = (
 				56137D29202773F8003917BD /* FloatingButtonNavigationController.swift */,
-				5641851D202FA447003961F2 /* AddRecipeViewController.swift */,
 				5693300F201068AA0017D16B /* AllRecipesCollectionViewController.swift */,
-				560CA6B8200062AA00807784 /* IngredientTableViewController.swift */,
-				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
-				56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */,
-				56D698B02079C79B00E70483 /* AddWorkFlowControllers.swift */,
-				5607AF3C2094248100112496 /* RecipePhotoSelectionViewController.swift */,
-				561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */,
+				56F1D96420DB65BD0046126D /* RecipeDetailControllers */,
+				56F1D96320DB65A20046126D /* AddControllers */,
 				5693300E201067D00017D16B /* BaseClasses */,
 			);
 			name = iPadControllers;
@@ -287,9 +281,9 @@
 		568258BB1F63A33700A020A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				568258C31F63A53600A020A9 /* Recipe.swift */,
-				5669B1E01F6503C200AEB5FA /* Measurement.swift */,
 				56797B341FBC0A3500052382 /* Ingredient.swift */,
+				5669B1E01F6503C200AEB5FA /* Measurement.swift */,
+				568258C31F63A53600A020A9 /* Recipe.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -309,17 +303,16 @@
 		568625C61FBD46A50062175F /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				567ABD5720369785005ECF09 /* CoreGraphics+SousChefAdditions.swift */,
 				56DECFD11F886A490019E972 /* IngredientLinguisticTagger.swift */,
+				56D698D12092F4BC00E70483 /* Logging.swift */,
+				5693301320106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift */,
+				56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */,
 				568625C71FBD46C80062175F /* SousChefDatabase.swift */,
 				56932FEC200F02B40017D16B /* SousChefStyling.swift */,
-				569330152011C8AC0017D16B /* TestData.swift */,
-				56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */,
-				5693301320106A4B0017D16B /* NSLayoutConstraint+SousChefAdditions.swift */,
-				56933069201412670017D16B /* UIImage+SousChefAdditions.swift */,
 				569330772014613A0017D16B /* TextRecognizer.swift */,
-				567ABD5720369785005ECF09 /* CoreGraphics+SousChefAdditions.swift */,
-				56157B6F205E1AA8000E0B2A /* NSLinguisticTagger+SousChefAdditions.swift */,
-				56D698D12092F4BC00E70483 /* Logging.swift */,
+				56D42B2F2002CCE700B2E4F0 /* UIColor+SousChefAdditions.swift */,
+				56933069201412670017D16B /* UIImage+SousChefAdditions.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -348,6 +341,26 @@
 				5669B1E61F6650D100AEB5FA /* IngredientListTableViewController.swift */,
 			);
 			name = Ingredients;
+			sourceTree = "<group>";
+		};
+		56F1D96320DB65A20046126D /* AddControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5641851D202FA447003961F2 /* AddRecipeViewController.swift */,
+				5607AF3C2094248100112496 /* RecipePhotoSelectionViewController.swift */,
+				561AB9942099782F00EC794E /* RecipeComponentSelectionViewController.swift */,
+			);
+			name = AddControllers;
+			sourceTree = "<group>";
+		};
+		56F1D96420DB65BD0046126D /* RecipeDetailControllers */ = {
+			isa = PBXGroup;
+			children = (
+				560CA6B8200062AA00807784 /* IngredientTableViewController.swift */,
+				5633F99A2006DB2800CF117E /* InstructionsTableViewController.swift */,
+				56766A571FDA6A3300C91E0C /* RecipeDetailViewController.swift */,
+			);
+			name = RecipeDetailControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -488,7 +501,6 @@
 			files = (
 				56766A5F1FDCFE1E00C91E0C /* DetailTableViewCell.swift in Sources */,
 				569330162011C8AC0017D16B /* TestData.swift in Sources */,
-				56D698B12079C79B00E70483 /* AddWorkFlowControllers.swift in Sources */,
 				569330782014613A0017D16B /* TextRecognizer.swift in Sources */,
 				560CA6B9200062AA00807784 /* IngredientTableViewController.swift in Sources */,
 				56DECFD21F886A490019E972 /* IngredientLinguisticTagger.swift in Sources */,

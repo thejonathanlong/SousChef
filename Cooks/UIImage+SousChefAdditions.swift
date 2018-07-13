@@ -57,19 +57,12 @@ extension UIImage {
 			if let err = error { print("There was an error: \(err)"); return } // There was an error abort.
 			guard let observations = request.results else { print("Didn't get any results, did the request fail?"); return }
 			
-			var textRectangleObservations = [TextRectangleObservation]()
 			// Get all the rects that have identified Text.
 			let textObservations = observations.map({$0 as! VNTextObservation})
-			for textObservation in textObservations {
-				let textRectangleObservation = textObservation.textRectangleObservation(with: rect)
-				textRectangleObservations.append(textRectangleObservation)
-			}
+            let textRectangleObservations = textObservations.map{ $0.textRectangleObservation(with: rect) }
 			
 			let groupedObservations = TextRectangleObservation.group(observations: textRectangleObservations)
-			
-			for rectObservation in groupedObservations {
-				aggregatedRects.append(rectObservation.rect)
-			}
+            aggregatedRects = groupedObservations.filter{ $0.rect != .null }.map{ $0.rect }
 			
 			textRectanglesWaiter.signal()
 		}
