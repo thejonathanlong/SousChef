@@ -204,6 +204,8 @@ class TextIdentificationViewController: UIViewController {
 		let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapHandler(sender:)))
 		doubleTapGestureRecognizer.numberOfTapsRequired = 2
 		view.addGestureRecognizer(doubleTapGestureRecognizer)
+        
+        singleTapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
 		
 //        let tripleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tripleTapHandler(sender:)))
 //        tripleTapGestureRecognizer.numberOfTapsRequired = 3
@@ -257,8 +259,12 @@ extension TextIdentificationViewController {
 		if let tappedView = tappedView, tappedView.isKind(of: BorderedView.self) {
 			let borderedView = tappedView as! BorderedView
 			borderedView.borderColor = borderedView.borderColor == UIColor.black ? UIColor.yellow : UIColor.black
+            if let borderedViewIndex = ingredientAreaViews.index(of: borderedView) {
+                ingredientAreaViews.remove(at: borderedViewIndex)
+            } else {
+                ingredientAreaViews.append(borderedView)
+            }
 		}
-//        if ingredient
 	}
 	
 	@objc func doubleTapHandler(sender: UITapGestureRecognizer) {
@@ -284,10 +290,13 @@ extension TextIdentificationViewController {
 class BorderedView: UIView {
 	
 	//MARK: - Public Properties
-	var borderColor = UIColor.clear {
-		didSet {
-			layer.borderColor = borderColor.cgColor
+    var borderColor: UIColor {
+		set (newColor) {
+			layer.borderColor = newColor.cgColor
 		}
+        get {
+            return layer.borderColor != nil ? UIColor(cgColor: layer.borderColor!) : UIColor.clear
+        }
 	}
 	
 	//MARK: Initializers
@@ -295,6 +304,7 @@ class BorderedView: UIView {
 		frame.insetBy(dx: -2.0, dy: -2.0)
 		super.init(frame: frame)
 		layer.borderWidth = 2.0
+        borderColor = UIColor.black
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
