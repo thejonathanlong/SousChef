@@ -176,8 +176,8 @@ class SmartAddViewController: UIViewController {
 class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     //MARK: - Public Properties
     var ingredientText: String {
-        set {
-            ingredientSmartAddViewController.resultingTextView.text = ingredientText
+        set (newText) {
+            ingredientSmartAddViewController.resultingTextView.text = newText
             ingredientSmartAddViewController.resultingTextView.setNeedsLayout()
         }
         get {
@@ -186,8 +186,8 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     var instructionText: String {
-        set {
-            instructionSmartAddViewController.resultingTextView.text = instructionText
+        set (newText){
+            instructionSmartAddViewController.resultingTextView.text = newText
             instructionSmartAddViewController.resultingTextView.setNeedsLayout()
         }
         get {
@@ -204,7 +204,7 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
                     let paragraph = sentences.joined(separator: "")
                     chefLog(message: "identified text %@", paragraph)
                     DispatchQueue.main.async {
-                        strongSelf.ingredientText += paragraph
+                        strongSelf.ingredientText = strongSelf.ingredientText + paragraph
                     }
                 })
             }
@@ -274,14 +274,12 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
 		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera(sender:)), image: cameraImage)
 		ingredientSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto(sender:)), image: photoImage)
 		ingredientSmartAddView.translatesAutoresizingMaskIntoConstraints = false
-		ingredientText = "ingredient list goes here"
 		
 		let instructionSmartAddView = instructionSmartAddViewController.view!
 		instructionSmartAddViewController.header.text = "Instructions"
 		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromCamera(sender:)), image: cameraImage)
 		instructionSmartAddViewController.header.addActionButton(target: self, action: #selector(extractFromPhoto(sender:)), image: photoImage)
 		instructionSmartAddView.translatesAutoresizingMaskIntoConstraints = false
-		instructionText = "instructions go here"
 		
 		titleHeaderView.translatesAutoresizingMaskIntoConstraints = false
 		titleHeaderView.isEditable = true
