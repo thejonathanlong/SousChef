@@ -178,6 +178,7 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     var ingredientText: String {
         set {
             ingredientSmartAddViewController.resultingTextView.text = ingredientText
+            ingredientSmartAddViewController.resultingTextView.setNeedsLayout()
         }
         get {
             return ingredientSmartAddViewController.resultingTextView.text
@@ -187,9 +188,43 @@ class AddRecipeViewController: UIViewController, UIImagePickerControllerDelegate
     var instructionText: String {
         set {
             instructionSmartAddViewController.resultingTextView.text = instructionText
+            instructionSmartAddViewController.resultingTextView.setNeedsLayout()
         }
         get {
             return instructionSmartAddViewController.resultingTextView.text
+        }
+    }
+    
+    var ingredientImageRepresentations = [UIImage]() {
+        didSet {
+            ingredientImageRepresentations.forEach{ (image) in
+                TextRecognizer.shared.recognizeText(in: image, completionHandler: { [weak self] (recognizedText) in
+                    guard let strongSelf = self else {return }
+                    let sentences = TextRecognizer.shared.findSentences(text: recognizedText, removingLeadingNumbers: false)
+                    let paragraph = sentences.joined(separator: "")
+                    chefLog(message: "identified text %@", paragraph)
+                    DispatchQueue.main.async {
+                        strongSelf.ingredientText += paragraph
+                    }
+                })
+            }
+        }
+    }
+    
+    var instructionImageRepresentations = [UIImage]() {
+        didSet {
+            instructionImageRepresentations.forEach { (image) in
+                TextRecognizer.shared.recognizeText(in: image, completionHandler: { [weak self] (recognizedText) in
+                 	guard let strongSelf = self else {return }
+                    let text = recognizedText.replacingOccurrences(of: "\n", with: " ")
+                    let sentences = TextRecognizer.shared.findSentences(text: text, removingLeadingNumbers: true)
+                    let paragraph = sentences.joined(separator: "\n")
+                    chefLog(message: "identified text %@", paragraph)
+                    DispatchQueue.main.async {
+                    	strongSelf.instructionText += paragraph
+                    }
+                });
+            }
         }
     }
     
@@ -414,146 +449,55 @@ extension AddRecipeViewController {
 }
 
 //MARK: - UIImagePickercontrollerDelegate
-extension AddRecipeViewController {
-	
-	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-		print("Did Finish picking media")
-		let image = info[UIImagePickerControllerOriginalImage] as? UIImage
-		
-		if resultingView is UITextView {
-			TextRecognizer.shared.recognizeText(in: image!) { (recognizedText) in
-				DispatchQueue.main.async {
-					let text = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? recognizedText.replacingOccurrences(of: "\n", with: " ") : recognizedText
-					let sentences = self.findSentences(text: text, removingLeadingNumbers: self.resultingView == self.instructionSmartAddViewController.resultingTextView)
-					
-					
-//					let removedLeadingNumberResults: ([String], [Bool]) = self.removeLeadingNumberFromSentence(sentences: sentences)
-//					var removedLeadingNumber = removedLeadingNumberResults.1
-//					let sentencesMinusLeadingNumbers = removedLeadingNumberResults.0
-//					var groupedSentences: [String] = []
-//					var currentSentenceIndex = 0
-//					var currentBoolIndex = 0
-//					for didRemoveLeadingNumber in removedLeadingNumber {
-//						if didRemoveLeadingNumber {
-//							groupedSentences.append(sentencesMinusLeadingNumbers[currentBoolIndex])
-//							currentSentenceIndex += 1
-//						} else {
-//							groupedSentences[currentSentenceIndex].append(sentencesMinusLeadingNumbers[currentBoolIndex])
-//						}
-//						currentBoolIndex += 1
-//					}
-					
-					let paragraph = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? sentences.joined(separator: "\n") : sentences.joined(separator: "")
-					print("identified text: \(paragraph)")
-					if let resultingTextView = self.resultingView as? UITextView {
-						resultingTextView.text = paragraph
-					}
-					else {
-						print("There was a problem... the resulting view should be a text view... not \(self.resultingView.self)")
-					}
-				}
-			}
-		}
-		else {
-			backgroundImageView.image = image
-		}
-		picker.dismiss(animated: true, completion: nil)
-	}
-	
-	func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-		picker.dismiss(animated: true, completion: nil)
-	}
-	
-}
+//extension AddRecipeViewController {
+//    
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+//        print("Did Finish picking media")
+//        let image = info[UIImagePickerControllerOriginalImage] as? UIImage
+//        
+//        if resultingView is UITextView {
+//            TextRecognizer.shared.recognizeText(in: image!) { (recognizedText) in
+//                DispatchQueue.main.async {
+//                    let text = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? recognizedText.replacingOccurrences(of: "\n", with: " ") : recognizedText
+//                    let sentences = self.findSentences(text: text, removingLeadingNumbers: self.resultingView == self.instructionSmartAddViewController.resultingTextView)
+//                    
+//                    
+////                    let removedLeadingNumberResults: ([String], [Bool]) = self.removeLeadingNumberFromSentence(sentences: sentences)
+////                    var removedLeadingNumber = removedLeadingNumberResults.1
+////                    let sentencesMinusLeadingNumbers = removedLeadingNumberResults.0
+////                    var groupedSentences: [String] = []
+////                    var currentSentenceIndex = 0
+////                    var currentBoolIndex = 0
+////                    for didRemoveLeadingNumber in removedLeadingNumber {
+////                        if didRemoveLeadingNumber {
+////                            groupedSentences.append(sentencesMinusLeadingNumbers[currentBoolIndex])
+////                            currentSentenceIndex += 1
+////                        } else {
+////                            groupedSentences[currentSentenceIndex].append(sentencesMinusLeadingNumbers[currentBoolIndex])
+////                        }
+////                        currentBoolIndex += 1
+////                    }
+//                    
+//                    let paragraph = self.resultingView == self.instructionSmartAddViewController.resultingTextView ? sentences.joined(separator: "\n") : sentences.joined(separator: "")
+//                    print("identified text: \(paragraph)")
+//                    if let resultingTextView = self.resultingView as? UITextView {
+//                        resultingTextView.text = paragraph
+//                    }
+//                    else {
+//                        print("There was a problem... the resulting view should be a text view... not \(self.resultingView.self)")
+//                    }
+//                }
+//            }
+//        }
+//        else {
+//            backgroundImageView.image = image
+//        }
+//        picker.dismiss(animated: true, completion: nil)
+//    }
+//    
+//    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+//        picker.dismiss(animated: true, completion: nil)
+//    }
+//    
+//}
 
-// MARK: - Utility
-extension AddRecipeViewController {
-	
-	// Splits a chunk of texts up by sentences.
-	func findSentences(text: String, removingLeadingNumbers: Bool) -> [String] {
-		var sentences: [String] = []
-		var currentGroup = ""
-		let sentenceTagger = NSLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
-		sentenceTagger.string = text
-		sentenceTagger.enumerateTags(in: NSMakeRange(0, text.count), unit: .sentence, scheme: .language, options: .joinNames) { (tagOrNil, range, stop) in
-			let start = text.index(text.startIndex, offsetBy: range.location)
-			let end = text.index(text.startIndex, offsetBy: (range.location + range.length))
-			let tokenInQuestion = String(text[start..<end])
-			if (tokenInQuestion != "\n")
-			{
-				if removingLeadingNumbers {
-					let sentenceWithoutNumber = self.removeLeadingNumberFromSentence(sentence: tokenInQuestion)
-					let didRemoveNumber = sentenceWithoutNumber != tokenInQuestion
-					if didRemoveNumber && currentGroup != "" {
-						sentences.append(currentGroup)
-						currentGroup = sentenceWithoutNumber
-					} else if currentGroup == "" {
-						currentGroup = sentenceWithoutNumber
-					}
-					else {
-						currentGroup.append(sentenceWithoutNumber)
-					}
-				} else {
-					sentences.append(tokenInQuestion)
-				}
-			}
-		}
-		
-		return sentences
-	}
-	
-	func removeLeadingNumberFromSentence(sentence: String) -> String {
-		var newSentence = sentence
-		let numberRemoverTagger = NSLinguisticTagger(tagSchemes: NSLinguisticTagger.availableTagSchemes(forLanguage: "en"), options: 0)
-		numberRemoverTagger.string = sentence
-		var tokenNumber = 0
-		var foundNumber = false
-		var replacementRangeOffset = 0
-		numberRemoverTagger.enumerateTagsAndTokens(in: NSMakeRange(0, sentence.count), unit: .word, scheme: .lexicalClass, using: { (tag, tokenInQuestion, range, stop) in
-			tokenNumber += 1
-			switch tag {
-			case .punctuation:
-				if foundNumber { replacementRangeOffset += range.length }
-				
-			case .sentenceTerminator:
-				if foundNumber { replacementRangeOffset += range.length }
-				
-			case .whitespace:
-				if foundNumber {
-					replacementRangeOffset += range.length
-				}
-				else {
-					stop.pointee = true
-				}
-				
-				
-			case .number:
-				foundNumber = true
-				replacementRangeOffset += range.length
-			
-			case .otherWord:
-				let probablyANumber = self.tokenIsProbablyANumber(token: tokenInQuestion)
-				if probablyANumber {
-					print("Found other word \(tokenInQuestion) it's probably a number...")
-				}
-				foundNumber = probablyANumber
-				
-			default: break
-				
-			}
-			
-			if tokenNumber == 3 { stop.pointee = true }
-		})
-		
-		if replacementRangeOffset != 0 {
-			let endIndex = sentence.index(sentence.startIndex, offsetBy:replacementRangeOffset)
-			newSentence.replaceSubrange(sentence.startIndex...endIndex, with: "")
-		}
-		
-		return newSentence
-	}
-	
-	func tokenIsProbablyANumber(token: String) -> Bool {
-		return token.contains("0") || token.contains("1") || token.contains("2") || token.contains("3") || token.contains("4") || token.contains("5") || token.contains("6") || token.contains("7") || token.contains("8") || token.contains("9")
-	}
-}

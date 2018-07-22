@@ -88,7 +88,14 @@ extension RecipeComponentSelectionPageViewController {
     @objc func next(sender: SousChefButton) {
         // Send all of this to the detail view for processing and stuff....
         let addRecipeViewController = AddRecipeViewController(nibName: nil, bundle: nil)
-//        addRecipeViewController.ingredientText =
+        var ingredientImages = [UIImage]()
+        var instructionImages = [UIImage]()
+        textIdentificationViewControllers.forEach { ingredientImages.append(contentsOf: $0.ingredientAreaViewImages) }
+        textIdentificationViewControllers.forEach { instructionImages.append(contentsOf: $0.instructionAreaViewImages) }
+        
+        addRecipeViewController.ingredientImageRepresentations = ingredientImages
+        addRecipeViewController.instructionImageRepresentations = instructionImages
+        navigationController?.pushViewController(addRecipeViewController, animated: true)
     }
 }
 
@@ -140,16 +147,41 @@ class TextIdentificationViewController: UIViewController {
 				let options = PHImageRequestOptions()
 				options.deliveryMode = .highQualityFormat
 				options.isNetworkAccessAllowed = true
+
+                let removeMe = "REMOVE THE LINE BELOW THIS. IT IS FOR TESTING ONLY."
                   self.image = UIImage(named:"TestPhoto6")
 //                PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options, resultHandler: {[unowned self] image, _ in
 //                    guard let image = image else { return }
 //                    self.image = image
-//                    //TODO: REMOVE ME
 //                    self.image = UIImage(named:"TestPhoto6")
 //                })
 			}
 		}
 	}
+    
+    var ingredientAreaViewImages: [UIImage] {
+        ingredientAreaViews.sort(by: { CGRect.sortedTopToBottomLeftToRight(rect1: $0.frame, rect2: $1.frame) })
+        let images = ingredientAreaViews.map { (view) -> UIImage in
+            if let borderedView = view as? BorderedView, let image = self.borderedViewImages[borderedView] {
+                return image
+            }
+            
+            return UIImage()
+        }
+        return images
+    }
+    
+    var instructionAreaViewImages: [UIImage] {
+        instructionAreaViews.sort(by: { CGRect.sortedTopToBottomLeftToRight(rect1: $0.frame, rect2: $1.frame) })
+        let images = instructionAreaViews.map { (view) -> UIImage in
+            if let borderedView = view as? BorderedView, let image = self.borderedViewImages[borderedView] {
+                return image
+            }
+            
+            return UIImage()
+        }
+        return images
+    }
 	
     //MARK: - fileprivate
     fileprivate var ingredientAreaViews: [UIView] = []
@@ -175,7 +207,7 @@ class TextIdentificationViewController: UIViewController {
 		return CGSize(width: UIScreen.main.bounds.width * scale, height: UIScreen.main.bounds.height * scale)
 	}
 	
-	private var aggregatedRects: [CGRect] = []
+	private var aggregatedRectangleObservations: [TextRectangleObservation] = []
     
     private var borderedViewImages: [BorderedView : UIImage] = [:]
 	
@@ -220,15 +252,17 @@ extension TextIdentificationViewController {
 		if !didDrawAggregatedRects, let image = image {
 			image.generateAggregatedWordRectsAsynchronously(in: imageView.frame) { [weak self] (aggregatedRects) in
 				guard let strongSelf = self else { return }
-				strongSelf.aggregatedRects = aggregatedRects
+				strongSelf.aggregatedRectangleObservations = aggregatedRects
 				DispatchQueue.main.async { [weak self] in
 					guard let strongSelf = self else { return }
-					for rect in strongSelf.aggregatedRects {
-						let borderedView = BorderedView(frame: rect)
+					for rectangleObservation in strongSelf.aggregatedRectangleObservations {
+						let borderedView = BorderedView(frame: rectangleObservation.rect)
 						strongSelf.view.addSubview(borderedView)
 						strongSelf.interestingAreaViews.append(borderedView)
                         if let image = strongSelf.image, let cgImage = image.cgImage {
-                            guard let croppedCGImage = cgImage.cropping(to: rect) else { print("Failed to crop CGImage to \(rect)."); return }
+                            let normalizedRect = rectangleObservation.normalizedRect
+                            let rectInImageCoordinates = CGRect(x: normalizedRect.minX * image.size.width, y: normalizedRect.minY * image.size.height, width: normalizedRect.width * image.size.width, height: normalizedRect.height * image.size.height).insetBy(dx: -5, dy: -5)
+                            guard let croppedCGImage = cgImage.cropping(to: rectInImageCoordinates) else { print("Failed to crop CGImage to \(rectInImageCoordinates)."); return }
                             strongSelf.borderedViewImages[borderedView] = UIImage(cgImage: croppedCGImage)
                         }
 					}
@@ -237,18 +271,22 @@ extension TextIdentificationViewController {
 		}
 		didDrawAggregatedRects = true
 	}
-	
-	func interestingViewContaining(point: CGPoint) -> UIView? {
-		var tappedView: UIView? = nil
-		for interestingView in interestingAreaViews {
-			if interestingView.frame.contains(point) {
-				tappedView = interestingView
-				break;
-			}
-		}
-		
-		return tappedView
-	}
+    
+}
+
+//MARK: - Private Methods
+extension TextIdentificationViewController {
+    private func interestingViewContaining(point: CGPoint) -> UIView? {
+        var tappedView: UIView? = nil
+        for interestingView in interestingAreaViews {
+            if interestingView.frame.contains(point) {
+                tappedView = interestingView
+                break;
+            }
+        }
+        
+        return tappedView
+    }
 }
 
 //MARK: - Gesture handlers
@@ -256,24 +294,27 @@ extension TextIdentificationViewController {
 	@objc func singleTapHandler(sender: UITapGestureRecognizer) {
 		let pointInView = sender.location(in: self.view)
 		let tappedView = interestingViewContaining(point:pointInView)
-		if let tappedView = tappedView, tappedView.isKind(of: BorderedView.self) {
-			let borderedView = tappedView as! BorderedView
-			borderedView.borderColor = borderedView.borderColor == UIColor.black ? UIColor.yellow : UIColor.black
-            if let borderedViewIndex = ingredientAreaViews.index(of: borderedView) {
-                ingredientAreaViews.remove(at: borderedViewIndex)
-            } else {
-                ingredientAreaViews.append(borderedView)
-            }
-		}
+		guard let borderedView = tappedView as? BorderedView else { print("The tapped view was not a \(BorderedView.self)"); return }
+        
+        borderedView.toggleSelected(borderColor: UIColor.yellow)
+        if let borderedViewIndex = ingredientAreaViews.index(of: borderedView) {
+            ingredientAreaViews.remove(at: borderedViewIndex)
+        } else {
+            ingredientAreaViews.append(borderedView)
+        }
 	}
 	
 	@objc func doubleTapHandler(sender: UITapGestureRecognizer) {
 		let pointInView = sender.location(in: self.view)
 		let tappedView = interestingViewContaining(point:pointInView)
-		if let tappedView = tappedView, tappedView.isKind(of: BorderedView.self) {
-			let borderedView = tappedView as! BorderedView
-			borderedView.borderColor = borderedView.borderColor == UIColor.black ? UIColor.green : UIColor.black
-		}
+        guard let borderedView = tappedView as? BorderedView else { print("The tapped view was not a \(BorderedView.self)"); return }
+        
+        borderedView.toggleSelected(borderColor: UIColor.green)
+        if let borderedViewIndex = instructionAreaViews.index(of: borderedView) {
+            instructionAreaViews.remove(at: borderedViewIndex)
+        } else {
+            instructionAreaViews.append(borderedView)
+        }
 	}
 	
 	@objc func tripleTapHandler(sender: UITapGestureRecognizer) {
@@ -281,7 +322,7 @@ extension TextIdentificationViewController {
 		let tappedView = interestingViewContaining(point:pointInView)
 		if let tappedView = tappedView, tappedView.isKind(of: BorderedView.self) {
 			let borderedView = tappedView as! BorderedView
-			borderedView.borderColor = borderedView.borderColor == UIColor.black ? UIColor.blue : UIColor.black
+            borderedView.isSelected = !borderedView.isSelected
 		}
 	}
 }
@@ -290,14 +331,13 @@ extension TextIdentificationViewController {
 class BorderedView: UIView {
 	
 	//MARK: - Public Properties
-    var borderColor: UIColor {
-		set (newColor) {
-			layer.borderColor = newColor.cgColor
-		}
-        get {
-            return layer.borderColor != nil ? UIColor(cgColor: layer.borderColor!) : UIColor.clear
+    var selectedBorderColor = UIColor.clear
+    var borderColor = UIColor.black
+    var isSelected = false {
+        didSet {
+            layer.borderColor = isSelected ? selectedBorderColor.cgColor : borderColor.cgColor
         }
-	}
+    }
 	
 	//MARK: Initializers
 	override init(frame: CGRect) {
@@ -310,5 +350,13 @@ class BorderedView: UIView {
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
+}
+
+//MARK: - Methods
+extension BorderedView {
+    func toggleSelected(borderColor: UIColor) {
+        selectedBorderColor = borderColor
+        isSelected = !isSelected
+    }
 }
 

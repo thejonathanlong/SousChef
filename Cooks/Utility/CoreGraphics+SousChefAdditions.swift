@@ -27,4 +27,8 @@ extension CGRect {
 		
 		self.init(x: minimumX, y: minimumY, width: maximumX - minimumX, height: maximumY - minimumY)
 	}
+    
+    static func sortedTopToBottomLeftToRight(rect1: CGRect, rect2: CGRect) -> Bool {
+        return rect1.minX <= rect2.minX && rect1.minY <= rect2.minY;
+    }
 }

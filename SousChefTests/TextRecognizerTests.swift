@@ -46,6 +46,80 @@ class TextRecognizerTests: SousChefTestCase {
 		semaphore.wait()
 	}
     
+    func testCroppedImage() {
+        let rect = CGRect(x: 65.0, y: 563.972571942446, width: 830.5, height: 855.642985611511)
+        let semaphore = DispatchSemaphore(value: 0)
+        let cgImage = UIImage(named:"TestPhoto5")!.cgImage?.cropping(to: rect)
+        let testImage = UIImage(cgImage: cgImage!)
+        TextRecognizer.shared.recognizeText(in: testImage) { (recognizedText) in
+            XCTAssertTrue(recognizedText == "3 pounds boneless chicken (thighs or breasts will work)\n1 medium yellow onion, thinly sliced\n\n2 cloves garlic, minced\n\n1 (13.5»ounce) can full—fat coconut milk\n1/3 cup tomato paste\n\n1/2 cup Thai red curry paste\n\n2 tablespoons ﬁsh sauce\n\n2 tablespoons coconut aminos\n\n2 teaspoons fresh |imejuice\n\n2 teaspoons sea salt\n\n3/4 teaspoon ground ginger\n\n4 cups mixed vegetables (frozen orfresh)\n\n")
+            semaphore.signal()
+        }
+        semaphore.wait()
+    }
+    
+    func testManyCroppedImages() {
+        let rect = CGRect(x: 65.0, y: 563.972571942446, width: 830.5, height: 855.642985611511)
+        let semaphore = DispatchSemaphore(value: 0)
+        let cgImage = UIImage(named:"TestPhoto5")!.cgImage?.cropping(to: rect)
+        var images = [UIImage]()
+        for _ in 0...4 {
+            let testImage1 = UIImage(cgImage: cgImage!)
+            images.append(testImage1)
+        }
+        
+        images.forEach {
+            TextRecognizer.shared.recognizeText(in: $0) { (recognizedText) in
+                XCTAssertTrue(recognizedText == "3 pounds boneless chicken (thighs or breasts will work)\n1 medium yellow onion, thinly sliced\n\n2 cloves garlic, minced\n\n1 (13.5»ounce) can full—fat coconut milk\n1/3 cup tomato paste\n\n1/2 cup Thai red curry paste\n\n2 tablespoons ﬁsh sauce\n\n2 tablespoons coconut aminos\n\n2 teaspoons fresh |imejuice\n\n2 teaspoons sea salt\n\n3/4 teaspoon ground ginger\n\n4 cups mixed vegetables (frozen orfresh)\n\n")
+                semaphore.signal()
+            }
+        }
+        
+        semaphore.wait()
+        semaphore.wait()
+        semaphore.wait()
+        semaphore.wait()
+        semaphore.wait()
+    }
+    
+    func testCroppingPhoto6ForIngredients() {
+        let rect = CGRect(x: 96.0, y: 752.99999999999989, width: 661, height: 322)
+        let semaphore = DispatchSemaphore(value: 0)
+        let cgImage = UIImage(named:"TestPhoto6")!.cgImage?.cropping(to: rect)
+        let testImage = UIImage(cgImage: cgImage!)
+        TextRecognizer.shared.recognizeText(in: testImage) { (recognizedText) in
+            XCTAssertTrue(recognizedText == "1 (1470unce/398 mL) can youngJackfruit (1n brine)*\n\n2 medlum (140 g) stalks celery, finely chopped\n\n3 medlum (45 g) green onions, thlnly sliced\n\n1/2 cup (67 g) finely chopped red bell pepper\n\n3 tablespoons (45 mL) storerbought vegan mayo or SrMinute MayoH\n1 small (5 g) clove garllc, mlnced\n\n2 to 3 teaspoons (3 g) minced fresh dill\n\n2 to 3 teaspoons (1 O to 15 mL) fresh lemon Julce, to taste\n1/2 teaspoon smoked papnka\n\n1/4 teaspoon flne sea salt, orto taste\n\nFreshly ground black pepper, to taste\n\n")
+            semaphore.signal()
+        }
+        semaphore.wait()
+    }
+    
+    func testCroppingPhoto6ForInstructions() {
+        let rect = CGRect(x: 91, y: 747.99999999999989, width: 671, height: 332.00000000000023)
+        let semaphore = DispatchSemaphore(value: 0)
+        let cgImage = UIImage(named:"TestPhoto6")!.cgImage?.cropping(to: rect)
+        let testImage = UIImage(cgImage: cgImage!)
+        TextRecognizer.shared.recognizeText(in: testImage) { (recognizedText) in
+            XCTAssertTrue(recognizedText == "1 (1470unce/398 mL) can youngJackfruit (1n brine)*\n\n2 medlum (140 g) stalks celery, finely chopped\n\n3 medlum (45 g) green onions, thlnly sliced\n\n1/2 cup (67 g) finely chopped red bell pepper\n\n3 tablespoons (45 mL) storerbought vegan mayo or SrMinute MayoH\n1 small (5 g) clove garllc, mlnced\n\n2 to 3 teaspoons (3 g) minced fresh dill\n\n2 to 3 teaspoons (1 O to 15 mL) fresh lemon Julce, to taste\n1/2 teaspoon smoked papnka\n\n1/4 teaspoon flne sea salt, orto taste\n\nFreshly ground black pepper, to taste\n\n")
+            semaphore.signal()
+        }
+        semaphore.wait()
+    }
+    
+    func testTwoImagesAtOnce() {
+        let semaphore = DispatchSemaphore(value: 0)
+        TextRecognizer.shared.recognizeText(in: UIImage(named:"TestPhoto1")!) { (recognizedText) in
+            XCTAssertTrue(recognizedText == "ROAST CHICKPEAS\nCOURGETTE & SWEET POTATO\nSPINACH\n\nLONG—GRAIN RICE -\n\nSOFT BOILED EGG\n\nCARROT PICKLE\n\n")
+            semaphore.signal()
+        }
+        TextRecognizer.shared.recognizeText(in: UIImage(named:"TestPhoto1")!) { (recognizedText) in
+            XCTAssertTrue(recognizedText == "ROAST CHICKPEAS\nCOURGETTE & SWEET POTATO\nSPINACH\n\nLONG—GRAIN RICE -\n\nSOFT BOILED EGG\n\nCARROT PICKLE\n\n")
+            semaphore.signal()
+        }
+        semaphore.wait()
+        semaphore.wait()
+        
+    }
 //    func testPerformanceTesseract() {
 //        self.measure {
 //			let semaphore = DispatchSemaphore(value: 0)
